@@ -1,0 +1,82 @@
+\section{Jaringan Saraf Tiruan}
+\label{sec:jst}
+
+Jaringan Saraf Tiruan (JST) atau Artificial Neural Networks (ANN)
+merupakan suatu sistem yang dibangun atas dasar cara kerja jaringan saraf
+manusia. Awal perkembangannya dimotivasi oleh kemampuan pengenalan dari manusia
+(otak) dimana cara perhitungannya sangat jauh berbeda dengan sistem komputer
+digital. JSt merupakan sistem adaptif yang dapat mengubah strukturnya
+untuk memecahkan masalah berdasarkan informasi eksternal maupun internal
+yang mengalir melalui jaringan tersebut. 
+
+Menurut S. Haykin \cite{haykin-1994}, sebuah jaringan saraf adalah sebuah
+prosesor yang terdistribusi paralel dan mempuyai kecenderungan untuk menyimpan
+pengetahuan yang didapatkannya dari pengalaman dan membuatnya tetap tersedia
+untuk digunakan. Hal ini menyerupai kerja otak dalam dua hal yaitu: (1)
+Pengetahuan diperoleh oleh jaringan melalui suatu proses belajar. (2) Kekuatan
+hubungan antar sel saraf yang dikenal dengan bobot sinapsis digunakan untuk
+menyimpan pengetahuan.
+Jaringan saraf merupakan suatu mesin yang digunakan untuk memodelkan kerja otak
+dalam menyelesaikan suatu permasalahan. Jaringan tersebut disusun dari
+sekumpulan unit pemroses yang disebut neuron dan untuk meningkatkan
+kemampuan-nya, dilakukan proses pembelajaran dengan menggunakan suatu algoritma
+tertentu (learning algorithm) dimana tujuannya adalah untuk memodifikasi
+kekuatan hubungan antar neuron (bobot) dalam jaringan sesuai dengan goal yang
+telah ditentukan.
+
+Keuntungan dari penggunaan JST adalah kemampuannya dalam beradaptasi melalui
+proses pembelajaran dan kemampuan generalisasi, dalam artian jaringan saraf
+mampu memberikan hasil dari input yang tidak diketahui sebelumnya. Berikut
+adalah beberapa kemampuan yang dapat diberikan melalui penggunaan JST menurut S.
+Haykin \cite{haykin-1994}:
+\begin{enumerate}
+  \item Non Linier : jaringan saraf dapat menangani permasalahan baik linier
+  maupun non linier.
+  \item Pemetaan Input-Output : dalam paradigma pembelajaran dengan arahan
+  (supervised learning), modifikasi bobot disesuaikan dengan output yang
+  diinginkan sebelumnya (label pada data sampel).
+  \item Adaptif : jaringan saraf memiliki kemampuan untuk mengadaptasi bobot
+  sinapsisnya sesuai dengan lingkungannya. Jaringan saraf pada umumnya melalui
+  proses pembelajaran terhadap suatu lingkungan tertentu, dan dapat diajarkan
+  kembali (re-train) untuk melakukan penyesuaian terhadap lingkungannya. 
+  \item Toleransi terhadap kesalahan.
+\end{enumerate}
+
+Konsep JST dimodelkan secara matematis dan direpresentasikan melalui suatu unit
+pemrosesan, yaitu neuron. terdapat tiga elemen dasar pada model neuron,
+seperti yang terlihat pada \pic~\ref{fig:neuron} yaitu
+\begin{itemize}
+  \item Sinapsis, koneksi antar neuron dimana direpresentasikan dengan suatu
+  bobot untuk menunjukkan kekuatan dari koneksi tersebut.
+  \item Penjumlah, yang berfungsi untuk menjumlahkan sinyal, yang
+  biasanya dalam hal ini perkalian antara bobot dengan sinyal masukan.
+  \item Setiap neuron menerapkan fungsi aktivasi terhadap jumlah dari perkalian
+  antara sinyal input dengan bobot neuron sebelumnya, untuk menentukan nilai
+  output. Fungsi aktivasi ini pada umumnya membatasi nilai output dari neuron,
+  menormalisasi output dalam range [0,1] atau [-1,1].
+\end{itemize}
+
+\addFigure{width=0.5\textwidth}{pics/neuron.png}{fig:neuron}{Model neuron non
+linier \cite[p.~33]{haykin-1994}}
+
+Paradigma pembelajaran JST secara umum dibagi menjadi dua kelompok utama yaitu
+pembelajaran dengan pengarahan (supervised) dan pembelajaran tidak dengan
+pengarahan (unsupervised).
+\begin{itemize}
+  \item Supervised learning : pembelajaran dengan pengarahan adalah hasil
+  keluaran komputasi dari JST akan dibandingkan dengan hasil keluaran
+  sesungguhnya, sehingga dengan selisih antara keduanya; proses penyesuaian
+  bobot dalam jaringan dapat dilakukan. Untuk itu tipe ini memerlukan suatu data
+  pelatihan yang berisikan data masukan serta target keluaran dari latihan. JST,
+  tipe ini misalnya Multi Layer Perceptron, Learning Vector Quantization (LVQ), dll.
+
+  \item Unsupervised learning : pembelajaran dengan tanpa pelatihan
+  adalah proses pembelajaran JST dimana tidak memerlukan
+  informasi target, cara pembelajarannya adalah jaringan akan menyesuaikan
+  bobotnya tanpa campur tangan dari faktor luar dan berusaha menentukan sendiri
+  masuk kedalam kelompok mana. Jaringan macam ini misalnya Kohonen
+  Self-Organizing Maps (SOM).\end{itemize}
+\subsection{Pembelajaran berbasis kompetisi}
+
+\subsubsection{LVQ}
+
