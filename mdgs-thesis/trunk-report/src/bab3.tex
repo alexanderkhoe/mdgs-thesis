@@ -7,7 +7,249 @@ mempersiapkan data fitur yang akan digunakan sebagai data pelatihan dan evaluasi
 dari classifier yang dikembangkan. Dijabarkan pula mengenai dataset MIT-BIH
 database yang digunakan sebagai sumber data dari keseluruhan penelitian ini.
 
+%-----------------------------------------------------------------------------%
+\section{ECG Dataset}
+%-----------------------------------------------------------------------------%
+Pada penelitian ini, data yang digunakan bersumber dari data yang tersedia
+dengan bebas di physionet, yakni data MIT-BIH arrhytmia database. Data ini telah
+banyak digunakan oleh para peneliti dalam melakukan investigasi mengenai kelaian
+arrhytmia seperti yang telah diuraikan sebagian pada Bab~\ref{bab:1}. Database
+ini terdiri dari 48 data record yang didapat dari 47 subjek yang diteliti oleh
+BIH Arrhytmia Laboratory yang dilakukan antara tahun 1975 sampai 1979. 
+
+\addFigure{width=0.6\textwidth}{pics/ecgsignalphysionet100.jpg}{fig:ecgphy}{Contoh
+representasi Signal ECG.}
+
+Setiap record data merupakan hasil perekaman dari 2 sandapan (lead) ECG dengan
+durasi masing-masing $\pm$ 30 menit. Sandapan yang digunakan sebagian besar
+adalah sandapan MLII dan sebagian sandapan V1/V2/V4/V5. Frekuensi cuplik
+(sampling rate) yang digunakan dalam perekaman ECG ini adalah 360Hz.
+
+Data MIT-BIH database direpresentasikan menggunakan suatu standar
+format - \gls{wfdb}. sebuah rekam data ECG direpresentasikan menjadi 3 file
+dengan tipe \textit{annotation}, \textit{signal data} dan \textit{header}. Cara untuk
+membaca maupun menulis format data tersebut juga disediakan dalam situs
+resminya. Pada \pic~\ref{fig:ecgphy} adalah contoh data signal yang dibaca
+dengan menggunakan \gls{wfdb} toolbox di matlab.
+ 
+\addFigure{width=0.7\textwidth}{pics/ecgsignalphysionetdata.jpg}{fig:ecgphydata}{Contoh
+representasi data ECG.}
+
+Seperti yang terlihat pada \pic~\ref{fig:ecgphy}, merupakan sinyal ECG selama
+10 detik yang berasal dari data $100.dat$ dimana isi dari data tersebut dapat
+dilihat pada \pic~\ref{fig:ecgphydata}. Secara keseluruhan, data pada $100.dat$
+tersebut merupakan hasil rekam selama 30 menit 5.556 detik dari seorang pasien
+berumur 69 tahun , Laki-Laki dengan diagnosa Aldomet, Inderal, atau sekitar
+650.000 sample interval. Terdapat 3 kolom dimana yg pertama merupakan sample
+capture interval time dari signal dengan frequensi 360, sehingga untuk 10 detik
+mengandung 3600 sample. kolom kedua adalah besar amplitude (mV) dari lead II
+(MLII) dan kolom ketiga adalah besar amplitude dari lead V5.
 
 %-----------------------------------------------------------------------------%
-\section{Satu Persamaan}
+\section{Baseline Wander Removal}
 %-----------------------------------------------------------------------------%
+Tahapan pertama dalam pemrossesan sinyal ECG adalah \gls{bwr}. Baseline wander
+adalah suatu kondisi dimana signal ECG yang dihasilkan tidak berada pada garis
+isoelectrik (garis sumbu), melainkan mengalami pergeseran keatas maupun
+kebawah. hal ini dikarenakan aktifitas frekuensi rendah yang muncuk ketika 
+proses perekaman dilakukan yaitu dari proses pernafasan maupun dari pergerakan
+bagian tubuh. Hal ini dapat mengganggu proses analisis sinyal dan memungkinkan
+terjadinya kesalahan dalam proses penerjemahan sinyal ECG,  salah satu
+contoh-nya adalah perubahan gelombang ST-T pada ECG dimana  proses
+penerjemahannya sangat tergantung pada garis isoelektrik.
+
+Terdapat beberapa teknik yang digunakan untuk mereduksi noise frekuensi rendah
+(baseline wander) mulai dari linear filtering seperti yang dikembangkan oleh
+J.A. {Alst\'{e}} van \cite{alst-1986} maupun polynomial fitting atau cubic
+spline filtering seperti yang dikembangkan oleh Meyer et.al. \cite{meyer-1977}.
+Penggunaan linear filter mengakibatkan terjadinya distorsi gelombang ECG,
+terutama dibagian antara PQ interval dan ST segment. Dengan menggunakan
+nonlinear cubic spline interpolation, digabungkan dengan teknik pengurangan
+(substraction technique) dapat mereduksi noise tanpa mempengaruhi gelombang ECG
+secara signifikan.
+
+Konsep dasar dari teknik polynomial fitting ini adalah dengan melakukan proses
+estimasi pergeseran sumbu utama dengan menggunakan titik perwakilan pada
+gelombang ECG, dengan satu titik untuk setiap beat. Pilihan terbaik yang
+digunakan sebagai titik acuan (knot) adalah PQ interval. Estimasi kemudian
+dilakukan sedemikian sehingga menginterpolasi setiap titik secara halus. Oleh
+karena itu, sebelum langkah ini dilakukan, QRS complex harus dideteksi  terlebih
+dahulu dan PQ interval sudah ditentukan.
+
+Metode interpolasi cubic spline adalah salah satu cara untuk fitting kurva pada
+data eksperimental yang bentuk dari fungsinya maupun turunannya tidak diketahui.
+Metode ini menggunakan polinomial pangkat tiga yang diasumsikan berlaku pada
+titik-titik yang terletak di antara dua titik data yang diketahui. Fungsi yang
+bersangkutan kemudian diaplikasikan pada semua titik-titik data yang ada,
+sehingga didapatkan persamaan simultan, yang selanjutnya dapat diselesaikan
+dengan menggunakan metode matriks. Estimasi pergeseran sumbu utama dilakukan
+dengan interpolasi cubic spline karena interpolasi cubic spline menghasilkan
+suatu pendekatan yang lebih halus dibandingkan dengan linier spline ataupun
+kuadratik spline karena ada jaminan bahwa turunan pertama dan kedua adalah
+kontinu pada seluruh selang. Interpolasi cubic spline merupakan pendekatan
+sungsi yang diperoleh dengan mengunakan polinomial derajat tiga pada
+masing-masing sub selang. Dalam kasus sinyal ECG sub selang yang kita gunakan
+adalah PQ interval dari tiap-tiap beat.
+ 
+\noindent Definisi dari cubic spline adalah sebagai berikut: \\
+Diberikan titik-titik data $(t_1, A_1), (t_2, A_2),...(t_n, A_n)$. Dimana
+titik data tersebut merupakan PQ interval dari sinyal ECG. Suatu cubic spline
+$S$ yang menginterpolasi data yang diberikan memenuhi sifat-sifat berikut: 
+\begin{enumerate}[(i)] 
+  \item Dalam setiap selang $[x, x_{i+1}]$, dimana $i=1, 2, \dots, n-1$ , dan
+  $S$ adalah polinomial derajat tiga. 
+  \item $S(x_i)=f_i$, $i=1,2,...,n.$ 
+  \item $S, S'$ dan $S"$ adalah kontinu di titik-titik dalam $x_2, x_3, \dots,
+  x_{n-1}$.
+\end{enumerate}
+ 
+Dari definisi di atas, persamaan-persamaan yang terjadi pada cubic spline
+diberikan sebagai berikut, pada selang yang ke-$i$ yaitu terletak diantara titik
+$(x_i, f_i)$ dan $(x_{i+1}, f_{i+1})$, polinomial berderajat tiga yang memenuhi
+adalah: 
+\begin{align}
+	\label{eq:polybwr}
+	f = a_i(x-x_i)^3 + b_i(x-x_i)^2 + c_i(x-x_i) + d_i
+\end{align}
+
+Setelah diperoleh persamaan tersebut maka pergeseran sumbu utama bisa diestimasi
+dan langkah selanjutnya adalah mencari sumbu utama yang sebenarnya atau iso
+elektrik sinyal ECG dengan menentukan pivot isoelektrik untuk digunakan sebagai
+pengurang sinyal ECG. 
+
+Pada penelitian ini, proses BWR dilakukan menggunakan matlab package yang
+dikembangkan oleh Gari Clifford \cite{clifford-2005} yang bersifat open source.
+Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
+\pic~\ref{fig:bwrsample}.
+
+\addFigure{width=0.8\textwidth}{pics/bwrsample.png}{fig:bwrsample}{Sinyal ECG
+asli dan hasil proses BWR serta garis isoelectrik (estimasi)}
+
+%-----------------------------------------------------------------------------%
+\section{Ekstraksi Fitur}
+\label{sec:ekstractfitur}
+%-----------------------------------------------------------------------------%
+Untuk melakukan pengenalan kelaianan arrhytmia, ada 2 cara yang dapat dilakukan.
+Cara pertama adalah dengan mendeteksi karakteristik time interval dari sinyal
+ECG seperti PR interval, PR segment, QRS interval, ST segment, ST interval, QT
+interval dan karakteristik morfologi lainnya. Cara yang kedua adalah dengan
+mendeteksi kelainan berdasarkan informasi sinyal beat-by-beat, dimana pada
+metode ini, rangkaian sinyal ECG di segmentasi menjadi sekumpulan beat seperti
+yang dilakukan pada \cite{Ghongade.1}, \cite{zhao-2005}.
+
+Pada penelitian ini, segmentasi beat dipilih karena dataset sudah menyediakan 
+anotasi tambahan mengenai posisi puncak gelompang R (R-peak). Dengan informasi
+anotasi tersebut, asumsi terhadap lebar setiap beat dibuat dengan pendekatan
+sekitar 300 sampel data dan ekstraksi beat dilakukan dengan memposisikan puncak
+R sebagai pivot untuk setiap beat. Untuk setiap puncak R, sinyal awal dipotong
+dimulai dari posisi $R-150$ sampai $R+149$, sehingga didapat beat dengan lebar
+300 sampel data. Ilustrasi dapat dilihat pada \pic~\ref{fig:ecgcutoff}. Hasil 
+dari proses segmentasi tersebut dapat dilihat pada \pic~\ref{fig:ecgplot}.
+
+\addFigure{width=0.8\textwidth}{pics/ecgcutoff.png}{fig:ecgcutoff}{Ilustrasi
+teknik segmentasi beat.}
+
+\addFigure{width=0.8\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh  beat dari
+5 jenis arrhytmia dan 1 beat normal.}
+
+Dari proses segmentasi yang telah dilakukan didapat sejumlah beat yang
+dilengkapi dengan label anotasi nya seperti yang ditunjukkan pada
+\tab~\ref{tbl:beatstat}.
+
+\addTableFromFigures{width=0.7\textwidth}{pics/beatstat.png}{tbl:beatstat}{Jumlah
+Beat untuk setiap jenis anotasi pada MIT-BIH database}
+
+Dari \tab~\ref{tbl:beatstat} dapat dilihat jumlah beat untuk tiap label anotasi
+tidak berimbang dan bahkan ada yang berjumlah sangat kecil, yaitu 2 beat untuk
+jenis Supraventrikular premature beat. 
+
+Sesuai dengan standar AAMI, seperti yang terlihat pada \tab~\ref{tbl:aami}, maka
+jenis beat yang akan digunakan adalah 15 beat pertama yang ditunjukkan dengan
+kotak hitam pada \tab~\ref{tbl:beatstat}. Karena jumlah 3 beat terakhir sangat
+kecil, maka untuk saat ini hanya 12 kelas saja yang nantinya akan digunakan
+dalam proses pengenalan. \\
+
+\addTableFromFigures{width=1\textwidth}{pics/tblaami.png}{tbl:aami}{Pemetaan
+jenis beat pada MIT-BIH Arrhytmia database dengan kelas beat pada
+AAMI\cite{Philip.1}}
+%-----------------------------------------------------------------------------%
+\section{Noise/Outlier Removal}
+%-----------------------------------------------------------------------------%
+Untuk menganalisis hasil ekstraksi beat yang dilakukan pada tahap sebelumnya
+(sub-bab \ref{sec:ekstractfitur}), beat yang dihasilkan kemudian dikelompokkan
+berdasarkan tipe masing-masing arrhytmia dan diplot menggunakan aplikasi matlab.
+Empat jenis arrhytmia diplot seperti yang diilustrasikan pada
+\pic~\ref{fig:ecg:plotecgoutlier}.
+
+\addFigure{width=1\textwidth}{pics/plotecgoutlier.jpg}{fig:plotecgoutlier}{Plot
+Empat tipe arrhytmia hasil proses ekstraksi fitur}
+
+\TODO{need to be reviewed}
+Dari hasil pengamatan terlihat bahwa terdapat beat ECG pada tiap-tiap tipe
+arrhytmia yang lain dari distribusi data kebanyakan, dimana dalam hal ini
+disebut outlier. Outlier ini jika digunakan untuk melatih jaringan saraf
+yang dibangun dapat menyebabkan ketidak-akuratan data karena model akan mencoba
+mengakomodasi outlier tersebut, namun akan berimbas pada kinerja dari jaringan
+saraf karena akan menurunkan tingkat pengenalan terhadap beat tersebut. 
+Oleh karena itu, beat yang terindikasi menjadi outlier harus dihilangkan.
+
+Untuk menghilangkan outlier pada tiap kelas, ada beberapa teknik yang dapat
+dilakukan salah satunya adalah teknik Inter-Quartile Range (IQR). Pada umumnya
+IQR digunakan untuk univariate data, tapi pada penelitian ini, teknik IQR
+digunakan untuk multivariate data dengan asumsi penerapannya dilakukan tanpa
+memperhitungkan korelasi antar fitur yang biasanya didapat dengan covariance
+matrix. Algoritma untuk menghilangkan outlier dapat dilihat pada 
+algoritma~\ref{alg:outlier}.
+ 
+\begin{algorithm}  
+\caption{Mencari dan menghilangkan outlier beat}          
+\label{alg:outlier}                           
+\begin{algorithmic}                    % enter the algorithmic environment
+	\FORALL {$Data_c$ in $C_{arrhytmia}$}
+		\FOR{$k = 1 \to d$}
+			\STATE $Q_1 = lower\ quartile $ \COMMENT{percentile ke-25} 
+			\STATE $Q_3 = upper\ quartile $ \COMMENT{percentile ke-75}
+			
+			\STATE
+			\STATE $IQR = Q_3 - Q_1$ \COMMENT{Hitung IQR}
+			
+			\STATE
+			\STATE \COMMENT{Hitung tingkat ekstrimitas data sebagai pembatas outlier}
+			\STATE $Low = Q_1 - 1.5 * IQR $ 
+			\STATE $Up  = Q_3 + 1.5 * IQR $
+			
+			\STATE
+			\STATE \COMMENT{Cari kandidat outlier untuk dimensi k}
+			\FOR {$x = 1 \to N$}
+				\IF {$x_k < Low\ and\ x_k > Up$}
+				 	\STATE $Outlier \Leftarrow  x$ 
+				\ENDIF
+			\ENDFOR
+		\ENDFOR
+		\STATE $Data_c \Leftarrow Data_c \ni Outlier$
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+Pada \pic~\ref{fig:detectoutlier}  dapat dilihat ilustrasi pendeteksian outlier
+dengan menggunakan teknik IQR. Sampel data yang memiliki fitur berada diluar
+rentang quartil yang ditentukan akan dianggap outlier, dalam hal ini sampel data
+dengan fitur bertanda $+$ berwarna merah.
+\addFigure{width=1\textwidth}{pics/detectoutlier.png}{fig:detectoutlier}{Ilustrasi
+Outlier detection menggunakan IQR}
+
+Setelah dilakukan proses pendeteksian dan penghapusan outlier beat dengan
+menggunakan algoritma~\ref{alg:outlier}, maka didapatkan hasil beat yang jika
+diplot seperti yang ditunjukkan pada \pic~\ref{fig:hasilremove}
+
+\addFigure{width=1\textwidth}{pics/hasiloutlierremoval.png}{fig:hasilremove}{Plot
+beat RBBB setelah dilakukan proses penghapusan outlier beat}
+
+Dari \pic~\ref{fig:hasilremove} dapat dilihat beat outlier yang terdapat pada
+sinyal ECG di-kecualikan/dihapus dan menghasilkan kumpulan beat dengan sebaran
+sesuai dengan rentang quartil yang ditentukan.
+
+%-----------------------------------------------------------------------------%
+\section{Reduksi Fitur}
+%-----------------------------------------------------------------------------%
+

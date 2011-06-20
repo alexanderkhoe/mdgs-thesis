@@ -29,26 +29,28 @@
  
 % Awal bagian penulisan laporan
 \begin{document}
+
+\pagestyle{empty}
 %
 % Sampul Laporan
 \include{sampul}
- 
-%
-% Gunakan penomeran romawi
-\pagenumbering{roman}
 
-%
 % load halaman judul dalam
 \addChapter{HALAMAN JUDUL}
 \include{judul_dalam}
 
-%
+\pagestyle{fancy}
+
+% Gunakan penomeran romawi
+\pagenumbering{roman}
+
 % setelah bagian ini, halaman dihitung sebagai halaman ke 2
 \setcounter{page}{2}
 
 %  load halaman pengesahan
 \addChapter{LEMBAR PERSETUJUAN}
 \include{pengesahan}
+
 %  load halaman orisinalitas
 \addChapter{LEMBAR PERNYATAAN ORISINALITAS}
 \include{orisinal}

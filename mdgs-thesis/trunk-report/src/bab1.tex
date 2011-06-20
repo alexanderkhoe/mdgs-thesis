@@ -1,5 +1,6 @@
 %-----------------------------------------------------------------------------%
 \chapter{\babSatu}
+\label{bab:1}
 %-----------------------------------------------------------------------------%
 
 %-----------------------------------------------------------------------------%
@@ -86,8 +87,11 @@ disertai dengan ekstrasi fitur berdasarkan morfologi signal yakni R-peak, QRS
 area serta Q-S distance dengan menggunakan Backpropagation. Data yang digunakan adalah tiga
 tipe arrhytmia dari MIT-BIH database. Guler \cite{guler.1} menggunakan multi
 layer perceptron (MLP) dan combine network model untuk mengklasifikasi signal ECG (beat) 
-dan menggunakan distribusi statistik dari hasil analisis spectral signal ECG menggunakan DWT sebagai fitur klasifikasi. Elsayad dalam papernya, \cite{Elsayad.1} mengaplikasikan competitive based learning, yakni Learning Vector Quantization - LVQ, untuk mengklasifikasi data ECG arrhytmia
-dari UCI database. Data diolah menggunakan PCA dan diaplikasikan pada beberapa
+dan menggunakan distribusi statistik dari hasil analisis spectral signal ECG
+menggunakan DWT sebagai fitur klasifikasi. Elsayad dalam papernya,
+\cite{Elsayad.1} mengaplikasikan competitive based learning, yakni Learning
+Vector Quantization - LVQ, untuk mengklasifikasi data ECG arrhytmia dari UCI
+database. Data diolah menggunakan PCA dan diaplikasikan pada beberapa
 varian LVQ. Karraz et.al. dalam papernya \cite{Karraz.1} mengembangkan
 klasifikasi denyut jantung otomatis menggunakan jaringan saraf tiruan
 berdasarkan Bayesian Framework. Studi dilakukan terhadap 5 tipe ECG
@@ -196,6 +200,11 @@ Ruang lingkup yang digunakan dalam penelitian ini adalah sebagai berikut;
   \item Jumlah kategori arrhytmia yang akan dideteksi dalam penelitian ini
   adalah sebanyak 12 kategori termasuk didalamnya signal denyut jantung hasil
   dari penggunaan alat pacu jantung (pacemaker).
+  \item Sinyal ECG yang digunakan pada penelitian ini hanya menggunakan
+  sinyal hasil sandapan MLII.
+  \item Frekuensi cuplik (sampling rate) dari sinyal ECG yang digunakan adalah
+  360Hz.
+  \item 
 \end{enumerate} 
 %-----------------------------------------------------------------------------%
 \section{Tujuan}
