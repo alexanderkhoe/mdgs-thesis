@@ -7,8 +7,11 @@ import java.util.Iterator;
 
 import org.encog.engine.util.BoundMath;
 
-import id.mdgs.lvq.Dataset.Entry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
+import id.mdgs.master.WinnerFunction;
+import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
 
 /**
@@ -54,34 +57,26 @@ public class WinnerByEuc implements WinnerFunction {
 		boolean once = false;
 		Iterator<Entry> eIt = codes.iterator();
 		while(eIt.hasNext()) { 
-			double difference = 0;
+			double score = 0;
 			Entry code = eIt.next();
 			
-			for(i=0;i < codes.numFeatures; i++){
-				double diff = sample.data[i] - code.data[i];
-				difference += diff * diff;
-				
-//				if(difference > winner[knn-1].coef)
-//					break;
-			}
-			
-			difference = Math.sqrt(difference);
-//			difference = BoundMath.sqrt(difference);
+			score = MathUtils.euclideDistance(sample.data, code.data);
+//			score = MathUtils.squaredEuclideDistance(sample.data, code.data);
 			
 			if(!once) {
 				once = true;
-				winner[0].coef 	 = difference;
+				winner[0].coef 	 = score;
 				winner[0].winner = code;
 				continue;
 			}
 			
-			for(i=0; (i < knn) && (difference > winner[i].coef); i++);
+			for(i=0; (i < knn) && (score > winner[i].coef); i++);
 			
 			if(i < knn){
 				for(int j=knn - 1;j > i;j--){
 					winner[j].copy(winner[j-1]);
 				}
-				winner[i].coef 	 = difference;
+				winner[i].coef 	 = score;
 				winner[i].winner = code;
 			}
 		}

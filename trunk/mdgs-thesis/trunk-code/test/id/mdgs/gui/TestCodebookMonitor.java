@@ -2,12 +2,12 @@ package id.mdgs.gui;
 
 import java.util.Iterator;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset;
 import id.mdgs.lvq.Lvq;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.lvq.TrainLvq21;
-import id.mdgs.lvq.glvq.TrainGlvq;
 import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
@@ -31,7 +31,7 @@ public class TestCodebookMonitor {
 		net.initCodes(trainset);
 //		net.initCodesRandom(trainset);
 		
-		TrainGlvq train = new TrainGlvq(net, trainset, 0.005);
+		TrainGlvq1 train = new TrainGlvq1(net, trainset, 0.005);
 		train.setMaxEpoch(200);
 		
 //		TrainLvq21 train = new TrainLvq21(net, trainset, 0.001, 0.005);

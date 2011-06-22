@@ -74,12 +74,6 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.test.txt",
 
-		//6 4 fit IRIS
-		utils.getDefaultPath() + "/resources/trash/iris.train.data",
-		utils.getDefaultPath() + "/resources/trash/iris.test.data",
-		utils.getDefaultPath() + "/resources/trash/iris.test.data",
-		utils.getDefaultPath() + "/resources/trash/iris.test.data",
-
 		//7 30 fit PCA 
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000.pca/6.300f_2000_nonoutliers.bwr_300_gabung.train.pca30.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000.pca/6.300f_2000_nonoutliers.bwr_300_gabung.test.pca30.txt",
@@ -98,9 +92,24 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.3.24.2000Samples/3.24f_2000_kotor.bwr_300_gabung.txt",
 	};
 	
+	public static String DATA_IRIS[] = {
+		utils.getDefaultPath() + "/resources/trash/iris.train.data",
+		utils.getDefaultPath() + "/resources/trash/iris.test.data",
+		utils.getDefaultPath() + "/resources/trash/iris.test.data",
+		utils.getDefaultPath() + "/resources/trash/iris.test.data"
+	};
+	
+	public static String DATA_UCI[] = {
+		utils.getDefaultPath() + "/resources/ucidata/13.6f.ucidb.txt.train.txt",
+		utils.getDefaultPath() + "/resources/ucidata/13.6f.ucidb.txt.test.txt",
+		utils.getDefaultPath() + "/resources/ucidata/4.6f.ucidb.txt.train.txt",
+		utils.getDefaultPath() + "/resources/ucidata/4.6f.ucidb.txt.test.txt",
+		utils.getDefaultPath() + "/resources/ucidata/else.6f.ucidb.txt",
+	};
+	
 	public static String DATA_ALL[] = {
 		//0. 300 fit 6 class
-		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.all/6.300f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.test.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_kotor.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_kotor.bwr_300_gabung.test.txt",

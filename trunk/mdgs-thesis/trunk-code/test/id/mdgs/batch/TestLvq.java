@@ -11,15 +11,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dump.glvq.TrainGlvq1;
+import id.mdgs.dump.glvq.TrainGlvqPso;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.lvq.TrainLvq21;
 import id.mdgs.lvq.TrainLvq3;
-import id.mdgs.lvq.glvq.TrainGlvq;
-import id.mdgs.lvq.glvq.TrainGlvqPso;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -899,7 +899,7 @@ public class TestLvq {
 						Lvq net = new Lvq();
 						net.initCodes(trainsets[dt]);
 						
-						TrainGlvq train = new TrainGlvq(net, trainsets[dt], alphaset[a]);
+						TrainGlvq1 train = new TrainGlvq1(net, trainsets[dt], alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);
 						
 						utils.timer.start();
@@ -1020,7 +1020,7 @@ public class TestLvq {
 						Lvq net = new Lvq();
 						net.initCodes(trainsets[dt]);
 						
-						TrainGlvq train = new TrainGlvq(net, trainsets[dt], alphaset[a]);
+						TrainGlvq1 train = new TrainGlvq1(net, trainsets[dt], alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);
 						
 						utils.timer.start();

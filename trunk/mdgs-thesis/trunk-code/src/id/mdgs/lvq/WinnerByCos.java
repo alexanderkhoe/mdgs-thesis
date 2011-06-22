@@ -5,8 +5,10 @@ package id.mdgs.lvq;
 
 import java.util.Iterator;
 
-import id.mdgs.lvq.Dataset.Entry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
+import id.mdgs.master.WinnerFunction;
 
 /**
  * @author I Made Agus Setiawan

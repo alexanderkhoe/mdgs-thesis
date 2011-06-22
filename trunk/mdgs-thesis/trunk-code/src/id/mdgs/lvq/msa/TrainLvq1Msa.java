@@ -3,10 +3,10 @@
  */
 package id.mdgs.lvq.msa;
 
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.HitList;
-import id.mdgs.lvq.HitList.HitEntry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.HitList;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.HitList.HitEntry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils;

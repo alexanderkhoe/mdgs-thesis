@@ -3,10 +3,10 @@
  */
 package id.mdgs.lvq.msa;
 
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.DatasetProfiler;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.Lvq;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 import id.mdgs.utils.MathUtils;
 

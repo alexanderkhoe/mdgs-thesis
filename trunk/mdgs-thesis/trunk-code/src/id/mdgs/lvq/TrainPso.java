@@ -3,8 +3,10 @@
  */
 package id.mdgs.lvq;
 
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.DatasetProfiler.PEntry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.lvq.LvqUtils.MinMax;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 import id.mdgs.utils.MathUtils;

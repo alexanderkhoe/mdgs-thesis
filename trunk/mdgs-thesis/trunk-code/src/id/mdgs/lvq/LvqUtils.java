@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.DatasetProfiler.PEntry;
-import id.mdgs.lvq.HitList.HitEntry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.HitList;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.DatasetProfiler.PEntry;
+import id.mdgs.dataset.FCodeBook.FEntry;
+import id.mdgs.dataset.HitList.HitEntry;
 import id.mdgs.utils.MathUtils;
-import id.mdgs.utils.utils;
 
 /**
  * @author I Made Agus Setiawan
@@ -66,8 +69,30 @@ public class LvqUtils {
 		}
 	}
 	
+	/*Fuzzy WINNERINFO*/
+	public static class FWinnerInfo {
+		public FEntry winner;
+		public Entry miu;
+		public double coef;
+		public FWinnerInfo(){
+			reset();
+		}
+		
+		public void reset(){
+			winner = null;
+			miu  = null;
+			coef = Double.MAX_VALUE;
+		}
+		
+		public void copy(final FWinnerInfo wi){
+			this.winner = wi.winner;
+			this.miu = wi.miu;
+			this.coef 	= wi.coef;
+		}
+	}
+	
 	public static class MinMax {
-		double min = Double.POSITIVE_INFINITY, max = Double.NEGATIVE_INFINITY;
+		public double min = Double.POSITIVE_INFINITY, max = Double.NEGATIVE_INFINITY;
 		public void setMinMax(double val){
 			if(val < min) min = val;
 			if(val > max) max = val;
@@ -198,7 +223,7 @@ public class LvqUtils {
 		HitList hits;
 		
 		if(knn < 1) knn = 1;
-		winner = findWinner(data, code, knn);
+		winner = LvqUtils.findWinner(data, code, knn);
 		if(winner == null){
 			return false;
 		}
@@ -265,7 +290,9 @@ public class LvqUtils {
 //			}
 //			
 //			difference = Math.sqrt(difference);
-			difference = MathUtils.euclideDistance(sample.data, code.data);
+//			difference = MathUtils.euclideDistance(sample.data, code.data);
+			difference = MathUtils.squaredEuclideDistance(sample.data, code.data);
+			
 			
 			for(i=0; (i < knn) && (difference > winner[i].coef); i++);
 			

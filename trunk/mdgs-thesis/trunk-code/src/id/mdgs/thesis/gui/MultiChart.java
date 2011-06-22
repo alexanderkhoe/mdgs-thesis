@@ -1,6 +1,6 @@
 package id.mdgs.thesis.gui;
 
-import id.mdgs.lvq.Dataset.Entry;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.utils.MathUtils;
 
 import java.awt.BorderLayout;

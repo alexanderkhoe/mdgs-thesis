@@ -3,8 +3,12 @@
  */
 package id.mdgs.thesis.gui;
 
-import id.mdgs.fnlvq.FCodeBook;
-import id.mdgs.lvq.Dataset;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FCodeBook;
+import id.mdgs.master.ITrain;
+import id.mdgs.thesis.gui.Interface.ICodeMonitor;
+import id.mdgs.thesis.gui.Interface.IErrorMonitor;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,19 +28,32 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 		
 	private static final long serialVersionUID = 3340716339457233003L;
 	/**/
-	public IMonitor[] cms;
+	ITrain trainer;
+	public ICodeMonitor[] cms;
+	public IErrorMonitor  error;
 	public static int npanel = 10;
-	public CodebookMonitor(String title, Dataset codebook) {
+	
+	
+	public CodebookMonitor(String title, Dataset codebook , ITrain trainer) {
 		super(title);
+		this.trainer = trainer;
 		init(codebook);
 		createMenu();
 	}
+	public CodebookMonitor(String title, Dataset codebook) {
+		this(title, codebook, null);
+	}
 	
-	public CodebookMonitor(String title, FCodeBook codebook) {
+	public CodebookMonitor(String title, FCodeBook codebook, ITrain trainer) {
 		super(title);
+		this.trainer = trainer;
 		init(codebook);
 		createMenu();
 	}	
+	public CodebookMonitor(String title, FCodeBook codebook) {
+		this(title, codebook, null);
+		
+	}
 	
 	public void init(Dataset ds) {
 	    // Add internal frame to desktop
@@ -48,6 +65,9 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	    	cms[i] = new CodeMonitor(ds.get(i));
 	    	desktop.add(cms[i].getPanel());
 	    }
+	    
+	    error = new ErrorMonitor(trainer.getMaxEpoch());
+	    desktop.add(error.getPanel());
 	    
 	    // Display the desktop in a top-level frame
 	    setContentPane(desktop);
@@ -66,6 +86,9 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	    	cms[i] = new FuzzyCodeMonitor(ds.get(i));
 	    	desktop.add(cms[i].getPanel());
 	    }
+	    
+	    error = new ErrorMonitor(trainer.getMaxEpoch());
+	    desktop.add(error.getPanel());
 	    
 	    // Display the desktop in a top-level frame
 	    setContentPane(desktop);
@@ -118,6 +141,11 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 		}
 	}
 
+	public void update(int epoch, double error){
+		this.update(epoch);
+		this.error.updateError(epoch, error);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equalsIgnoreCase("Exit")){

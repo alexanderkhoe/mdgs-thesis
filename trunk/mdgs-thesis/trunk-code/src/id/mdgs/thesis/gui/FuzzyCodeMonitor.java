@@ -6,7 +6,7 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import id.mdgs.fnlvq.FCodeBook.FEntry;
+import id.mdgs.dataset.FCodeBook.FEntry;
 
 public class FuzzyCodeMonitor extends CodeMonitor {
 	FEntry code;

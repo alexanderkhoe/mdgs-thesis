@@ -3,15 +3,11 @@
  */
 package id.mdgs.glvq;
 
-import java.util.Iterator;
-
 import id.mdgs.dataset.Dataset;
-import id.mdgs.dataset.DatasetProfiler;
 import id.mdgs.dataset.Dataset.Entry;
-import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
-import id.mdgs.master.ITrain;
+import id.mdgs.lvq.TrainLvq1;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
 
@@ -19,77 +15,27 @@ import id.mdgs.utils.utils;
  * @author I Made Agus Setiawan
  *
  */
-public class TrainGlvq implements ITrain {
+public class TrainGlvq extends TrainLvq1 {
+
 	protected final int CLASS = 0;
 	protected final int NCLASS = 1;
-	public int maxEpoch;
-	public int currEpoch;
-	protected double alpha;
-	protected double alphaStart;
-	protected double xi;
-	protected Dataset training;
-	public Lvq network;
-	protected DatasetProfiler profiler;
-	protected double error;
-
-	/**/
-	public static class Best {
-		public Dataset codebook;
-		public double  coef;
-		public int epoch;
-		public Best(Dataset ds) {
-			codebook = new Dataset(ds);
-			coef = Double.MAX_VALUE;
-			epoch = 0;
-		}
-		public void evaluate(Dataset codes, double err, int epoch){
-			if(coef > err){
-				coef = err;
-				codebook.set(codes);
-				this.epoch = epoch;
-			}
-		}
-	}
-	public Best bestCodebook;
 	
+	protected double xi;
 	/**
-	 * 
 	 * @param network
 	 * @param training
 	 * @param learningRate
+	 * @param windowWidth
 	 */
 	public TrainGlvq(Lvq network, Dataset training, double learningRate) {
-		this.network 	= network;
-		this.training	= training;
-		this.alphaStart = learningRate;
-		this.alpha		= learningRate;
-		this.xi			= 1d;
-		this.profiler	= new DatasetProfiler();
-		this.maxEpoch	= 100;
+		super(network, training, learningRate);
 		
-		this.bestCodebook = new Best(network.codebook);
+		/*Set findWinner method to Squared Euclid*/
+		network.findWinner = new WinnerBySquaredEuc();
+		
+		this.xi	= 1d;
 	}
-
-	/**
-	 * @return the error
-	 */
-	public double getError() {
-		return error;
-	}
-
-	/**
-	 * @param error the error to set
-	 */
-	public void setError(double error) {
-		this.error = error;
-	}
-
-	public void updateLearningRate(){
-		this.alpha = alphaStart * (1 - (currEpoch/maxEpoch));
-//		this.alpha *= (1 - (getCurrIteration()/maxEpoch));
-//		this.alpha *= 0.99d;
-	}
-
+	
 	protected void updateXiParameter() {
 		this.xi *= 1.1;// + (epoch/maxEpoch);
 	}
@@ -97,143 +43,51 @@ public class TrainGlvq implements ITrain {
 	public double lostFunction(double mce){
 		return MathUtils.sigmoid(mce * xi);
 	}
-	/**
-	 * @return the maxEpoch
-	 */
-	public int getMaxEpoch() {
-		return maxEpoch;
-	}
 
-	/**
-	 * @param maxEpoch the maxEpoch to set
-	 */
-	public void setMaxEpoch(int maxEpoch) {
-		this.maxEpoch = maxEpoch;
-		this.setCurrIteration(0);
-		profiler.run(this.training);
-	}
-	
-	/**
-	 * @return the currIteration
-	 */
-	public int getCurrIteration() {
-		return currEpoch;
-	}
-
-	/**
-	 * @param currIteration the currIteration to set
-	 */
-	public void setCurrIteration(int currIteration) {
-		this.currEpoch = currIteration;
-	}
-
-	/**
-	 * @return the training
-	 */
-	public Dataset getTraining() {
-		return training;
-	}
-
-	public boolean shouldStop(){
-		return currEpoch >= maxEpoch;
-	}
-	
-	public void iteration(int maxEpoch){
-		setMaxEpoch(maxEpoch);
-		
-		for(int epoch=0;epoch < maxEpoch;epoch++){
-			
-			this.iteration();
-			
-			System.out.println("Iteration: " + epoch + ", Error:" + this.getError());
-		}
-	}
-	
-
-	public void iteration(){
+	@Override
+	public void iteration() {
 		if(getCurrEpoch() >= getMaxEpoch()){
 			utils.log("Exeed max epoch.");
 			return;
 		}
 		
-		iterationOption3();
-	}
-	
-	public void iterationOption1(){
-		double avgLost = 0;
-		int N = 0;
-		int True = 0;
-		
+		int TP = 0, N = 0;
+		double avgError = 0;
 		for(Entry sample: getTraining()){
-			WinnerInfo win;
-			win = train(this.network.codebook, sample);
+			WinnerInfo wi;
+			wi = train(this.network.codebook, sample);
 			
-			double mce = win.coef;
-			avgLost += lostFunction(mce);
+			double mce = wi.coef;
+			avgError += lostFunction(mce);
+			
+			if(mce < 0) TP++;
 			N++;
-			if(mce < 0) True++;
 		}
+	
 		updateLearningRate();
 		updateXiParameter();
-		setError(avgLost/N);
-//		setError(1 - ((double)True/N));
+		setError(avgError/N);
+		currEpoch++;
 		
-		this.currEpoch++;
-		bestCodebook.evaluate(network.codebook, getError(), currEpoch);
-	}
-	
-	public void iterationOption3(){
-		//find max
-		int maxData = 0;
-		for(PEntry pe: profiler){
-			if (maxData < pe.size()){
-				maxData = pe.size();
-			}
-		}
-		
-		Entry sample = null;
-		double avgLost = 0;
-		int N = 0; int True = 0;
-		for(int i=0;i<maxData;i++){
-			for(PEntry pe: profiler){
-				if(i >= pe.size()) continue;
-				
-				int pos = pe.get(i % pe.size());
-				sample = training.get(pos);
-				
-				WinnerInfo win;
-				win = train(this.network.codebook, sample);
-				
-				double mce = win.coef;
-				avgLost += lostFunction(mce);
-				N++;
-				if(mce < 0) True++;
-			}
-		}
-		updateLearningRate();
-		updateXiParameter();		
-		setError(avgLost/N);
-//		setError(1 - ((double)True/N));
-		
-		this.currEpoch++;
 		bestCodebook.evaluate(network.codebook, getError(), currEpoch);
 	}
 	
 	
+	@Override
 	protected WinnerInfo train(Dataset codebook, Entry input) {
 		WinnerInfo[] wins;
 		double mce = 0, fori = 0, finc = 0; 
 		
 		wins = this.findWinner(codebook, input);
-		/*misclassification error*/
-		mce = (wins[CLASS].coef - wins[NCLASS].coef)/
-			  (wins[CLASS].coef + wins[NCLASS].coef);
-		/*it should be [d(ki) + d(rj)]^2, but for simplification, remove the squere*/
-		fori= (wins[NCLASS].coef)/
-		  	  (wins[CLASS].coef + wins[NCLASS].coef);
-		finc= (wins[CLASS].coef)/
-		  	  (wins[CLASS].coef + wins[NCLASS].coef);
 		
+		/*misclassification error*/
+		double d1 = wins[CLASS].coef;
+		double d2 = wins[NCLASS].coef;
+		
+		mce = (d1 - d2) / (d1 + d2);
+		/*it should be [d(ki) + d(rj)]^2, but for simplification, remove the squere*/
+		fori= (d2)/ (d1 + d2);
+		finc= (d1)/ (d1 + d2);
 		
 		/*adjust code vector*/
 		/*GENUINE*/
@@ -255,47 +109,24 @@ public class TrainGlvq implements ITrain {
 
 	protected void adjustWeights(Entry code, Entry input, double alpha, 
 			double mce, double factor){
-//		double sig = lostFunction(mce*currEpoch);
-//		for(int i=0;i < code.size();i++){
-//			code.data[i] += alpha * 1 * sig * (1 - sig) * factor * 
-//					(input.data[i] - code.data[i]);
-//		}
+		
 		double sig = lostFunction(mce);
 		for(int i=0;i < code.size();i++){
 			code.data[i] += alpha * 4 * sig * (1 - sig) * factor * 
 					(input.data[i] - code.data[i]);
 		}
 	}
-	
-	public double getDistance(Entry sample, Entry code){
-		return MathUtils.squaredEuclideDistance(sample.data, code.data);
+
+	@Override
+	protected void adjustWeights(Entry code, Entry input, double alpha) {
+		throw new RuntimeException("Not Supported");
 	}
 	
 	public WinnerInfo[] findWinner(Dataset codebook, Entry input){
 		WinnerInfo[] winner;
 		int i;
-		winner = new WinnerInfo[codebook.size()];
-		for(i=0;i < winner.length;i++){
-			winner[i] = new WinnerInfo();
-		}
-		
-		Iterator<Entry> eIt = codebook.iterator();
-		while(eIt.hasNext()) {
-			double difference = 0;
-			Entry code = eIt.next();
-			
-			difference = getDistance(input, code);
-			
-			for(i=0; (i < winner.length) && (difference > winner[i].coef); i++);
-			
-			if(i < winner.length){
-				for(int j=winner.length - 1;j > i;j--){
-					winner[j].copy(winner[j-1]);
-				}
-				winner[i].coef 	 = difference;
-				winner[i].winner = code;
-			}
-		}
+
+		winner = this.network.findWinner.function(codebook, input, codebook.size());
 		
 		/*find the best matching to original class and other classes*/
 		WinnerInfo[] result = new WinnerInfo[2];
@@ -319,19 +150,6 @@ public class TrainGlvq implements ITrain {
 		
 		return result;
 	}
-
-	@Override
-	public int getCurrEpoch() {
-		return this.currEpoch;
-	}
-
-	@Override
-	public void reloadPreviousCode(int label) {
-		throw new RuntimeException(this.getClass().getSimpleName() + ": reloadPreviousCode() Not Supported");
-	}
-
-	@Override
-	public int getNumberOfClass() {
-		return this.network.codebook.numEntries;
-	}
+	
+	
 }

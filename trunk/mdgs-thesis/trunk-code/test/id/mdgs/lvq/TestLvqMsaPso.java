@@ -2,8 +2,9 @@ package id.mdgs.lvq;
 
 import java.util.Iterator;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.lvq.msa.TrainLvqMsaPso;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;

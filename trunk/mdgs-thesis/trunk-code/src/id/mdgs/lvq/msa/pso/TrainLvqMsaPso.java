@@ -6,7 +6,7 @@ package id.mdgs.lvq.msa.pso;
 import java.util.ArrayList;
 import java.util.List;
 
-import id.mdgs.lvq.Dataset;
+import id.mdgs.dataset.Dataset;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.msa.TrainLvq1Msa;
 

@@ -1,6 +1,6 @@
 package id.mdgs.thesis.gui;
 
-import id.mdgs.lvq.Dataset.Entry;
+import id.mdgs.dataset.Dataset.Entry;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,7 +27,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 
-public class CodeMonitor implements IMonitor {
+public class CodeMonitor implements Interface.ICodeMonitor {
 	public XYSeriesCollection dataset;
 	public JFreeChart chart;
 	public ChartPanel chartPanel;
@@ -114,7 +114,8 @@ public class CodeMonitor implements IMonitor {
 		rangeAxis.setLabelFont(fnLabel);
 		//rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		//set fix range
-		rangeAxis.setRange(rMin, rMax);
+		//rangeAxis.setRange(rMin, rMax);
+		rangeAxis.setAutoRange(true);
 		
 		
 		/*Epoch label*/
@@ -248,4 +249,5 @@ public class CodeMonitor implements IMonitor {
            }
        }//else: input unavailable
    }//setSeriesStyle() 
+
 }
