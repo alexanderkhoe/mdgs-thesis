@@ -1,12 +1,12 @@
 package id.mdgs.batch;
 
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.glvq.mahalanobis.MGlvq;
-import id.mdgs.lvq.glvq.mahalanobis.MGlvq.MParam;
-import id.mdgs.lvq.glvq.mahalanobis.TrainMGlvq;
+import id.mdgs.glvq.mglvq.MGlvq;
+import id.mdgs.glvq.mglvq.TrainMGlvq;
+import id.mdgs.glvq.mglvq.MGlvq.MParam;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 

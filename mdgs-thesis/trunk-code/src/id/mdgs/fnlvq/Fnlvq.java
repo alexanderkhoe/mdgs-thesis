@@ -1,17 +1,14 @@
-/**
- * 
- */
 package id.mdgs.fnlvq;
 
-import id.mdgs.fnlvq.FCodeBook.FEntry;
-import id.mdgs.fnlvq.FCodeBook.FWinnerInfo;
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.DatasetProfiler;
-import id.mdgs.lvq.DatasetProfiler.PEntry;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.FCodeBook;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.DatasetProfiler.PEntry;
+import id.mdgs.dataset.FCodeBook.FEntry;
+import id.mdgs.lvq.LvqUtils.FWinnerInfo;
+import id.mdgs.master.FWinnerFunction;
 import id.mdgs.utils.MathUtils;
-
-import java.util.Iterator;
 
 /**
  * @author I Made Agus Setiawan
@@ -19,19 +16,18 @@ import java.util.Iterator;
  */
 public class Fnlvq {
 
-	//codebook vector
 	public FCodeBook codebook;
-	public Dataset miu;
+	public FWinnerFunction findWinner;
 	
 	public Fnlvq(){
 		codebook = new FCodeBook();
-		miu = new Dataset();
+		findWinner = new WinnerByFuzzy(WinnerByFuzzy.TRANSFER.MINIMUM);
 	}
 	
 	public int classify(Entry sample){
 		FWinnerInfo wi;
 		
-		wi = this.findWinner(codebook, sample);
+		wi = this.findWinner.function(codebook, sample);
 		
 		if(MathUtils.equals(wi.coef, 0))
 			return -1;
@@ -40,12 +36,13 @@ public class Fnlvq {
 	}
 	
 	/**
+	 * //pick code from dataset by random or sequence
 	 * 
 	 * @param data
 	 * @param num    number of data to be agregated
+	 * @param random true if random, false if sequence
 	 */
-	public void initCodes(Dataset data, int num){
-		//pick random (every class) from dataset
+	public void initCodes(Dataset data, int num, boolean random){
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
@@ -54,11 +51,15 @@ public class Fnlvq {
 			FEntry code = new FEntry(data.numFeatures);
 			code.label = pe.label;
 			
-			/*need to be optimized, not handle data lest then 2*/
 			int max = num;
 			if(pe.size() < max) max = pe.size();
 			
-			int[] rpos = MathUtils.randPerm(max, pe.size());
+			int[] rpos;
+			if(random)
+				rpos = MathUtils.randPerm(max, pe.size());
+			else
+				rpos = MathUtils.genSeq(max);
+			
 			double[][] fz = new double[data.numFeatures][3];
 			for(int i=0;i<data.numFeatures;i++){
 				fz[i][0] = Double.POSITIVE_INFINITY; //min
@@ -79,8 +80,8 @@ public class Fnlvq {
 			for(int j=0;j < data.numFeatures;j++) {
 				fz[j][1] /= max;
 				if(max == 1){
-					fz[j][0] -= 0.5*fz[j][0];
-					fz[j][2] += 0.5*fz[j][2];
+					fz[j][0] = fz[j][1] - 0.2;
+					fz[j][2] = fz[j][1] + 0.2;
 				}
 			}
 
@@ -90,18 +91,18 @@ public class Fnlvq {
 			}
 			
 			codebook.add(code);
-			
-			
-			/*init miu*/
-			Entry m = new Entry(data.numFeatures);
-			m.label = pe.label;
-			m.set(0);
-			miu.add(m);
 		}
 	}
 	
-	/*ambil porsi sebesar portion dari tiap data kelas*/
-	public void initCodes(Dataset data, double portion){
+	/**
+	 * ambil porsi sebesar portion dari tiap data kelas
+	 * Untuk menggunakan semua data sebagai basis, set portion=1.0 dan random=false
+	 * 
+	 * @param data
+	 * @param portion
+	 * @param random true if random, false if sequence 
+	 */
+	public void initCodes(Dataset data, double portion, boolean random){
 		//pick random (every class) from dataset
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
@@ -114,7 +115,12 @@ public class Fnlvq {
 			int max = (int) portion * pe.size();
 			if(max < 3) max = pe.size();
 			
-			int[] rpos = MathUtils.randPerm(max, pe.size());
+			int[] rpos;
+			if(random)
+				rpos = MathUtils.randPerm(max, pe.size());
+			else
+				rpos = MathUtils.genSeq(max);
+			
 			double[][] fz = new double[data.numFeatures][3];
 			for(int i=0;i<data.numFeatures;i++){
 				fz[i][0] = Double.POSITIVE_INFINITY; //min
@@ -135,8 +141,8 @@ public class Fnlvq {
 			for(int j=0;j < data.numFeatures;j++) {
 				fz[j][1] /= max;
 				if(pe.size() < 3){
-					fz[j][0] = -0.5*fz[j][1];
-					fz[j][2] = 0.5*fz[j][1];
+					fz[j][0] = fz[j][1] - 0.2;
+					fz[j][2] = fz[j][1] + 0.2;
 				}
 			}
 
@@ -146,130 +152,64 @@ public class Fnlvq {
 			}
 			
 			codebook.add(code);
-			
-			
-			/*init miu*/
-			Entry m = new Entry(data.numFeatures);
-			m.label = pe.label;
-			m.set(0);
-			miu.add(m);
 		}
 	}
 	
-	public void initCodes(Dataset data){
-		//ambil dari semua data
-		DatasetProfiler profiler = new DatasetProfiler();
-		profiler.run(data);
-
-		/**/
-		for(PEntry pe: profiler){
-			FEntry code = new FEntry(data.numFeatures);
-			code.label = pe.label;
-			
-			/*need to be optimized, not handle data lest then 2*/
-			int max = pe.size();
-			
-//			int[] rpos = MathUtils.randPerm(max, pe.size());
-			double[][] fz = new double[data.numFeatures][3];
-			for(int i=0;i<data.numFeatures;i++){
-				fz[i][0] = Double.POSITIVE_INFINITY; //min
-				fz[i][1] = 0;   //mean
-				fz[i][2] = Double.NEGATIVE_INFINITY;//max
-			}
-			
-			for(int i=0;i<pe.size();i++){
-				Entry sample = data.get(pe.get(i));
-				
-				for(int j=0;j < sample.size();j++){
-					if(fz[j][0] > sample.data[j]) fz[j][0] = sample.data[j];
-					if(fz[j][2] < sample.data[j]) fz[j][2] = sample.data[j];
-					fz[j][1] += sample.data[j];
-				}
-			}
-			
-			for(int j=0;j < data.numFeatures;j++) {
-				fz[j][1] /= max;
-				if(max == 1){
-					fz[j][0] -= 0.5*fz[j][0];
-					fz[j][2] += 0.5*fz[j][2];
-				}
-			}
-
-			for(int i=0;i < code.size();i++){
-				code.data[i].set(fz[i]);
-			}
-			
-			codebook.add(code);
-			
-			
-			/*init miu*/
-			Entry m = new Entry(data.numFeatures);
-			m.label = pe.label;
-			m.set(0);
-			miu.add(m);
-		}
-	}
+//	/**
+//	 * ambil agregate dari semua data
+//	 * @param data
+//	 */
+//	public void initCodes(Dataset data){
+//		DatasetProfiler profiler = new DatasetProfiler();
+//		profiler.run(data);
+//
+//		/**/
+//		for(PEntry pe: profiler){
+//			FEntry code = new FEntry(data.numFeatures);
+//			code.label = pe.label;
+//			
+//			/*need to be optimized, not handle data lest then 2*/
+//			int max = pe.size();
+//			
+////			int[] rpos = MathUtils.randPerm(max, pe.size());
+//			double[][] fz = new double[data.numFeatures][3];
+//			for(int i=0;i<data.numFeatures;i++){
+//				fz[i][0] = Double.POSITIVE_INFINITY; //min
+//				fz[i][1] = 0;   //mean
+//				fz[i][2] = Double.NEGATIVE_INFINITY;//max
+//			}
+//			
+//			for(int i=0;i<pe.size();i++){
+//				Entry sample = data.get(pe.get(i));
+//				
+//				for(int j=0;j < sample.size();j++){
+//					if(fz[j][0] > sample.data[j]) fz[j][0] = sample.data[j];
+//					if(fz[j][2] < sample.data[j]) fz[j][2] = sample.data[j];
+//					fz[j][1] += sample.data[j];
+//				}
+//			}
+//			
+//			for(int j=0;j < data.numFeatures;j++) {
+//				fz[j][1] /= max;
+//				if(max == 1){
+//					fz[j][0] = fz[j][1] - 0.5;
+//					fz[j][2] = fz[j][1] + 0.5;
+//				}
+//			}
+//
+//			for(int i=0;i < code.size();i++){
+//				code.data[i].set(fz[i]);
+//			}
+//			
+//			codebook.add(code);
+//		}
+//	}
 	
 	public void initCodes(FCodeBook codebook){
 		this.codebook.copyInfo(codebook);
 		for(FEntry fe : codebook){
 			this.codebook.add(fe);
-			
-			/*init miu*/
-			Entry m = new Entry(fe.size());
-			m.label = fe.label;
-			m.set(0);
-			miu.add(m);			
 		}
 	}
 
-	public FWinnerInfo findWinner(FCodeBook codebook, Entry input){
-		FWinnerInfo[] wis;
-		
-		wis = findWinner(codebook, input, 1);
-		
-		return wis[0];
-	}
-	
-	public FWinnerInfo[] findWinner(FCodeBook codebook, Entry input, int num){
-		FWinnerInfo[] winner;
-		int i;
-		winner = new FWinnerInfo[num];
-		for(i=0;i < winner.length;i++){
-			winner[i] = new FWinnerInfo();
-			//sort descending, set coef to minimum
-			winner[i].coef = Double.NEGATIVE_INFINITY;
-		}
-		
-		Iterator<FEntry> eIt = codebook.iterator();
-		Iterator<Entry>	mIt = miu.iterator();
-		while(eIt.hasNext()) {
-			double score = 0;
-			FEntry code = eIt.next();
-			Entry sim = mIt.next();//miu.findEntry(code.label);
-			
-			for(int j=0;j < code.size();j++){
-				sim.data[j] = code.data[j].getMaxIntersection(input.data[j]);
-			}
-			
-			score = MathUtils.min(sim.data);
-			
-			/*sort desc*/
-			for(i=0; (i < winner.length) && (score < winner[i].coef); i++);
-			
-			if(i < winner.length){
-				for(int j=winner.length - 1;j > i;j--){
-					winner[j].copy(winner[j-1]);
-				}
-				winner[i].coef 	 = score;
-				winner[i].winner = code;
-			}
-		}
-		
-		return winner;
-	}
-	
-	/*aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/
-	
-	
 }

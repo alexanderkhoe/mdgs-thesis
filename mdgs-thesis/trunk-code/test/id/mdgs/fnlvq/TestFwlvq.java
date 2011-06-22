@@ -1,10 +1,13 @@
 package id.mdgs.fnlvq;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FCodeBook;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.fnlvq.FCodeBook.FEntry;
-import id.mdgs.lvq.Dataset;
+import id.mdgs.fwlvq.Fwlvq;
+import id.mdgs.fwlvq.TrainFwlvq;
 import id.mdgs.lvq.LvqUtils;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;

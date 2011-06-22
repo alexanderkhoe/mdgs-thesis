@@ -111,6 +111,14 @@ public class MathUtils {
 		
 		return out;
 	}
+	
+	public static int[] genSeq(int num){
+		int[] out = new int[num];
+		
+		for(int i = 0;i < num;i++) out[i] = i;
+		
+		return out;
+	}
 
 	/*max*/
 	public static int maxIndex(double[] data){
@@ -155,6 +163,11 @@ public class MathUtils {
 		assert(data.length > 0);
 		
 		return data[minIndex(data)]; 
+	}
+	
+	public static double min(double d1, double d2){
+		if(d1 < d2) return d1;
+		else return d2;
 	}
 	
 	/*mean*/

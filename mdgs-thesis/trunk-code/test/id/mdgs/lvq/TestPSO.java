@@ -1,8 +1,9 @@
 package id.mdgs.lvq;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.glvq.TrainGlvq;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -46,7 +47,7 @@ public class TestPSO {
 
 		} while (iteration < trainInit.maxEpoch);		
 		
-		TrainGlvq train = new TrainGlvq(net, trainset, 0.05);
+		TrainGlvq1 train = new TrainGlvq1(net, trainset, 0.05);
 		train.iteration(100);
 		
 		ConfusionMatrix cm = new ConfusionMatrix(nclass);

@@ -1,11 +1,11 @@
 package id.mdgs.gui;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FCodeBook;
+import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.fnlvq.FCodeBook;
-import id.mdgs.fnlvq.FnlvqF;
-import id.mdgs.fnlvq.TrainFnlvqFuzzy;
-import id.mdgs.fnlvq.FCodeBook.FEntry;
-import id.mdgs.lvq.Dataset;
+import id.mdgs.fnlvqold.FnlvqF;
+import id.mdgs.fnlvqold.TrainFnlvqFuzzy;
 import id.mdgs.lvq.LvqUtils;
 import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;

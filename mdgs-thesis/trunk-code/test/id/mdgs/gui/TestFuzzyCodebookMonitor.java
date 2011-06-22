@@ -1,12 +1,12 @@
 package id.mdgs.gui;
 
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.fnlvq.Fnlvq;
-import id.mdgs.fnlvq.Fwlvq;
-import id.mdgs.fnlvq.TrainFnlvq;
-import id.mdgs.fnlvq.TrainFwlvq;
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.Dataset.Entry;
+import id.mdgs.fnlvqold.Fnlvq;
+import id.mdgs.fnlvqold.TrainFnlvq;
+import id.mdgs.fwlvq.Fwlvq;
+import id.mdgs.fwlvq.TrainFwlvq;
 import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;

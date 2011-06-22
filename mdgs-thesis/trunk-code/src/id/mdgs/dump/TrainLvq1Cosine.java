@@ -3,11 +3,11 @@
  */
 package id.mdgs.dump;
 
-import id.mdgs.lvq.Dataset;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils;
 import id.mdgs.lvq.TrainLvq1;
-import id.mdgs.lvq.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 
 /**

@@ -4,9 +4,12 @@
 package id.mdgs.utils;
 
 
-import id.mdgs.lvq.Dataset;
-import id.mdgs.lvq.Dataset.Entry;
-import id.mdgs.lvq.HitList;
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.HitList;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.DatasetProfiler.PEntry;
+import id.mdgs.dataset.HitList.HitEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -339,6 +342,43 @@ public class DataSetUtils {
 		}
             
 		return set;
+	}
+	
+	public static int selectClassOnly(Dataset train, Dataset test, int threshold){
+		Dataset tmp1 = new Dataset(); tmp1.copyInfo(train);
+		Dataset tmp2 = new Dataset(); tmp2.copyInfo(test);
+		
+		HitList hl = new HitList();
+		hl.run(train);
+		
+		int numClass = 0;
+		for(HitEntry he: hl){
+			
+			if(he.freq >= threshold){
+				Iterator<Entry> it1 = train.iterator();
+				while(it1.hasNext()){
+					Entry e = it1.next();
+					if(he.label == e.label)
+//						e.label = numClass;
+						tmp1.add(e);
+				}
+
+				Iterator<Entry> it2 = test.iterator();
+				while(it2.hasNext()){
+					Entry e = it2.next();
+					if(e.label == he.label){
+//						e.label = numClass;
+						tmp2.add(e);
+					}
+				}
+				
+				numClass++;
+			}
+		}
+		
+		train.entries = tmp1.entries;
+		test.entries  = tmp2.entries;
+		return numClass;
 	}
 }
 

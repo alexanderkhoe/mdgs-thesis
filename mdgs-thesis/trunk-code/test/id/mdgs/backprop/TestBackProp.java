@@ -2,8 +2,8 @@ package id.mdgs.backprop;
 
 import java.util.Iterator;
 
+import id.mdgs.dataset.Dataset;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Dataset;
 import id.mdgs.utils.DataSetUtils;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
@@ -25,9 +25,11 @@ public class TestBackProp {
 	@Test
 	public void testBP(){
 		int Pos = 3 * 4;
-		int nclass = 12;
-		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
-		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
+		int nclass = 15;
+//		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
+//		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
+		Dataset trainset = new Dataset(Parameter.ECG300C15N100_TRAIN);
+		Dataset testset  = new Dataset(Parameter.ECG300C15N100_TEST);
 		
 		trainset.load();
 		testset.load();
@@ -43,7 +45,7 @@ public class TestBackProp {
 		network.reset();
 
 		// train the neural network
-		final Train train = new Backpropagation(network, enTrainset, 0.075, 0.8);
+		final Train train = new Backpropagation(network, enTrainset, 0.05, 0.6);
 		train.addStrategy(new SmartLearningRate());
 		int epoch = 1;
 
@@ -52,7 +54,7 @@ public class TestBackProp {
 			System.out.println("Epoch #" + epoch + " Error:" + train.getError());
 			epoch++;
 //		} while(train.getError() > 0.01);
-		} while (epoch < 500);
+		} while (epoch < 1000);
 		
 		utils.log("Test Result");
 		Iterator<NeuralDataPair> it = enTestset.iterator();
