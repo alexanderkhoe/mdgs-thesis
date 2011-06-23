@@ -25,10 +25,10 @@ public class TestFpglvq {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int Pos = 0 * 2;
-		int nclass = 4;
-//		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
-//		Dataset testset  = new Dataset(Parameter.DATA[Pos + 2]);
+		int Pos = 2 * 4;
+		int nclass = 6;
+		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
+		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
 //		Dataset trainset = new Dataset(Parameter.ECG300C15N100_TRAIN);
 //		Dataset testset  = new Dataset(Parameter.ECG300C15N100_TEST);
 		
@@ -36,14 +36,14 @@ public class TestFpglvq {
 //		Dataset unknownset   = new Dataset(Parameter.DATA_EXT[0]);
 //		Dataset unknownset   = new Dataset(Parameter.DATA[(4*4) + 1]);
 		
-		Dataset trainset = new Dataset(Parameter.DATA_UCI[Pos + 2]);
-		Dataset testset  = new Dataset(Parameter.DATA_UCI[Pos + 3]);
+//		Dataset trainset = new Dataset(Parameter.DATA_UCI[Pos + 2]);
+//		Dataset testset  = new Dataset(Parameter.DATA_UCI[Pos + 3]);
 		trainset.load();
 		testset.load();
 		
-		DataNormalization norm = new ZScoreNormalization(trainset);
-		norm.normalize(trainset);
-		norm.normalize(testset);
+//		DataNormalization norm = new DataNormalization(trainset);
+//		norm.normalize(trainset);
+//		norm.normalize(testset);
 		
 //		nclass = DataSetUtils.selectClassOnly(trainset, testset, 10);
 //		unknownset.load();
@@ -58,10 +58,10 @@ public class TestFpglvq {
 		
 		Fpglvq net = new Fpglvq();
 //		net.initCodes(trainset, 5, false);
-		net.initCodes(trainset, 5, true);
+		net.initCodes(trainset, 1000, false);
 		
-		ITrain train = new TrainFpglvq(net, trainset, 0.05);
-		train.setMaxEpoch(1500);
+		ITrain train = new TrainFpglvq(net, trainset, 0.01);
+		train.setMaxEpoch(200);
 		
 		/*view monitor*/
 		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + "Codebook Monitor", net.codebook, train);

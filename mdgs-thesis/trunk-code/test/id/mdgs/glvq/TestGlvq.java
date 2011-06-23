@@ -23,7 +23,7 @@ public class TestGlvq {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int Pos = 3 * 4;
+		int Pos = 4 * 4;
 		int nclass = 12;
 		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
@@ -36,17 +36,17 @@ public class TestGlvq {
 		trainset.load();
 		testset.load();
 		
-		DataNormalization norm = new ZScoreNormalization(trainset);
-		norm.normalize(trainset);
-		norm.normalize(testset);
+//		DataNormalization norm = new ZScoreNormalization(trainset);
+//		norm.normalize(trainset);
+//		norm.normalize(testset);
 		
 		Lvq net = new Lvq();
 		net.initCodes(trainset, 1, 5);
 //		net.initCodes(trainset);
 		
 		ITrain train = new TrainGlvq(net, trainset, 0.05);
-		train.setMaxEpoch(125);
-		((TrainGlvq)train).getTraining().makeRoundRobin(5);
+		train.setMaxEpoch(100);
+//		((TrainGlvq)train).getTraining().makeRoundRobin(1);
 		
 		/*monitor*/
 		CodebookMonitor cbm = new CodebookMonitor("Glvq Codebook Monitor", net.codebook, train);
