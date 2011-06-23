@@ -16,7 +16,7 @@ public class TestLvq {
 	
 	@Test
 	public void testLvq(){
-		int Pos = 0 * 4;
+		int Pos = 2 * 4;
 		int nclass = 6;
 		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
@@ -25,10 +25,11 @@ public class TestLvq {
 		testset.load();
 		
 		Lvq net = new Lvq();
-//		net.initCodes(trainset, 1, 5);
-		net.initCodes(trainset);
+		net.initCodes(trainset, 1, 5);
+//		net.initCodes(trainset);
 //		net.initCodes(trainset, 0d, 1d);
-		
+		System.out.println(net.codebook.toString());
+		System.exit(0);
 		
 //		ITrain train = new TrainLvq1(net, trainset, 0.05);
 		ITrain train = new TrainLvq21(net, trainset, 0.05, 0.005);

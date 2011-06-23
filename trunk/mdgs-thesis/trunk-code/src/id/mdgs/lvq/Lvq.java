@@ -38,18 +38,22 @@ public class Lvq {
 		return wi.winner.label;
 	}
 	
+	public void initCodes(Dataset data, double min, double max){
+		initCodes(data, min, max, 1);
+	}
+	
 	/**
 	 * pick code using random data range (min, max)
 	 * if min == max, then range is spesific between dimension
 	 * 
 	 * @param data
 	 */
-	public void initCodes(Dataset data, double min, double max){
+	public void initCodes(Dataset data, double min, double max, int num){
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
 		MinMax[] dataRange = new MinMax[data.numFeatures];
-		if((max - min) == 0) {
+		if(MathUtils.equals((max - min) , 0)) {
 			for(int i=0;i<dataRange.length;i++) 
 				dataRange[i] = new MinMax();
 			
@@ -62,30 +66,40 @@ public class Lvq {
 		}
 		
 		for(PEntry pe: profiler){
-			Entry code = new Entry(data.numFeatures);
-			code.label = pe.label;
-			for(int j=0;j < code.size();j++){
-				if((max - min) == 0) {
-					code.data[j] = MathUtils.randomDouble(dataRange[j].min, dataRange[j].max);
-				} else {
-					code.data[j] = MathUtils.randomDouble(min,max);
+			for(int i=0;i<num;i++){
+				Entry code = new Entry(data.numFeatures);
+				code.label = pe.label;
+				for(int j=0;j < code.size();j++){
+					if(MathUtils.equals((max - min) , 0)) {
+						code.data[j] = MathUtils.randomDouble(dataRange[j].min, dataRange[j].max);
+					} else {
+						code.data[j] = MathUtils.randomDouble(min,max);
+					}
 				}
-			}
 			
-			codebook.add(code);
+				codebook.add(code);
+			}
 		}
 	}
 	
 	/**
-	 * pick random code from dataset, for every class
-	 * 
+	 * get 1 random code from dataset
 	 * @param data
 	 */
 	public void initCodes(Dataset data){
+		this.initCodes(data, 1);
+	}
+	
+	/**
+	 * pick random code from dataset, for every class, num item
+	 * 
+	 * @param data
+	 */
+	public void initCodes(Dataset data, int num){
 		
 		List<Entry> le = null;
 		
-		le = LvqUtils.pickRandomCodes(data, 1);
+		le = LvqUtils.pickRandomCodes(data, num);
 		
 		codebook.reset();
 		//copy info

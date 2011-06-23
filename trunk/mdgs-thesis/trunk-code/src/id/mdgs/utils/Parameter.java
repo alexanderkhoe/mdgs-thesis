@@ -144,4 +144,29 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.test.txt",
 	};
+	
+	
+	public static String DATA_DECOMPOSE[] = {
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.test.txt",
+		
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.157.2000Samples/6.157f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.157.2000Samples/6.157f_2000_nonoutliers.bwr_300_gabung.test.txt",
+
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.86.2000Samples/6.86f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.86.2000Samples/6.86f_2000_nonoutliers.bwr_300_gabung.test.txt",
+		
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.50.2000Samples/6.50f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.50.2000Samples/6.50f_2000_nonoutliers.bwr_300_gabung.test.txt",		
+
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.32.2000Samples/6.32f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.32.2000Samples/6.32f_2000_nonoutliers.bwr_300_gabung.test.txt",
+		
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.23.2000Samples/6.23f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.23.2000Samples/6.23f_2000_nonoutliers.bwr_300_gabung.test.txt",
+		
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_nonoutliers.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_nonoutliers.bwr_300_gabung.test.txt",
+	};
 }
+

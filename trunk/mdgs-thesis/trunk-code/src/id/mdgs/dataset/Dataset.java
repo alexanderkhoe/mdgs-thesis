@@ -391,15 +391,26 @@ public class Dataset implements Iterable<Dataset.Entry>{
 //		return this.numEntries;
 //	}
 	
+//	public String toString(){
+//		StringBuilder sb = new StringBuilder();
+//		
+//		sb.append("[Dataset: " + fname + "]\n");
+//		sb.append(numEntries + " entries, " + numFeatures + " features, " +
+//				LvqUtils.getLabels().size() + " classes");
+//		return sb.toString();
+//	}
+	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("[Dataset: " + fname + "]\n");
-		sb.append(numEntries + " entries, " + numFeatures + " features, " +
-				LvqUtils.getLabels().size() + " classes");
+		for(int i=0;i < size(); i++){
+			sb.append("Label: " + entries.get(i).label + "\n");
+			sb.append(entries.get(i).toString() + "\n");
+		}
+		
 		return sb.toString();
 	}
-
+	
 	@Override
 	public Iterator<Entry> iterator() {
 		final EntryIterator it = new EntryIterator();

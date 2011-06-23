@@ -7,6 +7,7 @@ import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
+import id.mdgs.lvq.LvqUtils.MinMax;
 import id.mdgs.master.FWinnerFunction;
 import id.mdgs.utils.MathUtils;
 
@@ -149,6 +150,50 @@ public class Fnlvq {
 			
 			for(int i=0;i < code.size();i++){
 				code.data[i].set(fz[i]);
+			}
+			
+			codebook.add(code);
+		}
+	}
+	
+	public void initCodes(Dataset data, double min, double max){
+		DatasetProfiler profiler = new DatasetProfiler();
+		profiler.run(data);
+
+		MinMax[] dataRange = new MinMax[data.numFeatures];
+		if(MathUtils.equals((max - min) , 0)) {
+			for(int i=0;i<dataRange.length;i++) 
+				dataRange[i] = new MinMax();
+			
+			/*find min max data training*/
+			for(Entry e: data){			
+				for(int i = 0;i < e.size();i++){
+					dataRange[i].setMinMax(e.data[i]);
+				}
+			}
+		}
+		
+		for(PEntry pe: profiler){
+			FEntry code = new FEntry(data.numFeatures);
+			code.label = pe.label;
+			
+			double[][] fz = new double[data.numFeatures][3];
+			for(int i=0;i<data.numFeatures;i++){
+				fz[i][0] = Double.POSITIVE_INFINITY; //min
+				fz[i][1] = 0;   //mean
+				fz[i][2] = Double.NEGATIVE_INFINITY;//max
+			}
+			
+			for(int j=0;j < code.size();j++){
+				if(MathUtils.equals((max - min) , 0)) {
+					fz[j][1] = MathUtils.randomDouble(dataRange[j].min, dataRange[j].max);
+				} else {
+					fz[j][1] = MathUtils.randomDouble(min,max);
+				}
+				
+				fz[j][0] = fz[j][1] - 0.2;
+				fz[j][2] = fz[j][1] + 0.2;
+				
 			}
 			
 			codebook.add(code);
