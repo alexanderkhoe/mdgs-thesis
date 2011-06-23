@@ -165,9 +165,9 @@ public class TestBatchScenario3 {
 	public void MainTest() throws IOException{
 		testLvq1();
 		testLvq21();
-		testLvq3();
 		testGlvq();
 		testFplvq();
+		testLvq3();
 	}
 	
 	public void testLvq1() throws IOException{
@@ -299,7 +299,7 @@ public class TestBatchScenario3 {
 		
 		StringBuilder sbh = new StringBuilder();
 		sbh.append("#\tNC\tNFit\t");
-		sbh.append("alpha\tEpoch\t");
+		sbh.append("alpha\\twidth\tEpoch\t");
 		sbh.append("time\t");
 		sbh.append("bestError\tbestEpoch\tlastError\t");
 		sbh.append("accTrain\taccTest\taccTestO\t");
@@ -363,8 +363,8 @@ public class TestBatchScenario3 {
 					
 					sb.append(String.format("%2d\t%2d\t%3d\t", 
 							attempt+1, nclass[dt], fiture[dt]));
-					sb.append(String.format("%7.4f\t%4d\t", 
-							alphaset[a], iterationset[b]));
+					sb.append(String.format("%7.4f\t%7.4f\t%4d\t", 
+							alphaset[a], windowset[c], iterationset[b]));
 					sb.append(String.format("%8s\t", 
 							utils.elapsedTime(waktu)));
 					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 

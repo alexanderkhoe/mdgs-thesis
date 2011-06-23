@@ -40,7 +40,8 @@ public class Fnlvq {
 	 * //pick code from dataset by random or sequence
 	 * 
 	 * @param data
-	 * @param num    number of data to be agregated
+	 * @param num    number of data to be agregated, if want to use all the data in the class,
+	 * 				 set as high as possible, regarding the max number of data in each class.
 	 * @param random true if random, false if sequence
 	 */
 	public void initCodes(Dataset data, int num, boolean random){

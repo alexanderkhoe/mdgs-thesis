@@ -161,18 +161,27 @@ public class TrainFpglvq implements ITrain {
 //			System.out.print(String.format("%10s, %7.4f : %7.4f : %7.4f\n", "Known", mce, fori, finc));
 			
 			//cek dari mce, (+) dipersempit, karena salah prediksi
-//			if(mce > 0) {
-//				FEntry cbe = wins[NCLASS].winner;
-//				Entry sim  = network.miu.findEntry(cbe.label);
-//				
-//				for(int j=0;j < cbe.size();j++){
-//					double lRange = (cbe.data[j].mean - cbe.data[j].min);
-//					double rRange = (cbe.data[j].max - cbe.data[j].mean);
-//					
-//					cbe.data[j].min = cbe.data[j].mean - lRange * (1 - (1 - sim.data[j]) * alpha);
-//					cbe.data[j].max = cbe.data[j].mean + rRange * (1 - (1 - sim.data[j]) * alpha);
-//				}
-//			}
+			if(mce > 0) {
+				FEntry cbe = wins[NCLASS].winner;
+					
+				for(int j=0;j < cbe.size();j++){
+					double lRange = (cbe.data[j].mean - cbe.data[j].min);
+					double rRange = (cbe.data[j].max - cbe.data[j].mean);
+					
+					cbe.data[j].min = cbe.data[j].mean - lRange * (1 - 0.00005 * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].max = cbe.data[j].mean + rRange * (1 - 0.00005 * alpha);//((1 - cbe.miu[j]));
+				}
+			} else {
+				FEntry cbe = wins[CLASS].winner;
+				
+				for(int j=0;j < cbe.size();j++){
+					double lRange = (cbe.data[j].mean - cbe.data[j].min);
+					double rRange = (cbe.data[j].max - cbe.data[j].mean);
+					
+					cbe.data[j].min = cbe.data[j].mean - lRange * (1 + 0.00005 * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].max = cbe.data[j].mean + rRange * (1 + 0.00005 * alpha);//((1 - cbe.miu[j]));
+				}
+			}
 		}
 		
 		//else jika nilai coefisien = 0

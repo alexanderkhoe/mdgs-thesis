@@ -103,10 +103,10 @@ public class TestBatchSkenario5 {
 	
 	@Test
 	public void mainTest() throws IOException{
-		testGlvq();
+		testFpglvq();
 	}
 	
-	public void testGlvq() throws IOException{
+	public void testFpglvq() throws IOException{
 		writer = createWriter("Skenario5.Fpglvq" + ".detail");
 		resumeWriter = createWriter("Fpglvq");
 		
