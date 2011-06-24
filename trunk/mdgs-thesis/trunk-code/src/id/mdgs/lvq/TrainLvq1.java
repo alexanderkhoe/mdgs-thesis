@@ -31,20 +31,21 @@ public class TrainLvq1 implements ITrain {
 	public int currEpoch;
 	
 	public CBest bestCodebook;
-	protected Dataset training;
 	protected FoldedDataset<Dataset, Entry> foldedDs;
 	
 	/**
 	 * 
 	 */
 	public TrainLvq1(Lvq network, Dataset training, double learningRate){
+		this(network, new FoldedDataset<Dataset, Entry>(training), learningRate);
+	}
+	
+	public TrainLvq1(Lvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
 		this.network 	= network;
-		this.training	= training;
 		this.alpha		= learningRate;
 		this.alphaStart	= learningRate;		
 		
-		foldedDs		= new FoldedDataset<Dataset, Entry>(training);
-		
+		this.foldedDs	= foldedDs;
 		this.bestCodebook = new Best.CBest(network.codebook);
 	}
 	

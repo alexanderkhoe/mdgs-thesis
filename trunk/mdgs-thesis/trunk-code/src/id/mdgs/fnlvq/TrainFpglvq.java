@@ -29,7 +29,7 @@ public class TrainFpglvq implements ITrain {
 	public Fpglvq network;
 	protected double alpha;
 	protected double xi;
-	protected Dataset training;
+//	protected Dataset training;
 	protected DatasetProfiler profiler;
 	protected double error;
 	public int maxEpoch;
@@ -41,15 +41,18 @@ public class TrainFpglvq implements ITrain {
 	 * 
 	 */
 	public TrainFpglvq(Fpglvq network, Dataset training, double learningRate) {
+		this(network, new FoldedDataset<Dataset, Entry>(training), learningRate);
+	}
+	
+	public TrainFpglvq(Fpglvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate) {
 		this.network 	= network;
-		this.training	= training;
 		this.alpha		= learningRate;
 		this.xi			= 1d;
 		
-		foldedDs		= new FoldedDataset<Dataset, Entry>(training);
+		this.foldedDs	= foldedDs;
 		this.bestCodebook = new Best.FBest(network.codebook);
 	}
-
+	
 	@Override
 	public void updateLearningRate() {
 		this.alpha *= (1 - (currEpoch/maxEpoch));
@@ -172,6 +175,7 @@ public class TrainFpglvq implements ITrain {
 					cbe.data[j].max = cbe.data[j].mean + rRange * (1 - 0.00005 * alpha);//((1 - cbe.miu[j]));
 				}
 			} else {
+				//dilebarin
 				FEntry cbe = wins[CLASS].winner;
 				
 				for(int j=0;j < cbe.size();j++){
@@ -194,6 +198,8 @@ public class TrainFpglvq implements ITrain {
 					double lRange = (cbe.data[j].mean - cbe.data[j].min);
 					double rRange = (cbe.data[j].max - cbe.data[j].mean);
 					
+//					cbe.data[j].min = cbe.data[j].mean - lRange * (1 + this.alpha * DELTA);//- lRange * this.alpha * DELTA;
+//					cbe.data[j].max = cbe.data[j].mean + rRange * (1 + this.alpha * DELTA);//+ rRange * this.alpha * DELTA;
 					cbe.data[j].min = cbe.data[j].mean - lRange - lRange * this.alpha * DELTA;
 					cbe.data[j].max = cbe.data[j].mean + rRange + rRange * this.alpha * DELTA;
 				}

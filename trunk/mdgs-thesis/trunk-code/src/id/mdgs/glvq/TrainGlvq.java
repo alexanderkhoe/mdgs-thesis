@@ -4,7 +4,9 @@
 package id.mdgs.glvq;
 
 import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.evaluation.Best;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 import id.mdgs.lvq.TrainLvq1;
@@ -28,7 +30,11 @@ public class TrainGlvq extends TrainLvq1 {
 	 * @param windowWidth
 	 */
 	public TrainGlvq(Lvq network, Dataset training, double learningRate) {
-		super(network, training, learningRate);
+		this(network, new FoldedDataset<Dataset, Entry>(training), learningRate);
+	}
+	
+	public TrainGlvq(Lvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		super(network, foldedDs, learningRate);
 		
 		/*Set findWinner method to Squared Euclid*/
 		network.findWinner = new WinnerBySquaredEuc();

@@ -107,7 +107,7 @@ public class TestBatchSkenario6 {
 	}
 	
 	public void testGlvq() throws IOException{
-		writer = createWriter("Skenario4.Glvq" + ".detail");
+		writer = createWriter("Skenario6.Glvq" + ".detail");
 		resumeWriter = createWriter("Glvq");
 		
 		utils.header("Running testGlvq");
