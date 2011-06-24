@@ -1,8 +1,11 @@
 package id.mdgs.batch;
 
 import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
+import id.mdgs.fnlvq.Fpglvq;
+import id.mdgs.fnlvq.TrainFpglvq;
 import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
@@ -99,16 +102,37 @@ public class TestBatchSkenario4 {
 		return cm;
 	}
 	
+	public ConfusionMatrix test2(FCodeBook codebook, Dataset testset, int numclass){
+		ConfusionMatrix cm = new ConfusionMatrix(numclass);
+		
+		Fpglvq net = new Fpglvq();
+		net.codebook.copyInfo(codebook);
+		net.codebook.addAll(codebook.entries);
+		
+		Iterator<Entry> it = testset.iterator();
+		while(it.hasNext()){
+			Entry sample = it.next(); 
+			
+			int win = net.classify(sample);
+			int target = sample.label;
+			
+			cm.feed(win, target);
+		}
+		
+		return cm;
+	}
+	
 	public int MAX_ATTEMPT 	  = 10;
 	
 	@Test
 	public void mainTest() throws IOException{
-		testGlvq();
+//		testGlvq();
+		testFpglvq();
 	}
 	
 	public void testGlvq() throws IOException{
 		writer = createWriter("Skenario4.Glvq" + ".detail");
-		resumeWriter = createWriter("Glvq");
+		resumeWriter = createWriter("Skenario4.Glvq");
 		
 		utils.header("Running testGlvq");
 		utils.log(writer, "TrainGlvq");
@@ -117,7 +141,7 @@ public class TestBatchSkenario4 {
 		StringBuilder sbh = new StringBuilder();
 		sbh.append("#\tNC\tNFit\t");
 		sbh.append("alpha\tEpoch\t");
-		sbh.append("time\t");
+		sbh.append("time\ttime\t");
 		sbh.append("bestError\tbestEpoch\tlastError\t");
 		sbh.append("accTrain\taccTest\taccTestO\t");
 		sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -178,8 +202,8 @@ public class TestBatchSkenario4 {
 							attempt+1, nclass[dt], fiture[dt]));
 					sb.append(String.format("%7.4f\t%4d\t", 
 							alpha, iteration));
-					sb.append(String.format("%8s\t", 
-							utils.elapsedTime(waktu)));
+					sb.append(String.format("%d\t%8s\t", 
+							waktu, utils.elapsedTime(waktu)));
 					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 							train.bestCodebook.coef, train.bestCodebook.epoch,
 							train.getError()));
@@ -202,7 +226,7 @@ public class TestBatchSkenario4 {
 				sb2.append(String.format("%2s\t%2d\t%3d\t", "##", nclass[dt], fiture[dt]));
 				sb2.append(String.format("%7.4f\t%4d\t", 
 									alpha, iteration));
-				sb2.append(String.format("%8s\t", utils.elapsedTime(avgtime)));
+				sb2.append(String.format("%d\t%8s\t", avgtime, utils.elapsedTime(avgtime)));
 				sb2.append(String.format("%7.4f\t%4d\t%7.4f\t", avgErr[0], Math.round(avgErr[1]), avgErr[2]));
 				sb2.append(String.format("%7.4f\t%7.4f\t%7.4f\t%7.4f\t", 
 						avgAcc[0], avgAcc[1], avgAcc[2], 
@@ -217,4 +241,118 @@ public class TestBatchSkenario4 {
 		utils.log("TrainGlvq done");
 	}
 	
+	public void testFpglvq() throws IOException{
+
+		writer = createWriter("Skenario4.Fpglvq" + ".detail");
+		resumeWriter = createWriter("Skenario4.Fpglvq");
+		
+		utils.header("Running testFpglvq");
+		
+		double porsi = 0.5d; 
+		boolean random = true;
+		utils.log(writer, "TrainFpglvq , porsi: " + porsi*100 + "%, Random: " + random);
+		utils.log(resumeWriter, "TrainFpglvq , porsi: " + porsi*100 + "%, Random: " + random);
+		
+		StringBuilder sbh = new StringBuilder();
+		sbh.append("#\tNC\tNFit\t");
+		sbh.append("alpha\tEpoch\t");
+		sbh.append("time\ttime\t");
+		sbh.append("bestError\tbestEpoch\tlastError\t");
+		sbh.append("accTrain\taccTest\taccTestO\t");
+		sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
+		utils.log(writer, sbh.toString());
+		utils.log(resumeWriter, sbh.toString());
+		
+		double alpha = 0.05;
+		int iteration = 150;
+		
+		for(int dt=0;dt < NUM_DATA;dt++){
+				utils.log(String.format("dt: %d, alpha: %f, iteration: %d", 
+						dt, alpha,iteration));
+				
+				double[] avgErr = new double[3];
+				for(int i=0;i < avgErr.length;i++) avgErr[i] = 0;
+				long avgtime = 0;					
+				double[] avgAcc = new double[4];
+				for(int i=0;i < avgAcc.length;i++) avgAcc[i] = 0;
+				StringBuilder sb = new StringBuilder();
+				StringBuilder sErr = new StringBuilder();
+				
+				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
+					
+					Fpglvq net = new Fpglvq();
+					net.initCodes(trainsets[dt], porsi, random);
+					
+					TrainFpglvq train = new TrainFpglvq(net, trainsets[dt], alpha);
+					train.setMaxEpoch(iteration);
+					
+					utils.timer.start();
+					
+					do {
+						train.iteration();
+						sErr.append(String.format("%7.4f,", train.getError()));
+					} while (!train.shouldStop());
+					
+					long waktu = utils.timer.stop();
+					
+					ConfusionMatrix cm1, cm2, cm3, cm4;
+					cm1 = test2(net.codebook, trainsets[dt], nclass[dt]);
+					cm2 = test2(net.codebook, testsets[dt], nclass[dt]);
+
+					//best codebook
+					cm3 = test2(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
+					cm4 = test2(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
+					
+					avgAcc[0] += cm1.getAccuracy();
+					avgAcc[1] += cm2.getAccuracy();
+					avgAcc[2] += cm3.getAccuracy();
+					avgAcc[3] += cm4.getAccuracy();
+					avgtime	  += waktu;
+					avgErr[0] += train.bestCodebook.coef;
+					avgErr[1] += train.bestCodebook.epoch;
+					avgErr[2] += train.getError();
+					
+					
+					sb.append(String.format("%2d\t%2d\t%3d\t", 
+							attempt+1, nclass[dt], fiture[dt]));
+					sb.append(String.format("%7.4f\t%4d\t", 
+							alpha, iteration));
+					sb.append(String.format("%d\t%8s\t", 
+							waktu, utils.elapsedTime(waktu)));
+					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
+							train.bestCodebook.coef, train.bestCodebook.epoch,
+							train.getError()));
+
+					sb.append(String.format("%7.4f\t%7.4f\t%7.4f\t", 
+							cm1.getAccuracy(), cm2.getAccuracy(), cm3.getAccuracy()));
+					sb.append(String.format("%7.4f\t", 
+							cm4.getAccuracy()));
+					
+					sb.append("|\t" + sErr.toString());
+					sb.append("\n");
+				}
+				
+				for(int i=0;i < avgAcc.length;i++) avgAcc[i] /= MAX_ATTEMPT;
+				for(int i=0;i < avgErr.length;i++) avgErr[i] /= MAX_ATTEMPT;
+				avgtime /= MAX_ATTEMPT;
+				
+				StringBuilder sb2 = new StringBuilder();
+				
+				sb2.append(String.format("%2s\t%2d\t%3d\t", "##", nclass[dt], fiture[dt]));
+				sb2.append(String.format("%7.4f\t%4d\t", 
+									alpha, iteration));
+				sb2.append(String.format("%d\t%8s\t", avgtime, utils.elapsedTime(avgtime)));
+				sb2.append(String.format("%7.4f\t%4d\t%7.4f\t", avgErr[0], Math.round(avgErr[1]), avgErr[2]));
+				sb2.append(String.format("%7.4f\t%7.4f\t%7.4f\t%7.4f\t", 
+						avgAcc[0], avgAcc[1], avgAcc[2], 
+						avgAcc[3]));
+			
+				utils.log(writer, sb.toString() + sb2.toString() + "\n");
+				utils.log(resumeWriter, sb2.toString());
+		}
+		
+		closeWriter(writer);
+		closeWriter(resumeWriter);
+		utils.log("TrainGlvq done");
+	}
 }

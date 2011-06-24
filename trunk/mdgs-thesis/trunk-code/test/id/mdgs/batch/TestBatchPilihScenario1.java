@@ -169,11 +169,11 @@ public class TestBatchPilihScenario1 {
 	
 	@Test 
 	public void MainTest() throws IOException{
-		testLvq1(createWriter(mcode[0]));
-		testLvq21(createWriter(mcode[1]));
-//		testLvq3(createWriter(mcode[2]));
-		testGlvq(createWriter(mcode[3]));
+//		testLvq1(createWriter(mcode[0]));
+//		testLvq21(createWriter(mcode[1]));
+//		testGlvq(createWriter(mcode[3]));
 		testFplvq(createWriter(mcode[4]));
+//		testLvq3(createWriter(mcode[2]));
 	}
 	
 	public void testLvq1(PrintWriter resumeWriter) throws IOException{
@@ -188,7 +188,7 @@ public class TestBatchPilihScenario1 {
 			StringBuilder sbh = new StringBuilder();
 			sbh.append("#\tNC\tNFit\t");
 			sbh.append("alpha\tEpoch\t");
-			sbh.append("time\t");
+			sbh.append("time\ttime\t");
 			sbh.append("bestError\tbestEpoch\tlastError\t");
 			sbh.append("accTrain\taccTest\taccTestO\t");
 			sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -251,8 +251,8 @@ public class TestBatchPilihScenario1 {
 								attempt+1, nclass[dt], fiture[dt]));
 						sb.append(String.format("%7.4f\t%4d\t", 
 								alphaset[a], iterationset[b]));
-						sb.append(String.format("%8s\t", 
-								utils.elapsedTime(waktu)));
+							sb.append(String.format("%d\t%8s\t", 
+								waktu, utils.elapsedTime(waktu)));
 						sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 								train.bestCodebook.coef, train.bestCodebook.epoch,
 								train.getError()));
@@ -289,7 +289,7 @@ public class TestBatchPilihScenario1 {
 			StringBuilder sbh = new StringBuilder();
 			sbh.append("#\tNC\tNFit\t");
 			sbh.append("alpha\twidth\tEpoch\t");
-			sbh.append("time\t");
+			sbh.append("time\ttime\t");
 			sbh.append("bestError\tbestEpoch\tlastError\t");
 			sbh.append("accTrain\taccTest\taccTestO\t");
 			sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -353,8 +353,8 @@ public class TestBatchPilihScenario1 {
 									attempt+1, nclass[dt], fiture[dt]));
 							sb.append(String.format("%7.4f\t%7.4f\t%4d\t", 
 									alphaset[a], windowset[c], iterationset[b]));
-							sb.append(String.format("%8s\t", 
-									utils.elapsedTime(waktu)));
+							sb.append(String.format("%d\t%8s\t", 
+								waktu, utils.elapsedTime(waktu)));
 							sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 									train.bestCodebook.coef, train.bestCodebook.epoch,
 									train.getError()));
@@ -391,7 +391,7 @@ public class TestBatchPilihScenario1 {
 			StringBuilder sbh = new StringBuilder();
 			sbh.append("#\tNC\tNFit\t");
 			sbh.append("alpha\tEpoch\t");
-			sbh.append("time\t");
+			sbh.append("time\ttime\t");
 			sbh.append("bestError\tbestEpoch\tlastError\t");
 			sbh.append("accTrain\taccTest\taccTestO\t");
 			sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -456,8 +456,8 @@ public class TestBatchPilihScenario1 {
 										attempt+1, nclass[dt], fiture[dt]));
 								sb.append(String.format("%7.4f\t%4d\t", 
 										alphaset[a], iterationset[b]));
-								sb.append(String.format("%8s\t", 
-										utils.elapsedTime(waktu)));
+								sb.append(String.format("%d\t%8s\t", 
+								waktu, utils.elapsedTime(waktu)));
 								sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 										train.bestCodebook.coef, train.bestCodebook.epoch,
 										train.getError()));
@@ -494,7 +494,7 @@ public class TestBatchPilihScenario1 {
 			StringBuilder sbh = new StringBuilder();
 			sbh.append("#\tNC\tNFit\t");
 			sbh.append("alpha\tEpoch\t");
-			sbh.append("time\t");
+			sbh.append("time\ttime\t");
 			sbh.append("bestError\tbestEpoch\tlastError\t");
 			sbh.append("accTrain\taccTest\taccTestO\t");
 			sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -557,8 +557,8 @@ public class TestBatchPilihScenario1 {
 								attempt+1, nclass[dt], fiture[dt]));
 						sb.append(String.format("%7.4f\t%4d\t", 
 								alphaset[a], iterationset[b]));
-						sb.append(String.format("%8s\t", 
-								utils.elapsedTime(waktu)));
+						sb.append(String.format("%d\t%8s\t", 
+								waktu, utils.elapsedTime(waktu)));
 						sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 								train.bestCodebook.coef, train.bestCodebook.epoch,
 								train.getError()));
@@ -585,7 +585,7 @@ public class TestBatchPilihScenario1 {
 	
 	public void testFplvq(PrintWriter resumeWriter) throws IOException{
 		utils.header("Running testFplvq");
-		utils.log(resumeWriter, "TrainFplvq");
+		utils.log(resumeWriter, "TrainFplvq " + "init: 1d random:false");
 		urut++;
 		
 		for(int dt=0;dt < NUM_DATA;dt++){
@@ -594,7 +594,7 @@ public class TestBatchPilihScenario1 {
 			StringBuilder sbh = new StringBuilder();
 			sbh.append("#\tNC\tNFit\t");
 			sbh.append("alpha\tEpoch\t");
-			sbh.append("time\t");
+			sbh.append("time\ttime\t");
 			sbh.append("bestError\tbestEpoch\tlastError\t");
 			sbh.append("accTrain\taccTest\taccTestO\t");
 			sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
@@ -617,7 +617,9 @@ public class TestBatchPilihScenario1 {
 					for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 						
 						Fpglvq net = new Fpglvq();
-						net.initCodes(trainsets[dt], 5, false);
+//						net.initCodes(trainsets[dt], 5, false);
+						//try to use all data in class to aggregate
+						net.initCodes(trainsets[dt], 1d, false);
 						
 						TrainFpglvq train = new TrainFpglvq(net, trainsets[dt], alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);
@@ -657,8 +659,8 @@ public class TestBatchPilihScenario1 {
 								attempt+1, nclass[dt], fiture[dt]));
 						sb.append(String.format("%7.4f\t%4d\t", 
 								alphaset[a], iterationset[b]));
-						sb.append(String.format("%8s\t", 
-								utils.elapsedTime(waktu)));
+						sb.append(String.format("%d\t%8s\t", 
+								waktu, utils.elapsedTime(waktu)));
 						sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
 								train.bestCodebook.coef, train.bestCodebook.epoch,
 								train.getError()));
@@ -671,7 +673,7 @@ public class TestBatchPilihScenario1 {
 						sb.append("|\t" + sErr.toString());
 //						sb.append("\n");
 					}
-					
+					utils.log(sb.toString());System.exit(0);
 					utils.log(resumeWriter, sb.toString());
 //					resumeWriter.flush();
 //					return;
