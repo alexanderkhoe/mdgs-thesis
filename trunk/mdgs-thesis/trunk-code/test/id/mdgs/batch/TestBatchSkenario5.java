@@ -4,10 +4,9 @@ import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.fnlvq.Fpglvq;
+import id.mdgs.fnlvq.*;
 import id.mdgs.glvq.TrainGlvq;
-import id.mdgs.lvq.Lvq;
-import id.mdgs.lvq.TrainLvq1;
+import id.mdgs.lvq.*;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 import id.mdgs.dataset.DatasetProfiler;
@@ -133,8 +132,324 @@ public class TestBatchSkenario5 {
 	public void mainTest() throws IOException{
 //		testGlvq();
 //		testFpglvq();
-		testGlvqSkenario5CekSemuaPola();
+//		testGlvqSkenario5CekSemuaPola();
+		testLvq21Skenario5CekSemuaPola();
+		testLvq1Skenario5CekSemuaPola();
+		testFpglvqSkenario5CekSemuaPola();
 	}
+	
+	public void testFpglvqSkenario5CekSemuaPola() throws IOException{
+		writer = createWriter("Skenario5-SemuaPola.Fpglvq");
+		
+		utils.header("Running testFpglvq-SemuaPola");
+		utils.log(writer, "TrainFpglvq, " + "init: get random code from dataset");
+		
+		StringBuilder sbh = new StringBuilder();
+		sbh.append("#\tNC\tPola\tNFit\t");
+		sbh.append("alpha\tEpoch\t");
+		sbh.append("time\ttime\t");
+		sbh.append("bestError\tbestEpoch\tlastError\t");
+		sbh.append("accTrain\taccTest\taccTestO\t");
+		sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
+		utils.log(writer, sbh.toString());
+		
+		double alpha = 0.05;
+		int iteration = 150;
+		
+		for(int dt=0;dt < NUM_DATA;dt++){
+			
+			//find max jumlah data per kelas
+			DatasetProfiler dp = new DatasetProfiler();
+			dp.run(trainsets[dt]);
+			int maxPola = 0;
+			for(PEntry pe: dp){
+				if (maxPola < pe.size()){
+					maxPola = pe.size();
+				}
+			}
+			for(int pola=1;pola<=maxPola;pola++){
+				utils.log(String.format("dt: %d, alpha: %f, iteration: %d, Pola: %d", 
+						dt, alpha,iteration, pola));
+				
+				double[] avgErr = new double[3];
+				for(int i=0;i < avgErr.length;i++) avgErr[i] = 0;
+				long avgtime = 0;					
+				double[] avgAcc = new double[4];
+				for(int i=0;i < avgAcc.length;i++) avgAcc[i] = 0;
+				StringBuilder sb = new StringBuilder();
+				StringBuilder sErr = new StringBuilder();
+				
+				for(int attempt=0;attempt < 1;attempt++){
+					
+					Fpglvq net = new Fpglvq();
+					net.initCodes(trainsets[dt], 0.5d, true);
+					
+					TrainFpglvq train = new TrainFpglvq(net, trainsets[dt], alpha);
+					train.setMaxEpoch(iteration);
+
+					train.getTraining().makeRoundRobin(pola);
+					
+					utils.timer.start();
+					
+					do {
+						train.iteration();
+						sErr.append(String.format("%7.4f,", train.getError()));
+					} while (!train.shouldStop());
+					
+					long waktu = utils.timer.stop();
+					
+					ConfusionMatrix cm1, cm2, cm3, cm4;
+					cm1 = test2(net.codebook, trainsets[dt], nclass[dt]);
+					cm2 = test2(net.codebook, testsets[dt], nclass[dt]);
+
+					//best codebook
+					cm3 = test2(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
+					cm4 = test2(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
+					
+					avgAcc[0] += cm1.getAccuracy();
+					avgAcc[1] += cm2.getAccuracy();
+					avgAcc[2] += cm3.getAccuracy();
+					avgAcc[3] += cm4.getAccuracy();
+					avgtime	  += waktu;
+					avgErr[0] += train.bestCodebook.coef;
+					avgErr[1] += train.bestCodebook.epoch;
+					avgErr[2] += train.getError();
+					
+					
+					sb.append(String.format("%2d\t%d\t%2d\t%3d\t", 
+							attempt+1, pola, nclass[dt], fiture[dt]));
+					sb.append(String.format("%7.4f\t%4d\t", 
+							alpha, iteration));
+					sb.append(String.format("%d\t%8s\t", waktu, 
+							utils.elapsedTime(waktu)));
+					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
+							train.bestCodebook.coef, train.bestCodebook.epoch,
+							train.getError()));
+
+					sb.append(String.format("%7.4f\t%7.4f\t%7.4f\t", 
+							cm1.getAccuracy(), cm2.getAccuracy(), cm3.getAccuracy()));
+					sb.append(String.format("%7.4f\t", 
+							cm4.getAccuracy()));
+					sb.append("|\t" + sErr.toString());
+				}
+				
+				utils.log(writer, sb.toString());
+			}
+		}
+		
+		closeWriter(writer);
+		utils.log("TrainFpglvq-SemuaPola done");
+	}
+	
+	public void testLvq1Skenario5CekSemuaPola() throws IOException{
+		writer = createWriter("Skenario5-SemuaPola.Lvq1");
+		
+		utils.header("Running testLvq1-SemuaPola");
+		utils.log(writer, "TrainLvq1, " + "init: get random code from dataset");
+		
+		StringBuilder sbh = new StringBuilder();
+		sbh.append("#\tNC\tPola\tNFit\t");
+		sbh.append("alpha\tEpoch\t");
+		sbh.append("time\ttime\t");
+		sbh.append("bestError\tbestEpoch\tlastError\t");
+		sbh.append("accTrain\taccTest\taccTestO\t");
+		sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
+		utils.log(writer, sbh.toString());
+		
+		double alpha = 0.05;
+		int iteration = 150;
+		
+		for(int dt=0;dt < NUM_DATA;dt++){
+			
+			//find max jumlah data per kelas
+			DatasetProfiler dp = new DatasetProfiler();
+			dp.run(trainsets[dt]);
+			int maxPola = 0;
+			for(PEntry pe: dp){
+				if (maxPola < pe.size()){
+					maxPola = pe.size();
+				}
+			}
+			for(int pola=1;pola<=maxPola;pola++){
+				utils.log(String.format("dt: %d, alpha: %f, iteration: %d, Pola: %d", 
+						dt, alpha,iteration, pola));
+				
+				double[] avgErr = new double[3];
+				for(int i=0;i < avgErr.length;i++) avgErr[i] = 0;
+				long avgtime = 0;					
+				double[] avgAcc = new double[4];
+				for(int i=0;i < avgAcc.length;i++) avgAcc[i] = 0;
+				StringBuilder sb = new StringBuilder();
+				StringBuilder sErr = new StringBuilder();
+				
+				for(int attempt=0;attempt < 1;attempt++){
+					
+					Lvq net = new Lvq();
+					net.initCodes(trainsets[dt]);
+					
+					TrainLvq1 train = new TrainLvq1(net, trainsets[dt], alpha);
+					train.setMaxEpoch(iteration);
+
+					train.getTraining().makeRoundRobin(pola);
+					
+					utils.timer.start();
+					
+					do {
+						train.iteration();
+						sErr.append(String.format("%7.4f,", train.getError()));
+					} while (!train.shouldStop());
+					
+					long waktu = utils.timer.stop();
+					
+					ConfusionMatrix cm1, cm2, cm3, cm4;
+					cm1 = test1(net.codebook, trainsets[dt], nclass[dt]);
+					cm2 = test1(net.codebook, testsets[dt], nclass[dt]);
+
+					//best codebook
+					cm3 = test1(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
+					cm4 = test1(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
+					
+					avgAcc[0] += cm1.getAccuracy();
+					avgAcc[1] += cm2.getAccuracy();
+					avgAcc[2] += cm3.getAccuracy();
+					avgAcc[3] += cm4.getAccuracy();
+					avgtime	  += waktu;
+					avgErr[0] += train.bestCodebook.coef;
+					avgErr[1] += train.bestCodebook.epoch;
+					avgErr[2] += train.getError();
+					
+					
+					sb.append(String.format("%2d\t%d\t%2d\t%3d\t", 
+							attempt+1, pola, nclass[dt], fiture[dt]));
+					sb.append(String.format("%7.4f\t%4d\t", 
+							alpha, iteration));
+					sb.append(String.format("%d\t%8s\t", waktu, 
+							utils.elapsedTime(waktu)));
+					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
+							train.bestCodebook.coef, train.bestCodebook.epoch,
+							train.getError()));
+
+					sb.append(String.format("%7.4f\t%7.4f\t%7.4f\t", 
+							cm1.getAccuracy(), cm2.getAccuracy(), cm3.getAccuracy()));
+					sb.append(String.format("%7.4f\t", 
+							cm4.getAccuracy()));
+					sb.append("|\t" + sErr.toString());
+				}
+				
+				utils.log(writer, sb.toString());
+			}
+		}
+		
+		closeWriter(writer);
+		utils.log("TrainLvq1-SemuaPola done");
+	}
+
+	
+	public void testLvq21Skenario5CekSemuaPola() throws IOException{
+		writer = createWriter("Skenario5-SemuaPola.Lvq21");
+		
+		utils.header("Running testLvq21-SemuaPola");
+		utils.log(writer, "TrainLvq21, " + "init: get random code from dataset");
+		
+		StringBuilder sbh = new StringBuilder();
+		sbh.append("#\tNC\tPola\tNFit\t");
+		sbh.append("alpha\tEpoch\t");
+		sbh.append("time\ttime\t");
+		sbh.append("bestError\tbestEpoch\tlastError\t");
+		sbh.append("accTrain\taccTest\taccTestO\t");
+		sbh.append("BaccTrain\tBaccTest\tBaccTestO\t");
+		utils.log(writer, sbh.toString());
+		
+		double alpha = 0.05;
+		int iteration = 150;
+		double window = 0.005;
+		
+		for(int dt=0;dt < NUM_DATA;dt++){
+			
+			//find max jumlah data per kelas
+			DatasetProfiler dp = new DatasetProfiler();
+			dp.run(trainsets[dt]);
+			int maxPola = 0;
+			for(PEntry pe: dp){
+				if (maxPola < pe.size()){
+					maxPola = pe.size();
+				}
+			}
+			for(int pola=1;pola<=maxPola;pola++){
+				utils.log(String.format("dt: %d, alpha: %f, iteration: %d, Pola: %d", 
+						dt, alpha,iteration, pola));
+				
+				double[] avgErr = new double[3];
+				for(int i=0;i < avgErr.length;i++) avgErr[i] = 0;
+				long avgtime = 0;					
+				double[] avgAcc = new double[4];
+				for(int i=0;i < avgAcc.length;i++) avgAcc[i] = 0;
+				StringBuilder sb = new StringBuilder();
+				StringBuilder sErr = new StringBuilder();
+				
+				for(int attempt=0;attempt < 1;attempt++){
+					
+					Lvq net = new Lvq();
+					net.initCodes(trainsets[dt]);
+					
+					TrainLvq21 train = new TrainLvq21(net, trainsets[dt], alpha, window);
+					train.setMaxEpoch(iteration);
+
+					train.getTraining().makeRoundRobin(pola);
+					
+					utils.timer.start();
+					
+					do {
+						train.iteration();
+						sErr.append(String.format("%7.4f,", train.getError()));
+					} while (!train.shouldStop());
+					
+					long waktu = utils.timer.stop();
+					
+					ConfusionMatrix cm1, cm2, cm3, cm4;
+					cm1 = test1(net.codebook, trainsets[dt], nclass[dt]);
+					cm2 = test1(net.codebook, testsets[dt], nclass[dt]);
+
+					//best codebook
+					cm3 = test1(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
+					cm4 = test1(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
+					
+					avgAcc[0] += cm1.getAccuracy();
+					avgAcc[1] += cm2.getAccuracy();
+					avgAcc[2] += cm3.getAccuracy();
+					avgAcc[3] += cm4.getAccuracy();
+					avgtime	  += waktu;
+					avgErr[0] += train.bestCodebook.coef;
+					avgErr[1] += train.bestCodebook.epoch;
+					avgErr[2] += train.getError();
+					
+					
+					sb.append(String.format("%2d\t%d\t%2d\t%3d\t", 
+							attempt+1, pola, nclass[dt], fiture[dt]));
+					sb.append(String.format("%7.4f\t%4d\t", 
+							alpha, iteration));
+					sb.append(String.format("%d\t%8s\t", waktu, 
+							utils.elapsedTime(waktu)));
+					sb.append(String.format("%7.4f\t%4d\t%7.4f\t", 
+							train.bestCodebook.coef, train.bestCodebook.epoch,
+							train.getError()));
+
+					sb.append(String.format("%7.4f\t%7.4f\t%7.4f\t", 
+							cm1.getAccuracy(), cm2.getAccuracy(), cm3.getAccuracy()));
+					sb.append(String.format("%7.4f\t", 
+							cm4.getAccuracy()));
+					sb.append("|\t" + sErr.toString());
+				}
+				
+				utils.log(writer, sb.toString());
+			}
+		}
+		
+		closeWriter(writer);
+		utils.log("TrainLvq21-SemuaPola done");
+	}
+
+	
 	
 	public void testGlvqSkenario5CekSemuaPola() throws IOException{
 		writer = createWriter("Skenario5-SemuaPola.Glvq");
@@ -182,7 +497,7 @@ public class TestBatchSkenario5 {
 					Lvq net = new Lvq();
 					net.initCodes(trainsets[dt]);
 					
-					TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alpha);
+					TrainGlvq train = new TrainGlvq(net, trainsets[dt], alpha);
 					train.setMaxEpoch(iteration);
 
 					train.getTraining().makeRoundRobin(pola);
