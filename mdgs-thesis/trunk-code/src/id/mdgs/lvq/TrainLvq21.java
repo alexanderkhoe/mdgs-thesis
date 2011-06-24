@@ -4,6 +4,7 @@
 package id.mdgs.lvq;
 
 import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
 
@@ -20,7 +21,11 @@ public class TrainLvq21 extends TrainLvq1 {
 	 * @param learningRate
 	 */
 	public TrainLvq21(Lvq network, Dataset training, double learningRate, double windowWidth) {
-		super(network, training, learningRate);
+		this(network,  new FoldedDataset<Dataset, Entry>(training), learningRate, windowWidth);
+	}
+	
+	public TrainLvq21(Lvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate, double windowWidth) {
+		super(network, foldedDs, learningRate);
 		this.windowWidth = windowWidth;
 	}
 	

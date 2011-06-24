@@ -194,6 +194,16 @@ public class Dataset implements Iterable<Dataset.Entry>{
 			add(e);
 	}
 	
+	public void join(Dataset ds){
+		//assure same properties
+		if(this.numEntries != ds.numEntries)
+			throw new RuntimeException("number of entry not match");
+		if(this.numFeatures != ds.numFeatures)
+			throw new RuntimeException("dimension not match");
+		
+		this.addAll(ds.entries);
+	}
+	
 	public Entry get(int pos) {
 		if(pos >= size()){
 			throw new RuntimeException(

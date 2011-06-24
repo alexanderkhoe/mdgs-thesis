@@ -30,7 +30,6 @@ public class TestLvq {
 //		net.initCodes(trainset, 0d, 1d);
 		System.out.println(net.codebook.toString());
 		System.exit(0);
-		
 //		ITrain train = new TrainLvq1(net, trainset, 0.05);
 		ITrain train = new TrainLvq21(net, trainset, 0.05, 0.005);
 //		ITrain train = new TrainLvq3(net, trainset, 0.05, 0.005, 0.5);
