@@ -4,6 +4,7 @@
 package id.mdgs.utils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -58,6 +59,17 @@ public class utils {
 		}
 		
 		return bw;
+	}
+	
+	public static void initPath(String path){
+		File directory = new File(path);
+		if(!directory.exists()){
+			if(!directory.mkdir()){
+				if(!directory.mkdirs()){
+					throw new RuntimeException("Can't make directory: " + path);
+				}
+			}
+		}
 	}
 	
 	public static void closeWriter(BufferedWriter bw){

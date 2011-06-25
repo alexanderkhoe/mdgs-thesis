@@ -12,8 +12,10 @@ import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.evaluation.Best;
 import id.mdgs.evaluation.Best.FBest;
 import id.mdgs.fnlvqold.Fnlvq;
+import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
+import id.mdgs.master.IClassify;
 import id.mdgs.master.ITrain;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
@@ -28,7 +30,9 @@ public class TrainFpglvq implements ITrain {
 	
 	public Fpglvq network;
 	protected double alpha;
+	protected double alphaStart;
 	protected double xi;
+	protected double xiStart;
 //	protected Dataset training;
 	protected DatasetProfiler profiler;
 	protected double error;
@@ -45,12 +49,33 @@ public class TrainFpglvq implements ITrain {
 	}
 	
 	public TrainFpglvq(Fpglvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate) {
-		this.network 	= network;
 		this.alpha		= learningRate;
+		this.alphaStart	= learningRate;
 		this.xi			= 1d;
-		
 		this.foldedDs	= foldedDs;
-		this.bestCodebook = new Best.FBest(network.codebook);
+		
+		setNetwork(network);
+//		this.network 	= network;
+//		this.bestCodebook = new Best.FBest(network.codebook);
+	}
+	
+	public TrainFpglvq(FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		this.alpha		= learningRate;
+		this.alphaStart	= learningRate;
+		this.xi			= 1d;
+		this.xiStart	= this.xi;
+		this.foldedDs	= foldedDs;
+	}
+
+	@Override
+	public void setNetwork(IClassify<?, ?> net) {
+		this.network = (Fpglvq) net;
+		this.bestCodebook = new Best.FBest(((Fpglvq) net).codebook);
+	}
+
+	@Override
+	public void setTraining(FoldedDataset<?, ?> foldedDs) {
+		this.foldedDs 	= (FoldedDataset<Dataset, Entry>) foldedDs;
 	}
 	
 	@Override
@@ -280,5 +305,11 @@ public class TrainFpglvq implements ITrain {
 		throw new RuntimeException("Not Supported");
 	}
 
-	
+	@Override
+	public void reset() {
+		this.alpha 	= this.alphaStart;
+		this.xi		= this.xiStart;
+		this.currEpoch = 0;
+	}
+
 }

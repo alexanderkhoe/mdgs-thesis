@@ -9,13 +9,14 @@ import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.lvq.LvqUtils.MinMax;
 import id.mdgs.master.FWinnerFunction;
+import id.mdgs.master.IClassify;
 import id.mdgs.utils.MathUtils;
 
 /**
  * @author I Made Agus Setiawan
  *
  */
-public class Fnlvq {
+public class Fnlvq implements IClassify<FCodeBook, Entry>{
 
 	public FCodeBook codebook;
 	public FWinnerFunction findWinner;
@@ -47,6 +48,8 @@ public class Fnlvq {
 	public void initCodes(Dataset data, int num, boolean random){
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
+		
+		codebook.numFeatures = data.numFeatures;
 
 		/**/
 		for(PEntry pe: profiler){
@@ -109,6 +112,8 @@ public class Fnlvq {
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.numFeatures = data.numFeatures;
+		
 		/**/
 		for(PEntry pe: profiler){
 			FEntry code = new FEntry(data.numFeatures);
@@ -157,10 +162,21 @@ public class Fnlvq {
 		}
 	}
 	
+	/**
+	 * init bobot dengan nilai random antara rentang min-max
+	 * Jika min=max, maka rentang akan didasarkan atas nilai min-max pada 
+	 * dataset per dimensi
+	 * 
+	 * @param data
+	 * @param min
+	 * @param max
+	 */
 	public void initCodes(Dataset data, double min, double max){
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.numFeatures = data.numFeatures;
+		
 		MinMax[] dataRange = new MinMax[data.numFeatures];
 		if(MathUtils.equals((max - min) , 0)) {
 			for(int i=0;i<dataRange.length;i++) 
@@ -256,6 +272,25 @@ public class Fnlvq {
 		for(FEntry fe : codebook){
 			this.codebook.add(fe);
 		}
+	}
+
+	@Override
+	public void loadCodebook(FCodeBook codebook) {
+		this.codebook.reset();
+		this.codebook.copyInfo(codebook);
+		for(FEntry fe : codebook){
+			this.codebook.add(fe);
+		}
+	}
+
+	@Override
+	public void saveCodebook(String location) {
+		this.codebook.save(location);
+	}
+
+	@Override
+	public void loadCodebook(String location) {
+		this.codebook.load(location);
 	}
 
 }

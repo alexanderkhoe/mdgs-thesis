@@ -7,12 +7,15 @@ import java.util.List;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.HitList;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
+import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.dataset.HitList.HitEntry;
 import id.mdgs.lvq.LvqUtils.MinMax;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
+import id.mdgs.master.IClassify;
 import id.mdgs.master.WinnerFunction;
 import id.mdgs.utils.MathUtils;
 
@@ -20,7 +23,7 @@ import id.mdgs.utils.MathUtils;
  * @author I Made Agus Setiawan
  *
  */
-public class Lvq {
+public class Lvq implements IClassify<Dataset, Entry> {
 
 	//codebook vector
 	public Dataset codebook;
@@ -153,5 +156,24 @@ public class Lvq {
 			codebook.addAll(le1);
 		if(le2 != null)
 			codebook.addAll(le2);
+	}
+
+	@Override
+	public void loadCodebook(Dataset codebook) {
+		this.codebook.reset();
+		this.codebook.copyInfo(codebook);
+		for(Entry e : codebook){
+			this.codebook.add(e);
+		}
+	}
+
+	@Override
+	public void saveCodebook(String location) {
+		this.codebook.save(location);
+	}
+
+	@Override
+	public void loadCodebook(String location) {
+		this.codebook.load(location);
 	}
 }

@@ -37,6 +37,12 @@ public class TrainLvq3 extends TrainLvq21 {
 		this.epsilon = epsilon;
 	}
 	
+	public TrainLvq3(FoldedDataset<Dataset, Entry> foldedDs, double learningRate, double windowWidth, double epsilon){
+		super(foldedDs, learningRate, windowWidth);
+		this.epsilon = epsilon;
+	}
+
+	
 	@Override
 	protected WinnerInfo train(Dataset codebook, Entry input) {
 		WinnerInfo[] wins;

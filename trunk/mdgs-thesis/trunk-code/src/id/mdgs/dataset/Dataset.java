@@ -254,6 +254,8 @@ public class Dataset implements Iterable<Dataset.Entry>{
 			fr = new FileReader(fname);
 			br = new BufferedReader(fr);
 			
+			this.fname = fname;
+			
 			int lineno = 0;
 			while((currLine = br.readLine()) != null){
 				lineno++;
@@ -458,7 +460,7 @@ public class Dataset implements Iterable<Dataset.Entry>{
 					bw.write(val + ",");
 				}
 				//bw.write(LvqUtils.getLabel(e.label));
-				bw.write(e.label);
+				bw.write(String.valueOf(e.label));
 				bw.newLine();
 				
 				numOfLine++;

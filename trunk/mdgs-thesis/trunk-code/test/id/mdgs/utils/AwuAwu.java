@@ -131,6 +131,137 @@ public class AwuAwu {
 	}
 	
 	@Test
+	public void test6(){
+		Test2 tmp = new Test2();
+		Test2 tmp2 = new Test2();
+		if(tmp instanceof Test2)
+			System.out.print("Instance Test2");
+		else if(tmp instanceof Test21)
+			System.out.print("Instance Test21");
+		
+		if(tmp.getClass().getSimpleName().equals("Test2"))
+			System.out.println("Instance Test2");
+		else if (tmp.getClass().getSimpleName().equals("Test21"))
+			System.out.println("Instance Test21");
+		
+		System.out.println(tmp.hashCode());
+		System.out.println(tmp2.hashCode());
+	}
+	
+	
+//	@Test
+	public void test5(){
+		CombinationGenerator gen = new CombinationGenerator(4, 2);
+		while(gen.hasMore()){
+			int[] idx = gen.getNext();
+			
+			for(int i=0;i<idx.length;i++){
+				System.out.print(idx[i] + ",");
+			}
+			System.out.println();
+		}
+//		int mask = 1;
+//		mask <<= (4-1);
+//		System.out.println(mask);
+		
+//		int N00 = 0, bitmask00 = 0,
+//		N01 = 0, bitmask01 = 0,
+//		N10 = 0, bitmask10 = 0,
+//		N11 = 0, bitmask11 = 0, mask = 0;
+//		int bitmask = 1;
+//		
+//		double X2 = 0;
+//		int nAlgo = 4, idAlgo1 = 0, idAlgo2 = 3;
+//		
+//		//idAlgo1
+//		for(int i=nAlgo-1; i >= 0; i--){
+//			if(idAlgo1 == i ){
+//				//bitmask10
+//				bitmask10 |= bitmask;
+//				
+//				mask |= bitmask;
+//			}
+//	
+//			if(idAlgo2 == i){
+//				//bitmask01
+//				bitmask01 |= bitmask;
+//				
+//				mask |= bitmask;
+//			}
+//			
+//			bitmask <<= 1;
+//		}
+		
+//		for(int i=0; i < Math.pow(2, nAlgo); i++){
+//			if((mask & i) == 0)
+//				System.out.print(i + ",");
+//		}
+//		System.out.println();
+//		for(int i=0; i < Math.pow(2, nAlgo); i++){
+//			if((mask & i) == bitmask01)
+//				System.out.print(i + ",");
+//		}
+//		System.out.println();
+//		for(int i=0; i < Math.pow(2, nAlgo); i++){
+//			if((mask & i) == bitmask10)
+//				System.out.print(i + ",");
+//		}
+//		System.out.println();
+//		for(int i=0; i < Math.pow(2, nAlgo); i++){
+//			if((mask & i) == mask)
+//				System.out.print(i + ",");
+//		}
+//		System.out.println();
+//		
+//		System.out.println(bitmask00);
+//		System.out.println(bitmask01);
+//		System.out.println(bitmask10);
+//		System.out.println(bitmask11);
+	}
+	
+//	@Test
+	public void test4(){
+//		Test2 tmp = new Test2();
+//		System.out.print(tmp.getClass().getSimpleName());
+		
+		int pos = 0;
+		int bitmask = 1;
+		
+		int[] mat = { 0, 1, 0, 1};
+		
+		for(int c=mat.length - 1; c >= 0; c--){
+			if(mat[c] == 1){
+				pos |= bitmask;
+			}
+			
+			bitmask <<= 1;
+		}
+		
+		System.out.print(pos);
+	}
+	
+	@Test
+	public void test3(){
+//		double num = 1.4;
+//		System.out.println(Math.round(1.4));
+		
+//		ArrayList<Integer> test = new ArrayList<Integer>();
+//		test.add(1);
+//		test.add(2);
+//		
+//		ArrayList<Integer> ctest = (ArrayList<Integer>) test.clone();
+//		Assert.assertEquals(1, (int)ctest.get(0));
+//		
+//		test.set(0, 3);
+//		Assert.assertEquals(1, (int)ctest.get(0));
+//		Assert.assertEquals(3, (int)test.get(0));
+//		
+//		test.clear();
+//		Assert.assertEquals(0, test.size());
+//		Assert.assertEquals(2, ctest.size());
+	}
+	
+//	@Test
 	public void test2(){
 		System.out.println(Math.pow(4, -(double)1/2));
 		System.out.println(Math.pow(4.0, -0.5));

@@ -29,6 +29,11 @@ public class TrainLvq21 extends TrainLvq1 {
 		this.windowWidth = windowWidth;
 	}
 	
+	public TrainLvq21(FoldedDataset<Dataset, Entry> foldedDs, double learningRate, double windowWidth){
+		super(foldedDs, learningRate);
+		this.windowWidth = windowWidth;
+	}
+	
 	@Override
 	protected WinnerInfo train(Dataset codebook, Entry input) {
 		WinnerInfo[] wins;
