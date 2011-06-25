@@ -29,7 +29,7 @@ public class TestKHoldOut {
 		
 		trainset.join(testset);
 		
-		KHoldOutTest kholdtest = new KHoldOutTest(trainset, 30, 0.5, true, utils.getDefaultPath() + "/resources/Evaluation/khold.log");
+		KHoldOutTest kholdtest = new KHoldOutTest(trainset, 30, 0.6, true, utils.getDefaultPath() + "/resources/evaluation/khold.log");
 		
 		//register trainer
 		ITrain train1 = new TrainLvq1(null, 0.05); train1.setMaxEpoch(150);
@@ -37,10 +37,11 @@ public class TestKHoldOut {
 		ITrain train3 = new TrainGlvq(null, 0.05); train3.setMaxEpoch(150);
 		ITrain train4 = new TrainFpglvq(null, 0.05); train4.setMaxEpoch(150);
 		
-		Lvq c1 = new Lvq();		c1.initCodes(trainset, 1, 5);
-		Lvq c2 = new Lvq();		c2.initCodes(trainset, 1, 5);
-		Glvq c3 = new Glvq();		c3.initCodes(trainset, 1, 5);
-		Fpglvq c4 = new Fpglvq();	c4.initCodes(trainset, 1d, false);
+		Lvq c1 = new Lvq();		
+		Lvq c2 = new Lvq();		
+		Glvq c3 = new Glvq();		
+		Fpglvq c4 = new Fpglvq();	
+		//proses init bobot di tester
 		
 		kholdtest.registerClassifier(c3, train3);
 		kholdtest.registerClassifier(c4, train4);

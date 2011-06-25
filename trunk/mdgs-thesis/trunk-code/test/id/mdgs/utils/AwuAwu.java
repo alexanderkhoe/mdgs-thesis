@@ -1,6 +1,8 @@
 package id.mdgs.utils;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +133,21 @@ public class AwuAwu {
 	}
 	
 	@Test
+	public void test7() throws IOException{
+		String name = utils.getDefaultPath() + "/resources/evaluation/khold.log";
+		File f = new File(name);
+		
+		System.out.println(String.format("%-15s : %s","getAbsolutePath", f.getAbsolutePath()));
+		System.out.println(String.format("%-15s : %s","getCanonicalPath", f.getCanonicalPath()));
+		System.out.println(String.format("%-15s : %s","getName", f.getName()));
+		System.out.println(String.format("%-15s : %s","getParent", f.getParent()));
+		System.out.println(String.format("%-15s : %s","getPath", f.getPath()));
+		System.out.println(String.format("%-15s : %s","isDirectory", f.isDirectory()));
+		System.out.println(String.format("%-15s : %s","isFile", f.isFile()));
+		
+	}
+	
+//	@Test
 	public void test6(){
 		Test2 tmp = new Test2();
 		Test2 tmp2 = new Test2();

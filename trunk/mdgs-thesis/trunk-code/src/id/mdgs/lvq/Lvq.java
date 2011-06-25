@@ -8,6 +8,7 @@ import java.util.List;
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.DatasetProfiler;
 import id.mdgs.dataset.FCodeBook;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.dataset.HitList;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
@@ -54,6 +55,8 @@ public class Lvq implements IClassify<Dataset, Entry> {
 	public void initCodes(Dataset data, double min, double max, int num){
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
+		
+		codebook.copyInfo(data);
 
 		MinMax[] dataRange = new MinMax[data.numFeatures];
 		if(MathUtils.equals((max - min) , 0)) {
@@ -158,6 +161,29 @@ public class Lvq implements IClassify<Dataset, Entry> {
 			codebook.addAll(le2);
 	}
 
+	//random from folded data
+	public void initCodes(FoldedDataset<Dataset, Entry> data, int num){
+		DatasetProfiler profiler = new DatasetProfiler();
+		profiler.run(data);
+
+		codebook.numFeatures = data.getMasterData().numFeatures;
+		
+		for(PEntry pe: profiler){
+			int max = num;
+			if(max > pe.size()) max = pe.size();
+			int[] unique;
+			
+			/*find unique random index for each class*/
+			unique = MathUtils.randPerm(max, pe.size());
+			
+			/*add codebook*/
+			for(int i = 0;i < unique.length;i++){
+				Entry code = data.get(pe.get(unique[i]));
+				codebook.add(code.clone());				
+			}
+		}
+	}
+	
 	@Override
 	public void loadCodebook(Dataset codebook) {
 		this.codebook.reset();
