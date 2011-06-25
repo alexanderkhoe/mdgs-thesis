@@ -25,7 +25,7 @@ public class TestFpglvq {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int Pos = 4 * 4;
+		int Pos = 0 * 4;
 		int nclass = 12;
 		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
@@ -60,9 +60,9 @@ public class TestFpglvq {
 		
 		Fpglvq net = new Fpglvq();
 //		net.initCodes(trainset, 5, false);
-		net.initCodes(trainset, 1000, false);
+		net.initCodes(trainset, 1d, false);
 		
-		ITrain train = new TrainFpglvq(net, trainset, 0.075);
+		ITrain train = new TrainFpglvq(net, trainset, 0.005);
 		train.setMaxEpoch(150);
 		
 		/*view monitor*/

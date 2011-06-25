@@ -89,9 +89,11 @@ public class MathUtils {
 	}	
 	
 	/**
+	 * randPerm() create unique random integer between 0 and max, and 
+	 * return only num number. 
 	 * 
-	 * @param num
-	 * @param max
+	 * @param num number of data return
+	 * @param max maximum integer number generated start from 0
 	 * @return
 	 */
 	public static int[] randPerm(int num, int max){
@@ -191,4 +193,33 @@ public class MathUtils {
 	public static boolean equals(double actual, double expected, double eps){
 		return actual == expected ? true : Math.abs(actual - expected) < eps;
 	}
+	
+	public static void fills(int[][] arr, int val){
+		for(int r=0;r<arr.length;r++){
+			for(int c=0;c<arr[0].length;c++){
+				arr[r][c] = val;
+			}
+		}
+	}
+	
+	public static void fills(int[] arr, int val){
+		for(int r=0;r<arr.length;r++){
+			arr[r] = val;
+		}
+	}
+
+	public static void fills(double[][] arr, double val){
+		for(int r=0;r<arr.length;r++){
+			for(int c=0;c<arr[0].length;c++){
+				arr[r][c] = val;
+			}
+		}
+	}
+	
+	public static void fills(double[] arr, double val){
+		for(int r=0;r<arr.length;r++){
+			arr[r] = val;
+		}
+	}
+
 }

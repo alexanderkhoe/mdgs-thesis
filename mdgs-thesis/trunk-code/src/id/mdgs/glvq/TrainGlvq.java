@@ -23,25 +23,46 @@ public class TrainGlvq extends TrainLvq1 {
 	protected final int NCLASS = 1;
 	
 	protected double xi;
+	protected double xiStart;
 	/**
 	 * @param network
 	 * @param training
 	 * @param learningRate
 	 * @param windowWidth
 	 */
-	public TrainGlvq(Lvq network, Dataset training, double learningRate) {
+	public TrainGlvq(Glvq network, Dataset training, double learningRate) {
 		this(network, new FoldedDataset<Dataset, Entry>(training), learningRate);
 	}
 	
-	public TrainGlvq(Lvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+	public TrainGlvq(Glvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
 		super(network, foldedDs, learningRate);
 		
 		/*Set findWinner method to Squared Euclid*/
-		network.findWinner = new WinnerBySquaredEuc();
+//		network.findWinner = new WinnerBySquaredEuc();
 		
 		this.xi	= 1d;
+		this.xiStart = this.xi;
 	}
 	
+	//bahaya network belum diset, yakinkan pake GLVQ
+	public TrainGlvq(FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		super(foldedDs, learningRate);
+		
+//		/*Set findWinner method to Squared Euclid*/
+//		network.findWinner = new WinnerBySquaredEuc();
+		
+		this.xi	= 1d;
+		this.xiStart = this.xi;
+	}
+	
+	
+	@Override
+	public void reset() {
+		super.reset();
+		
+		this.xi = this.xiStart;
+	}
+
 	protected void updateXiParameter() {
 		this.xi *= 1.1;// + (epoch/maxEpoch);
 	}

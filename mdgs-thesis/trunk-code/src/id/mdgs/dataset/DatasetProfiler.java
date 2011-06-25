@@ -5,9 +5,6 @@ package id.mdgs.dataset;
 
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.FCodeBook.FEntry;
-import id.mdgs.dataset.HitList.HitEntry;
-import id.mdgs.dataset.HitList.HitEntryIterator;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -140,6 +137,26 @@ public class DatasetProfiler  implements Iterable<DatasetProfiler.PEntry>{
 		}
 	}
 	
+	public void run(FoldedDataset<?,?> set){
+		Entry e;
+		PEntry pe;
+		
+		for(int pos=0; pos < set.size(); pos++){
+			//TODO harus diganti casting Entry dengan membuat interface untuk Entry dan FEntry 
+			e = (Entry) set.get(pos);
+			
+			pe = findPEntry(e.label);
+			if(pe != null){
+				pe.add(pos);
+			} else {
+				pe = new PEntry();
+				pe.label = e.label;
+				pe.add(pos);
+				this.entries.add(pe);
+			}
+		}
+	}
+
 	@Override
 	public Iterator<PEntry> iterator() {
 		final PEntryIterator it = new PEntryIterator();

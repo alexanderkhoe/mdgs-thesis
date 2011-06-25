@@ -5,10 +5,16 @@ package id.mdgs.dataset;
 
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author I Made Agus Setiawan
@@ -63,18 +69,20 @@ public class FCodeBook implements Iterable<FCodeBook.FEntry>{
 			StringBuilder sbmean = new StringBuilder();
 			StringBuilder sbmax  = new StringBuilder();
 			for(int i=0;i<data.length;i++){
-				sbmin.append(String.format("%7.4f",data[i].min));
-				sbmean.append(String.format("%7.4f",data[i].mean));
-				sbmax.append(String.format("%7.4f",data[i].max));
-				if(i != data.length - 1){
-					sbmin.append(",");
-					sbmean.append(",");
-					sbmax.append(",");
-				}
+				sbmin.append(String.format("%7.4f,",data[i].min));
+				sbmean.append(String.format("%7.4f,",data[i].mean));
+				sbmax.append(String.format("%7.4f,",data[i].max));
+//				if(i != data.length - 1){
+//					sbmin.append(",");
+//					sbmean.append(",");
+//					sbmax.append(",");
+//				}
 			}
-			return (sbmin.toString()  + "\n" +
-					sbmean.toString() + "\n" +
-					sbmax.toString()  + "\n");
+			sbmin.append(String.format("%d\n", label));
+			sbmean.append(String.format("%d\n", label));
+			sbmax.append(String.format("%d\n", label));
+			
+			return (sbmin.toString()  + sbmean.toString() + sbmax.toString());
 		}
 	}
 	
@@ -215,80 +223,97 @@ public class FCodeBook implements Iterable<FCodeBook.FEntry>{
 		return sb.toString();
 	}
 	
-//	public int load(){
-//		if(this.fname == null)
-//			throw new RuntimeException("[Dataset] Filename not defined yet.");
-//		
-//		return load(this.fname);
-//	}
+	public int load(){
+		if(this.fname == null)
+			throw new RuntimeException("[FCodeBook] Filename not defined yet.");
+		
+		return load(this.fname);
+	}
 	
-//	public int load(String fname) {
-//		FileReader fr = null;
-//		BufferedReader br = null; 
-//		String currLine;
-//		
-//		//reset 
-//		this.reset();
-//		
-//		try {
-//			
-//			fr = new FileReader(fname);
-//			br = new BufferedReader(fr);
-//			
-//			int lineno = 0;
-//			while((currLine = br.readLine()) != null){
-//				lineno++;
-//				
-//				if(lineno == 1){
-//					StringTokenizer stok = new StringTokenizer(currLine, delimiter);
-//					if(stok.hasMoreTokens()){
-//						this.numFeatures = Integer.parseInt(stok.nextToken());
-//						this.numEntries = 0;
-//					} 
-//				}
-//				
-//				else {
-//					StringTokenizer stok = new StringTokenizer(currLine, delimiter);
-//					Entry entry = new Entry(this.numFeatures);
-//					int counter = 0;
-//					while (stok.hasMoreTokens()) {
-//						if (counter < this.numFeatures){
-//							String sval = stok.nextToken();
-//							double dval = Double.parseDouble(sval);
-//							entry.data[counter++] = dval;
-//						} else {
-//							String label = stok.nextToken();
-//							
-//							entry.label = LvqUtils.getLabelId(label);
-//							add(entry);
-//							
-//							break;
-//						}
-//					}
-//					
-//					if(counter != this.numFeatures){
-//						this.reset();
-//						throw new RuntimeException("line:" + lineno + " num of data not match.");
-//					}
-//				}
-//			}
-//		} catch (FileNotFoundException e) {
-//			throw new RuntimeException(e.toString());
-//		} catch (NumberFormatException e) {
-//			throw new RuntimeException(e.toString());
-//		} catch (IOException e) {
-//			throw new RuntimeException(e.toString());
-//		} finally {
-//				try {
-//					if(br != null) br.close();
-//					if(fr != null) fr.close();
-//				} catch (IOException e) {
-//					throw new RuntimeException(e.toString());
-//				}
-//		}
-//		
-//		return numEntries;
-//	}
+	public int load(String fname) {
+		FileReader fr = null;
+		BufferedReader br = null; 
+		String currLine;
+		
+		//reset 
+		this.reset();
+		
+		try {
+			
+			fr = new FileReader(fname);
+			br = new BufferedReader(fr);
+			
+			this.fname = fname;
+			
+			int lineno = 0;
+			while((currLine = br.readLine()) != null){
+				lineno++;
+				
+				if(lineno == 1){
+					StringTokenizer stok = new StringTokenizer(currLine, delimiter);
+					if(stok.hasMoreTokens()){
+						this.numFeatures = Integer.parseInt(stok.nextToken());
+						this.numEntries = 0;
+					} 
+				}
+				
+				else {
+					assert(this.numFeatures != 0);
+					FEntry entry = new FEntry(this.numFeatures);
+					int linec = 0;
+					do {
+						//baca 3 baris bobot fuzzy (1) min, (2) mean, (3) max
+						if(linec != 0) {
+							currLine = br.readLine();
+							lineno++;
+						}
+						StringTokenizer stok = new StringTokenizer(currLine, delimiter);
+						int counter = 0;
+						while (stok.hasMoreTokens()) {
+							if (counter < this.numFeatures){
+								String sval = stok.nextToken();
+								double dval = Double.parseDouble(sval);
+								switch(linec){
+								case 0:	entry.data[counter++].min  = dval; break; 
+								case 1:	entry.data[counter++].mean = dval; break;
+								case 2:	entry.data[counter++].max  = dval; break;
+								}
+							} else {
+								String label = stok.nextToken();
+								entry.label = Integer.parseInt(label.trim());
+								
+								if(linec==2) add(entry);
+								
+								break;
+							}
+						}
+						
+						if(counter != this.numFeatures){
+							this.reset();
+							throw new RuntimeException("line:" + lineno + " num of data not match.");
+						}
+						
+						linec++;
+					}while(linec < 3);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e.toString());
+		} catch (NumberFormatException e) {
+			throw new RuntimeException(e.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		} finally {
+				try {
+					if(br != null) br.close();
+					if(fr != null) fr.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e.toString());
+				}
+		}
+		
+		return numEntries;
+	}
 	
 	/**
 	 * Can't Handle this number -> 4.5998e-005
@@ -397,58 +422,65 @@ public class FCodeBook implements Iterable<FCodeBook.FEntry>{
 	}
 	
 	/* WRITE TO FILE ROUTINE */
-//	public int save(String fname){
-//		return save(fname, false);
-//	}
-//	/**
-//	 * always overwrite existing fname file
-//	 */
-//	public int save(String fname, boolean append){
-//		FileWriter fw = null;
-//		BufferedWriter bw = null; 
-//		int numOfLine = 0;
-//		
-//		if(this.entries == null) {
-//			throw new RuntimeException("empty dataset");
-//		}
-//		
-//		try {
-//			fw = new FileWriter(fname, append);
-//			bw = new BufferedWriter(fw);
-//
-//			//write number of features
-//			bw.write(String.valueOf(this.numFeatures));
-//			bw.newLine();
-//			
-//			//iterate entries
-//			for(Entry e: this.entries){
-//				for(int i = 0;i < this.numFeatures;i++){
-//					String val = String.valueOf(e.data[i]);
-//					bw.write(val + ",");
-//				}
-//				bw.write(LvqUtils.getLabel(e.label));
-//				bw.newLine();
-//				
-//				numOfLine++;
-//			}
-//		} catch (IOException e) {
-//			throw new RuntimeException(e.toString());
-//		} finally {
-//			try {
-//				if(bw != null) {
-//					bw.flush();
-//					bw.close();
-//				}
-//				
-//				if(fw != null){
-//					fw.close();
-//				}
-//				
-//			} catch (IOException e) {
-//				throw new RuntimeException(e.toString());
-//			}
-//		}
-//		
-//		return numOfLine;
-//	}
+	public int save(String fname){
+		return save(fname, false);
+	}
+	/**
+	 * always overwrite existing fname file
+	 */
+	public int save(String fname, boolean append){
+		FileWriter fw = null;
+		BufferedWriter bw = null; 
+		int numOfLine = 0;
+		
+		if(this.entries == null) {
+			throw new RuntimeException("empty dataset");
+		}
+		
+		try {
+			fw = new FileWriter(fname, append);
+			bw = new BufferedWriter(fw);
+
+			//write number of features
+			bw.write(String.valueOf(this.numFeatures));
+			bw.newLine();
+			
+			//iterate entries
+			for(FEntry e: this.entries){
+				StringBuilder sbmin  = new StringBuilder();
+				StringBuilder sbmean = new StringBuilder();
+				StringBuilder sbmax  = new StringBuilder();
+				for(int i = 0;i < this.numFeatures;i++){
+					sbmin.append(String.format("%f,",e.data[i].min));
+					sbmean.append(String.format("%f,",e.data[i].mean));
+					sbmax.append(String.format("%f,",e.data[i].max));
+				}
+				sbmin.append(String.format("%d\n", e.label));
+				sbmean.append(String.format("%d\n", e.label));
+				sbmax.append(String.format("%d\n", e.label));
+				
+				bw.write(sbmin.toString()); numOfLine++;
+				bw.write(sbmean.toString()); numOfLine++;
+				bw.write(sbmax.toString()); numOfLine++;
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		} finally {
+			try {
+				if(bw != null) {
+					bw.flush();
+					bw.close();
+				}
+				
+				if(fw != null){
+					fw.close();
+				}
+				
+			} catch (IOException e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+		
+		return numOfLine;
+	}
 }

@@ -12,6 +12,7 @@ import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.evaluation.Best;
 import id.mdgs.evaluation.Best.CBest;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
+import id.mdgs.master.IClassify;
 import id.mdgs.master.ITrain;
 import id.mdgs.master.WinnerFunction;
 import id.mdgs.utils.utils;
@@ -41,13 +42,33 @@ public class TrainLvq1 implements ITrain {
 	}
 	
 	public TrainLvq1(Lvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
-		this.network 	= network;
 		this.alpha		= learningRate;
 		this.alphaStart	= learningRate;		
-		
 		this.foldedDs	= foldedDs;
-		this.bestCodebook = new Best.CBest(network.codebook);
+
+		setNetwork(network);
+//		this.network 	= network;
+//		this.bestCodebook = new Best.CBest(network.codebook);
 	}
+	
+	public TrainLvq1(FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		this.alpha		= learningRate;
+		this.alphaStart	= learningRate;		
+		this.foldedDs	= foldedDs;
+	}
+	
+	@Override
+	public void setNetwork(IClassify<?, ?> net) {
+		this.network = (Lvq) net;
+		this.bestCodebook = new Best.CBest(((Lvq) net).codebook);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setTraining(FoldedDataset<?, ?> foldedDs) {
+		this.foldedDs	= (FoldedDataset<Dataset, Entry>) foldedDs;
+	}
+
 	
 	/**
 	 * @param maxEpoch the maxEpoch to set
@@ -160,5 +181,11 @@ public class TrainLvq1 implements ITrain {
 	@Override
 	public int getNumberOfClass() {
 		return this.network.codebook.numEntries;
+	}
+
+	@Override
+	public void reset() {
+		this.currEpoch 	= 0;
+		this.alpha		= this.alphaStart;
 	}
 }
