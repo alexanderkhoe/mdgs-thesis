@@ -65,6 +65,10 @@ public class FoldedDataset<T, E> implements Iterable<E> {
 		}
 	}
 	
+	public T getMasterData(){
+		return (T) masterDataset;
+	}
+	
 	public int masterSize(){
 		if(masterDataset instanceof Dataset)
 			return ((Dataset)masterDataset).size();
@@ -120,7 +124,7 @@ public class FoldedDataset<T, E> implements Iterable<E> {
 					);
 		}
 		
-		int pos = FoldedDataset.this.folded.get(idx);
+		int pos = this.folded.get(idx);
 //		System.out.print(pos + "\t");
 		if(masterDataset instanceof Dataset){
 			return (E) ((Dataset)this.masterDataset).get(pos);

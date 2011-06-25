@@ -6,6 +6,7 @@ import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.dataset.FCodeBook.FEntry;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.lvq.LvqUtils.MinMax;
 import id.mdgs.master.FWinnerFunction;
@@ -146,6 +147,61 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 			}
 			
 			for(int j=0;j < data.numFeatures;j++) {
+				fz[j][1] /= max;
+				if(pe.size() < 3){
+					fz[j][0] = fz[j][1] - 0.2;
+					fz[j][2] = fz[j][1] + 0.2;
+				}
+			}
+
+			
+			for(int i=0;i < code.size();i++){
+				code.data[i].set(fz[i]);
+			}
+			
+			codebook.add(code);
+		}
+	}
+	
+	public void initCodes(FoldedDataset<Dataset, Entry> data, double portion, boolean random){
+		//pick random (every class) from dataset
+		DatasetProfiler profiler = new DatasetProfiler();
+		profiler.run(data);
+
+		codebook.numFeatures = data.getMasterData().numFeatures;
+		
+		/**/
+		for(PEntry pe: profiler){
+			FEntry code = new FEntry(data.getMasterData().numFeatures);
+			code.label = pe.label;
+			
+			int max = (int) portion * pe.size();
+			if(max < 3) max = pe.size();
+			
+			int[] rpos;
+			if(random)
+				rpos = MathUtils.randPerm(max, pe.size());
+			else
+				rpos = MathUtils.genSeq(max);
+			
+			double[][] fz = new double[data.getMasterData().numFeatures][3];
+			for(int i=0;i<data.getMasterData().numFeatures;i++){
+				fz[i][0] = Double.POSITIVE_INFINITY; //min
+				fz[i][1] = 0;   //mean
+				fz[i][2] = Double.NEGATIVE_INFINITY;//max
+			}
+			
+			for(int i=0;i<rpos.length;i++){
+				Entry sample = data.get(pe.get(rpos[i]));
+				
+				for(int j=0;j < sample.size();j++){
+					if(fz[j][0] > sample.data[j]) fz[j][0] = sample.data[j];
+					if(fz[j][2] < sample.data[j]) fz[j][2] = sample.data[j];
+					fz[j][1] += sample.data[j];
+				}
+			}
+			
+			for(int j=0;j < data.getMasterData().numFeatures;j++) {
 				fz[j][1] /= max;
 				if(pe.size() < 3){
 					fz[j][0] = fz[j][1] - 0.2;

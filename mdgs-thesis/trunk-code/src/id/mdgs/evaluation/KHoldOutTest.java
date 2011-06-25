@@ -33,7 +33,7 @@ public class KHoldOutTest {
 			
 			//save initial codebook to file
 			tag = name + Integer.toString(net.hashCode());
-			this.net.saveCodebook(this.tag);
+			//this.net.saveCodebook(this.tag); //ini untuk KFoldCrossValidation
 		}
 	};
 
@@ -131,7 +131,11 @@ public class KHoldOutTest {
 			for(int i=0;i < pairs.size();i++){
 				IClassify<?, Entry> net = pairs.get(i).net;
 				ITrain trainer = pairs.get(i).trainer;
-				net.loadCodebook(pairs.get(i).tag);
+				//net.loadCodebook(pairs.get(i).tag);
+				
+				if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
+				else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);
+				
 				trainer.reset();
 				trainer.setNetwork(net);
 				trainer.setTraining(train);
@@ -154,14 +158,14 @@ public class KHoldOutTest {
 			}
 			
 			statistic.add(pacc[0], pacc[1]);
-			System.out.print(String.format("%7.4f\t%7.4f\n", pacc[0], pacc[1]));
+			System.out.print(String.format("K=%d\t%7.4f\t%7.4f\n", k, pacc[0], pacc[1]));
 		}
 		
-		//delete log codebook
-		for(int i=0;i < pairs.size();i++){
-			File f = new File(pairs.get(i).tag);
-			f.delete();
-		}
+		//delete log codebook, dipake di KFoldCross
+//		for(int i=0;i < pairs.size();i++){
+//			File f = new File(pairs.get(i).tag);
+//			f.delete();
+//		}
 		
 		return logAll();
 	}
@@ -170,7 +174,7 @@ public class KHoldOutTest {
 		String sep = "\t";
 		double t = 0;
 		
-		utils.initPath(logFName);
+		utils.initPath((new File(logFName)).getParent());
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new File(logFName));
