@@ -5,6 +5,7 @@ import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.fnlvq.*;
+import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.lvq.*;
 import id.mdgs.utils.Parameter;
@@ -131,11 +132,11 @@ public class TestBatchSkenario5 {
 	@Test
 	public void mainTest() throws IOException{
 //		testGlvq();
-//		testFpglvq();
+		testFpglvq();
 //		testGlvqSkenario5CekSemuaPola();
-		testLvq21Skenario5CekSemuaPola();
-		testLvq1Skenario5CekSemuaPola();
-		testFpglvqSkenario5CekSemuaPola();
+//		testLvq21Skenario5CekSemuaPola();
+//		testLvq1Skenario5CekSemuaPola();
+//		testFpglvqSkenario5CekSemuaPola();
 	}
 	
 	public void testFpglvqSkenario5CekSemuaPola() throws IOException{
@@ -494,7 +495,7 @@ public class TestBatchSkenario5 {
 				
 				for(int attempt=0;attempt < 1;attempt++){
 					
-					Lvq net = new Lvq();
+					Glvq net = new Glvq();
 					net.initCodes(trainsets[dt]);
 					
 					TrainGlvq train = new TrainGlvq(net, trainsets[dt], alpha);
@@ -591,10 +592,10 @@ public class TestBatchSkenario5 {
 				
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
-					Lvq net = new Lvq();
+					Glvq net = new Glvq();
 					net.initCodes(trainsets[dt]);
 					
-					TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alpha);
+					TrainGlvq train = new TrainGlvq(net, trainsets[dt], alpha);
 					train.setMaxEpoch(iteration);
 
 					train.getTraining().makeRoundRobin(pola);
@@ -712,10 +713,10 @@ public class TestBatchSkenario5 {
 				
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
-					Lvq net = new Lvq();
-					net.initCodes(trainsets[dt]);
+					Fpglvq net = new Fpglvq();
+					net.initCodes(trainsets[dt], 0.5d, true);
 					
-					TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alpha);
+					TrainFpglvq train = new TrainFpglvq(net, trainsets[dt], alpha);
 					train.setMaxEpoch(iteration);
 
 					train.getTraining().makeRoundRobin(pola);
@@ -730,12 +731,12 @@ public class TestBatchSkenario5 {
 					long waktu = utils.timer.stop();
 					
 					ConfusionMatrix cm1, cm2, cm3, cm4;
-					cm1 = test1(net.codebook, trainsets[dt], nclass[dt]);
-					cm2 = test1(net.codebook, testsets[dt], nclass[dt]);
+					cm1 = test2(net.codebook, trainsets[dt], nclass[dt]);
+					cm2 = test2(net.codebook, testsets[dt], nclass[dt]);
 
 					//best codebook
-					cm3 = test1(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
-					cm4 = test1(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
+					cm3 = test2(train.bestCodebook.codebook, trainsets[dt], nclass[dt]);
+					cm4 = test2(train.bestCodebook.codebook, testsets[dt], nclass[dt]);
 					
 					avgAcc[0] += cm1.getAccuracy();
 					avgAcc[1] += cm2.getAccuracy();
