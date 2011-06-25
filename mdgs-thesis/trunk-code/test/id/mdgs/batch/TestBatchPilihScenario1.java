@@ -7,6 +7,7 @@ import id.mdgs.dataset.FCodeBook;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.fnlvq.Fpglvq;
 import id.mdgs.fnlvq.TrainFpglvq;
+import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
@@ -516,10 +517,10 @@ public class TestBatchPilihScenario1 {
 					
 					for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 						
-						Lvq net = new Lvq();
+						Glvq net = new Glvq();
 						net.initCodes(trainsets[dt], 1, 5);
 						
-						TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alphaset[a]);
+						TrainGlvq train = new TrainGlvq(net, trainsets[dt], alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);
 						
 						utils.timer.start();

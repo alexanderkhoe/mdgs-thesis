@@ -4,6 +4,7 @@ import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
+import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
@@ -178,10 +179,10 @@ public class TestBatchSkenario6 {
 				
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
-					Lvq net = new Lvq();
+					Glvq net = new Glvq();
 					net.initCodes(trainsetsOut[dt]);
 					
-					TrainLvq1 train = new TrainGlvq(net, trainsetsOut[dt], alpha);
+					TrainGlvq train = new TrainGlvq(net, trainsetsOut[dt], alpha);
 					train.setMaxEpoch(iteration);
 					
 					utils.timer.start();
@@ -411,10 +412,10 @@ public class TestBatchSkenario6 {
 				
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
-					Lvq net = new Lvq();
+					Glvq net = new Glvq();
 					net.initCodes(trainsets[dt]);
-					
-					TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alpha);
+
+					TrainGlvq train = new TrainGlvq(net, trainsets[dt], alpha);
 					train.setMaxEpoch(iteration);
 					
 					utils.timer.start();

@@ -6,6 +6,7 @@ import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.fnlvq.Fpglvq;
 import id.mdgs.fnlvq.TrainFpglvq;
+import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.lvq.*;
 import id.mdgs.utils.Parameter;
@@ -388,10 +389,10 @@ public class TestBatchSkenario4 {
 				
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
-					Lvq net = new Lvq();
+					Glvq net = new Glvq();
 					net.initCodes(trainsets[dt]);
 					
-					TrainLvq1 train = new TrainGlvq(net, trainsets[dt], alpha);
+					TrainGlvq train = new TrainGlvq(net, trainsets[dt], alpha);
 					train.setMaxEpoch(iteration);
 					
 					utils.timer.start();

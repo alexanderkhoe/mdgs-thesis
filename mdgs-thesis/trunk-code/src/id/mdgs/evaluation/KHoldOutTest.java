@@ -180,6 +180,7 @@ public class KHoldOutTest {
 			pw = new PrintWriter(new File(logFName));
 		
 			pw.write(String.format("-- K HOLD OUT PAIRED T-TEST -------\n"));
+			pw.write(String.format("pA:%s, pB:%s", pairs.get(0).name, pairs.get(1).name));
 			pw.write(String.format("%5s%s","K",sep));
 			pw.write(String.format("%5s%s","pA",sep));
 			pw.write(String.format("%5s%s","pB",sep));
