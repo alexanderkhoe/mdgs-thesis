@@ -20,7 +20,8 @@ import org.junit.Test;
 public class TestKHoldOut {
 	@Test
 	public void test(){
-		int pos = 1 * 4;
+		int id = 1;
+		int pos = id * 4;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[pos + 1]);
 		
@@ -31,11 +32,24 @@ public class TestKHoldOut {
 		
 		KHoldOutTest kholdtest = new KHoldOutTest(trainset, 30, 0.6, true, utils.getDefaultPath() + "/resources/evaluation/khold.log");
 		
+		//optimal parameter di 86
+		double[][] optimal = {
+				{0.05, 0.075, 0.075, 0.05}, //300-6class
+				{0.075, 0.075, 0.05, 0.05}, //86 -6class
+				{0.075, 0.05, 0.1, 0.001},  //24 -6class
+		};
+		
+		int[][] optiter = {
+				{20, 100, 100, 150},
+				{20, 150, 100, 150},
+				{20, 150, 150, 150},
+		};
+		
 		//register trainer
-		ITrain train1 = new TrainLvq1(null, 0.05); train1.setMaxEpoch(150);
-		ITrain train2 = new TrainLvq21(null, 0.05, 0.005); train2.setMaxEpoch(150);
-		ITrain train3 = new TrainGlvq(null, 0.05); train3.setMaxEpoch(150);
-		ITrain train4 = new TrainFpglvq(null, 0.05); train4.setMaxEpoch(150);
+		ITrain train1 = new TrainLvq1(null, optimal[id][0]); 			train1.setMaxEpoch(optiter[id][0]);
+		ITrain train2 = new TrainLvq21(null, optimal[id][1], 0.005); 	train2.setMaxEpoch(optiter[id][1]);
+		ITrain train3 = new TrainGlvq(null, optimal[id][2]); 			train3.setMaxEpoch(optiter[id][2]);
+		ITrain train4 = new TrainFpglvq(null, optimal[id][3]); 			train4.setMaxEpoch(optiter[id][3]);
 		
 		Lvq c1 = new Lvq();		
 		Lvq c2 = new Lvq();		

@@ -65,5 +65,18 @@ public class TrainLvq21 extends TrainLvq1 {
 	}
 	
 
-
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(this.getClass().getSimpleName() + " -> ");
+		sb.append("alpha: " + alphaStart + ","); 
+		sb.append("window-width: " + windowWidth + ",");
+		sb.append("epoch: " + maxEpoch);
+		
+		if(foldedDs != null)
+			sb.append(", NdataTrain: " + foldedDs.size());
+		
+		return sb.toString();
+	}
+	
 }
