@@ -28,7 +28,7 @@ public class TestFolding {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testKFoldedDataset() {
 		Dataset trainset = new Dataset(Parameter.DATA_IRIS[0]);
 		Dataset tmp = new Dataset(Parameter.DATA_IRIS[1]);
@@ -36,8 +36,8 @@ public class TestFolding {
 		tmp.load();
 		
 		trainset.join(tmp);
-		int K = 5;
-		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.6d, false);
+		int K = 10;
+		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.9d, false);
 
 		for(int i=0;i < kfold.size();i++){
 			FoldedDataset<Dataset, Entry> set = kfold.get(i);
@@ -108,5 +108,39 @@ public class TestFolding {
 //			System.out.println();
 //		}
 		
+	}
+	
+	@Test
+	public void testKFoldedDataset2() {
+		Dataset trainset = new Dataset(Parameter.DATA_IRIS[0]);
+		Dataset tmp = new Dataset(Parameter.DATA_IRIS[1]);
+		trainset.load();
+		tmp.load();
+		
+		trainset.join(tmp);
+		int K = 10;
+		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.9d, false);
+
+		KFoldedIterator kfit = kfold.iterator();
+		int iteration = 0;
+		while(kfit.hasNext()){
+			FoldedDataset<Dataset, Entry> train = kfit.nextTrain();
+			FoldedDataset<Dataset, Entry> test  = kfit.nextTest();
+			kfit.next();
+			
+			System.out.println("Iteration " + (iteration + 1));
+			System.out.println("Train " + (iteration + 1));
+			for(int j=0;j < train.size();j++)
+				System.out.println(train.folded.get(j) + "," + train.get(j));
+			
+			System.out.println();
+			System.out.println("TEST " + (iteration + 1));
+			for(int j=0;j < test.size();j++)
+				System.out.println(test.folded.get(j) + "," + test.get(j));
+			
+			iteration++;
+		}
+		
+		System.out.println();
 	}
 }

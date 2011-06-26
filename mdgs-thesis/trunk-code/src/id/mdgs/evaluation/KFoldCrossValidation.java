@@ -134,6 +134,7 @@ public class KFoldCrossValidation {
 		}
 		
 		KFoldedIterator kfit = masterdata.iterator();
+		int iteration = 0;
 		while(kfit.hasNext()){
 			FoldedDataset<Dataset, Entry> train;
 			FoldedDataset<Dataset, Entry> test;
@@ -141,52 +142,51 @@ public class KFoldCrossValidation {
 			train 	= kfit.nextTrain();
 			test 	= kfit.nextTest();
 			kfit.next();
+
+			double[] pacc = new double[2];
+			double[] perr = new double[2];
+			MathUtils.fills(pacc, 0);
+			MathUtils.fills(perr, 0);
 			
-			for(int c = 0; c < this.pairs.size();c++){
-				double[] pacc = new double[2];
-				double[] perr = new double[2];
-				MathUtils.fills(pacc, 0);
-				MathUtils.fills(perr, 0);
+			for(int i=0;i < pairs.size();i++){
+				IClassify<?, Entry> net = pairs.get(i).net;
+				ITrain trainer = pairs.get(i).trainer;
+				net.loadCodebook(pairs.get(i).tag);
 				
-				for(int i=0;i < pairs.size();i++){
-					IClassify<?, Entry> net = pairs.get(i).net;
-					ITrain trainer = pairs.get(i).trainer;
-					net.loadCodebook(pairs.get(i).tag);
+				if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
+				else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);
+				
+				trainer.reset();
+				trainer.setNetwork(net);
+				trainer.setTraining(train);
+				
+				do {
+					trainer.iteration();
+					perr[i] += trainer.getError();
+				}while(!trainer.shouldStop());
+				
+				perr[i] /= trainer.getMaxEpoch(); 
 					
-					if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
-					else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);
+				int TP = 0;
+				for(Entry sample: test){
+					int win = -1, target;
 					
-					trainer.reset();
-					trainer.setNetwork(net);
-					trainer.setTraining(train);
+					target = sample.label;
+					win = net.classify(sample);
 					
-					do {
-						trainer.iteration();
-						perr[i] += trainer.getError();
-					}while(!trainer.shouldStop());
-					
-					perr[i] /= trainer.getMaxEpoch(); 
-						
-					int TP = 0;
-					for(Entry sample: test){
-						int win = -1, target;
-						
-						target = sample.label;
-						win = net.classify(sample);
-						
-						if(win == target) TP++;
-					}
-					
-					pacc[i] = ((double) TP) / test.size();
+					if(win == target) TP++;
 				}
 				
-				statistic.add(statistic.table, pacc[0], pacc[1]);
-				statistic.add(statistic.errTable, perr[0], perr[1]);
-				System.out.print(String.format("K=%d\t%7.4f\t%7.4f\t%7.4f\t%7.4f\n", c, pacc[0], pacc[1], perr[0], perr[1]));
+				pacc[i] = ((double) TP) / test.size();
 			}
+			
+			iteration++;
+			
+			statistic.add(statistic.table, pacc[0], pacc[1]);
+			statistic.add(statistic.errTable, perr[0], perr[1]);
+			System.out.print(String.format("K=%d\t%7.4f\t%7.4f\t%7.4f\t%7.4f\n", iteration, pacc[0], pacc[1], perr[0], perr[1]));
 		}
 
-		
 		//delete log codebook, dipake di KFoldCross
 		for(int i=0;i < pairs.size();i++){
 			File f = new File(pairs.get(i).tag);
@@ -232,8 +232,8 @@ public class KFoldCrossValidation {
 			pw.write(String.format("\npBar: %f\n", pbar));
 			pw.write(String.format("t   : %f\n\n", t));
 			pw.write(String.format("Note : have a look on the T-Table (two-tailed test),\n" +
-					" degree of freedom (K-1) -> %d at level of significance 0.05.\n" +
-					" state z = tabulated value, if t-value < -z or t-value > z then, H0(no significance) rejected", K-1));
+					" degree of freedom (df) -> %d at level of significance 0.05.\n" +
+					" state z = tabulated value, if t-value < -z or t-value > z then, H0(no significance) rejected", statistic.table.size()));
 			
 			pw.write("\n\n");
 			pw.write(String.format("-- ERROR RATE EACH CROSS -------\n"));
