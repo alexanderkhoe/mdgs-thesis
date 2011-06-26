@@ -47,38 +47,6 @@ public class IOMatrix {
 		this.rawMatrix[idSample][idAlgo] = result ? 1 : 0;
 	}
 	
-//	//UTILIZE PerformanceMeasure from JavaML
-//	public PerformanceMeasure getPerformance(int kelas){
-//		PerformanceMeasure out = new PerformanceMeasure();
-//		
-//		if(kelas == -1) kelas = this.nclass;
-//		
-//		for(int r=0;r<this.matrix.length;r++){
-//			for(int c=0;c<this.matrix[0].length;c++){
-//				//TP
-//				if(kelas == r && kelas == c){
-//					out.tp += this.matrix[r][c];
-//				} 
-//				
-//				//FN
-//				else if(kelas == r){
-//					out.fn += this.matrix[r][c];
-//				} 
-//				
-//				//FP
-//				else if(kelas == c){
-//					out.fp += this.matrix[r][c];
-//				} 
-//				
-//				//TN
-//				else {
-//					out.tn += this.matrix[r][c];
-//				}
-//			}
-//		}
-//		
-//		return out;
-//	}
 
 	public void summarized(){
 		MathUtils.fills(calcMatrix, 0);
@@ -178,7 +146,7 @@ public class IOMatrix {
 		output.append(String.format("-- CONF MATRIX-------\n"));
 		output.append(String.format("%5s\t%5s\t%s\n", "", "D2(+)", "D2(-)"));
 		output.append(String.format("%5s\t%5d\t%d\n", "D1(+)", n11, n10));
-		output.append(String.format("%5s\t%5d\t%d\n\n", "D1(-)", n01, n00));
+		output.append(String.format("%5s\t%5d\t%d\n", "D1(-)", n01, n00));
 		return output.toString();
 	}
 	
@@ -220,9 +188,9 @@ public class IOMatrix {
 			
 			double X2 = this.getMcNemarCoef(idx[0], idx[1], mat);
 			
+			output.append(String.format("X2[D%d,D%d] = %7.4f\n", idx[0], idx[1], X2));
 			output.append(printConfusion(mat));
-			output.append(String.format("X[%2d,%2d] = %7.4f\n", idx[0], idx[1], X2));
-			
+			output.append("\n");
 		}
 		
 		return output.toString();
