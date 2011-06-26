@@ -50,6 +50,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 		
+		codebook.reset();
 		codebook.numFeatures = data.numFeatures;
 
 		/**/
@@ -113,6 +114,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.reset();
 		codebook.numFeatures = data.numFeatures;
 		
 		/**/
@@ -168,6 +170,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.reset();
 		codebook.numFeatures = data.getMasterData().numFeatures;
 		
 		/**/
@@ -231,6 +234,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.reset();
 		codebook.numFeatures = data.numFeatures;
 		
 		MinMax[] dataRange = new MinMax[data.numFeatures];
@@ -324,6 +328,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 //	}
 	
 	public void initCodes(FCodeBook codebook){
+		codebook.reset();
 		this.codebook.copyInfo(codebook);
 		for(FEntry fe : codebook){
 			this.codebook.add(fe);
@@ -346,6 +351,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 
 	@Override
 	public void loadCodebook(String location) {
+		codebook.reset();
 		this.codebook.load(location);
 	}
 
