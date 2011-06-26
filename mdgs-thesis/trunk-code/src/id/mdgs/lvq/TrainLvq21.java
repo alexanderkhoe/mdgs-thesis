@@ -65,7 +65,7 @@ public class TrainLvq21 extends TrainLvq1 {
 	}
 	
 
-	public String toString(){
+	public String information() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(this.getClass().getSimpleName() + " -> ");

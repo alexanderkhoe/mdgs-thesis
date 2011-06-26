@@ -26,4 +26,5 @@ public interface ITrain {
 	public FoldedDataset<?, ?> getTraining();
 	public void reset();
 	public void setTraining(FoldedDataset<?, ?> foldedDs);
+	public String information();
 }

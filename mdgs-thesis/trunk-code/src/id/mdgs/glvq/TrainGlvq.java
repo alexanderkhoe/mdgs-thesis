@@ -178,7 +178,7 @@ public class TrainGlvq extends TrainLvq1 {
 		return result;
 	}
 	
-	public String toString(){
+	public String information() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(this.getClass().getSimpleName() + " -> ");
