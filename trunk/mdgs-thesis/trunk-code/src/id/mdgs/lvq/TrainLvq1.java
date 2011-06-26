@@ -189,7 +189,8 @@ public class TrainLvq1 implements ITrain {
 		this.alpha		= this.alphaStart;
 	}
 
-	public String toString(){
+	@Override
+	public String information() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(this.getClass().getSimpleName() + " -> ");

@@ -312,7 +312,7 @@ public class TrainFpglvq implements ITrain {
 		this.currEpoch = 0;
 	}
 
-	public String toString(){
+	public String information() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(this.getClass().getSimpleName() + " -> ");
