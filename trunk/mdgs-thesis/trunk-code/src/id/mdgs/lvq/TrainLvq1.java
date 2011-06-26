@@ -188,4 +188,17 @@ public class TrainLvq1 implements ITrain {
 		this.currEpoch 	= 0;
 		this.alpha		= this.alphaStart;
 	}
+
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(this.getClass().getSimpleName() + " -> ");
+		sb.append("alpha: " + alphaStart + ","); 
+		sb.append("epoch: " + maxEpoch);
+		
+		if(foldedDs != null)
+			sb.append(", NdataTrain: " + foldedDs.size());
+		
+		return sb.toString();
+	}
 }

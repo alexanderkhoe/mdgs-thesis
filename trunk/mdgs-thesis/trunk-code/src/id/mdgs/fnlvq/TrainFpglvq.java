@@ -312,4 +312,16 @@ public class TrainFpglvq implements ITrain {
 		this.currEpoch = 0;
 	}
 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(this.getClass().getSimpleName() + " -> ");
+		sb.append("alpha: " + alphaStart + ","); 
+		sb.append("epoch: " + maxEpoch);
+		
+		if(foldedDs != null)
+			sb.append(", NdataTrain: " + foldedDs.size());
+		
+		return sb.toString();
+	}
 }

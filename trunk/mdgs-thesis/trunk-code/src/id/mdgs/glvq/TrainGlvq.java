@@ -178,5 +178,16 @@ public class TrainGlvq extends TrainLvq1 {
 		return result;
 	}
 	
-	
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(this.getClass().getSimpleName() + " -> ");
+		sb.append("alpha: " + alphaStart + ","); 
+		sb.append("epoch: " + maxEpoch);
+		
+		if(foldedDs != null)
+			sb.append(", NdataTrain: " + foldedDs.size());
+		
+		return sb.toString();
+	}	
 }

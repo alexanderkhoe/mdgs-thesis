@@ -181,6 +181,7 @@ public class KHoldOutTest {
 		
 			pw.write(String.format("-- K HOLD OUT PAIRED T-TEST -------\n"));
 			pw.write(String.format("pA:%s, pB:%s", pairs.get(0).name, pairs.get(1).name));
+			pw.write(String.format("pA:%s, pB:%s", pairs.get(0).trainer.toString(), pairs.get(1).trainer.toString()));
 			pw.write(String.format("%5s%s","K",sep));
 			pw.write(String.format("%5s%s","pA",sep));
 			pw.write(String.format("%5s%s","pB",sep));
@@ -189,7 +190,7 @@ public class KHoldOutTest {
 			pw.write("\n");
 	
 			for(int i=0;i < statistic.table.size();i++){
-				pw.write(String.format("%5s%s", "K:" + Integer.toString(i)));
+				pw.write(String.format("%5s%s", "K:" + Integer.toString(i),sep));
 				pw.write(String.format("%5d%s", statistic.table.get(i)[0],sep));
 				pw.write(String.format("%5d%s", statistic.table.get(i)[1],sep));
 				pw.write(String.format("%5d%s", statistic.table.get(i)[2],sep));
@@ -203,7 +204,7 @@ public class KHoldOutTest {
 			pw.write(String.format("t   : %f\n\n", t));
 			pw.write(String.format("Note : have a look on the T-Table (two-tailed test),\n" +
 					" degree of freedom (K-1) -> %d at level of significance 0.05.\n" +
-					" If t-value more than tabulated value, H0(no significance) rejected", K-1));
+					" state z = tabulated value, if t-value < -z or t-value > z then, H0(no significance) rejected", K-1));
 			pw.flush();
 			pw.close();
 			
