@@ -183,18 +183,18 @@ public class KHoldOutTest {
 			pw.write(String.format("pA:%s, pB:%s", pairs.get(0).name, pairs.get(1).name));
 			pw.write(String.format("pA:%s, pB:%s", pairs.get(0).trainer.toString(), pairs.get(1).trainer.toString()));
 			pw.write(String.format("%5s%s","K",sep));
-			pw.write(String.format("%5s%s","pA",sep));
-			pw.write(String.format("%5s%s","pB",sep));
-			pw.write(String.format("%5s%s","pI",sep));
-			pw.write(String.format("%5s%s","pI-Mn",sep));
+			pw.write(String.format("%7s%s","pA",sep));
+			pw.write(String.format("%7s%s","pB",sep));
+			pw.write(String.format("%7s%s","pI",sep));
+			pw.write(String.format("%7s%s","pI-Mn",sep));
 			pw.write("\n");
 	
 			for(int i=0;i < statistic.table.size();i++){
 				pw.write(String.format("%5s%s", "K:" + Integer.toString(i),sep));
-				pw.write(String.format("%5d%s", statistic.table.get(i)[0],sep));
-				pw.write(String.format("%5d%s", statistic.table.get(i)[1],sep));
-				pw.write(String.format("%5d%s", statistic.table.get(i)[2],sep));
-				pw.write(String.format("%5d%s", statistic.table.get(i)[3],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[0],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[1],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[2],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[3],sep));
 				pw.write("\n");
 			}
 			pw.write("\n");
