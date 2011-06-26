@@ -56,6 +56,7 @@ public class Lvq implements IClassify<Dataset, Entry> {
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 		
+		codebook.reset();
 		codebook.copyInfo(data);
 
 		MinMax[] dataRange = new MinMax[data.numFeatures];
@@ -123,6 +124,7 @@ public class Lvq implements IClassify<Dataset, Entry> {
 	 * @param knn
 	 */
 	public void initCodes(Dataset data, int num, int knn){
+		
 		//pick from dataset
 		HitList classes = new HitList();
 		List<Entry> le1 = null, le2 = null;
@@ -166,6 +168,7 @@ public class Lvq implements IClassify<Dataset, Entry> {
 		DatasetProfiler profiler = new DatasetProfiler();
 		profiler.run(data);
 
+		codebook.reset();
 		codebook.numFeatures = data.getMasterData().numFeatures;
 		
 		for(PEntry pe: profiler){
@@ -200,6 +203,7 @@ public class Lvq implements IClassify<Dataset, Entry> {
 
 	@Override
 	public void loadCodebook(String location) {
+		codebook.reset();
 		this.codebook.load(location);
 	}
 }
