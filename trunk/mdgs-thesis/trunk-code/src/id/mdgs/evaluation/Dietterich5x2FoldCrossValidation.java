@@ -1,4 +1,21 @@
+/**
+ * 
+ */
 package id.mdgs.evaluation;
+
+import id.mdgs.dataset.Dataset;
+import id.mdgs.dataset.FoldedDataset;
+import id.mdgs.dataset.KFoldedDataset;
+import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.KFoldedDataset.KFoldedIterator;
+import id.mdgs.evaluation.KFoldCrossValidation.KStatistic;
+import id.mdgs.evaluation.KFoldCrossValidation.Pair;
+import id.mdgs.fnlvq.Fnlvq;
+import id.mdgs.lvq.Lvq;
+import id.mdgs.master.IClassify;
+import id.mdgs.master.ITrain;
+import id.mdgs.utils.MathUtils;
+import id.mdgs.utils.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,19 +23,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import id.mdgs.dataset.*;
-import id.mdgs.dataset.KFoldedDataset.KFoldedIterator;
-import id.mdgs.dataset.Dataset.*;
-import id.mdgs.fnlvq.Fnlvq;
-import id.mdgs.fnlvq.Fpglvq;
-import id.mdgs.glvq.Glvq;
-import id.mdgs.lvq.Lvq;
-import id.mdgs.master.IClassify;
-import id.mdgs.master.ITrain;
-import id.mdgs.utils.MathUtils;
-import id.mdgs.utils.utils;
-
-public class KFoldCrossValidation {
+/**
+ * @author I Made Agus Setiawan
+ *
+ */
+public class Dietterich5x2FoldCrossValidation {
 
 	class Pair {
 		public String name;
@@ -51,38 +60,47 @@ public class KFoldCrossValidation {
 			errTable.clear();
 		}
 		
-		public void add(List<double[]> tbl, double pA, double pB){
-			double[] pacc = new double[4];
-			pacc[0] = pA;
-			pacc[1]	= pB;
-			pacc[2]	= pA - pB;
-			pacc[3] = 0;
+		public void add(List<double[]> tbl, double[] p){
+			double pA1 = p[0];
+			double pB1 = p[1];
+			double pA2 = p[2];
+			double pB2 = p[3];
+			double p1  = pA1 - pB1;
+			double p2  = pA2 - pB2;
 			
-			tbl.add(pacc);
-		}
-		
-		public double getPBar(){
-			double pbar = 0;
-			for(int i=0;i < table.size();i++)
-				pbar += table.get(i)[2];
+			double[] prow = new double[7];
+			prow[0] 	= pA1;
+			prow[1] 	= pB1;
+			prow[2] 	= pA2;
+			prow[3] 	= pA2;
+			prow[4] 	= p1;
+			prow[5] 	= p2;
+			prow[6] 	= (p2 - p2) / 2;
+			prow[7] 	= 0;	//s2
 			
-			return pbar / table.size();
+			tbl.add(prow);
 		}
 		
 		//reference to Combining pattern classifier p19
 		public double getT(){
-			double pbar = getPBar();
-			for(int i=0;i < table.size();i++)
-				table.get(i)[3] = table.get(i)[2] - pbar;
 			
+			//calc S2
+			for(int i=0;i < table.size();i++){
+				double p1 = table.get(i)[4];
+				double p2 = table.get(i)[5];
+				double pbar = table.get(i)[6];
+				table.get(i)[7] = Math.pow(p1 - pbar, 2) + Math.pow(p2 - pbar, 2);
+			}
+				
 			double sum = 0;
 			for(int i=0;i < table.size();i++)
-				sum += Math.pow(table.get(i)[3], 2);
+				sum += table.get(i)[7];
 			
-			sum /= table.size() - 1;
+			sum /= table.size();
 			sum = Math.sqrt(sum);
 			
-			double t = pbar * Math.sqrt(table.size()) / sum;
+			double p11 = table.get(1)[4];
+			double t = p11 / sum;
 			return t;
 		}
 	};
@@ -94,16 +112,17 @@ public class KFoldCrossValidation {
 	public int K;
 	public double portion;
 	public boolean random;
+	public int ATTEMPT = 5; 
 	
-	public KFoldCrossValidation(Dataset dataset, int K, double portion, boolean random, String logname) {
+	public Dietterich5x2FoldCrossValidation(Dataset dataset, boolean random, String logname) {
+		this.K = 2;
+		this.portion = 0.5d;
+		this.random	= random;
+		
 		masterdata = new KFoldedDataset<Dataset, Entry>(dataset, K, portion, random);
 		this.pairs = new ArrayList<Pair>();
 		this.statistic = new KStatistic();
 		this.logFName = logname;
-		this.K = K;
-		
-		this.portion = portion;
-		this.random	= random;
 	}
 	
 	public void reset(){
@@ -133,59 +152,66 @@ public class KFoldCrossValidation {
 			throw new RuntimeException("Need 2 classifier");
 		}
 		
-		KFoldedIterator kfit = masterdata.iterator();
 		int iteration = 0;
-		while(kfit.hasNext()){
-			FoldedDataset<Dataset, Entry> train;
-			FoldedDataset<Dataset, Entry> test;
-			
-			train 	= kfit.nextTrain();
-			test 	= kfit.nextTest();
-			kfit.next();
-
-			double[] pacc = new double[2];
-			double[] perr = new double[2];
+		for(int att=0;att < ATTEMPT; att++){
+			double[] pacc = new double[4];
+			double[] perr = new double[4];
 			MathUtils.fills(pacc, 0);
 			MathUtils.fills(perr, 0);
-			
-			for(int i=0;i < pairs.size();i++){
-				IClassify<?, Entry> net = pairs.get(i).net;
-				ITrain trainer = pairs.get(i).trainer;
-				net.loadCodebook(pairs.get(i).tag);
+
+			KFoldedIterator kfit = masterdata.iterator();
+			int k = 0;
+			while(kfit.hasNext()){
+				FoldedDataset<Dataset, Entry> train;
+				FoldedDataset<Dataset, Entry> test;
 				
-				if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
-				else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);
-				
-				trainer.reset();
-				trainer.setNetwork(net);
-				trainer.setTraining(train);
-				
-				do {
-					trainer.iteration();
-					perr[i] += trainer.getError();
-				}while(!trainer.shouldStop());
-				
-				perr[i] /= trainer.getMaxEpoch(); 
+				train 	= kfit.nextTrain();
+				test 	= kfit.nextTest();
+				kfit.next();
+
+				for(int i=0;i < pairs.size();i++){
+					IClassify<?, Entry> net = pairs.get(i).net;
+					ITrain trainer = pairs.get(i).trainer;
+					net.loadCodebook(pairs.get(i).tag);
 					
-				int TP = 0;
-				for(Entry sample: test){
-					int win = -1, target;
+					if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
+					else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);
 					
-					target = sample.label;
-					win = net.classify(sample);
+					trainer.reset();
+					trainer.setNetwork(net);
+					trainer.setTraining(train);
 					
-					if(win == target) TP++;
+					do {
+						trainer.iteration();
+						perr[(2*k)+i] += trainer.getError();
+					}while(!trainer.shouldStop());
+					
+					perr[(2*k)+i] /= trainer.getMaxEpoch(); 
+						
+					int TP = 0;
+					for(Entry sample: test){
+						int win = -1, target;
+						
+						target = sample.label;
+						win = net.classify(sample);
+						
+						if(win == target) TP++;
+					}
+					
+					pacc[(2*k)+i] = ((double) TP) / test.size();
 				}
 				
-				pacc[i] = ((double) TP) / test.size();
+				k++;
 			}
-			
+
 			iteration++;
 			
-			statistic.add(statistic.table, pacc[0], pacc[1]);
-			statistic.add(statistic.errTable, perr[0], perr[1]);
-			System.out.print(String.format("K=%d\t%7.4f\t%7.4f\t%7.4f\t%7.4f\n", iteration, pacc[0], pacc[1], perr[0], perr[1]));
+			statistic.add(statistic.table, pacc);
+			statistic.add(statistic.errTable, perr);
+			System.out.print(String.format("K=%2d\t%7.4f\t%7.4f\t%7.4f\t%7.4f\t|\t", iteration, pacc[0], pacc[1], pacc[2], pacc[3]));
+			System.out.print(String.format("\t%7.4f\t%7.4f\t%7.4f\t%7.4f\n", iteration, perr[0], perr[1], perr[2], perr[3]));
 		}
+
 
 		//delete log codebook, dipake di KFoldCross
 		for(int i=0;i < pairs.size();i++){
@@ -198,7 +224,7 @@ public class KFoldCrossValidation {
 	
 	private double logAll(){
 		String sep = "\t";
-		double t = 0, pbar = 0;;
+		double t = 0;
 		
 		utils.initPath((new File(logFName)).getParent());
 		PrintWriter pw;
@@ -206,17 +232,20 @@ public class KFoldCrossValidation {
 			pw = new PrintWriter(new File(logFName));
 		
 			t =  statistic.getT();
-			pbar = statistic.getPBar();
 			
 			pw.write(String.format("-- K FOLD CROSS VALIDATION PAIRED T-TEST -------\n"));
 			pw.write(String.format("Parameter -> K:%d, train portion:%5.2f, random:%s\n",this.K, this.portion, this.random ? "true" : "false"));
-			pw.write(String.format("pA:%s, pB:%s\n", pairs.get(0).name, pairs.get(1).name));
-			pw.write(String.format("pA:%s,\n pB:%s\n", pairs.get(0).trainer.information(), pairs.get(1).trainer.information()));
+//			pw.write(String.format("pA:%s, pB:%s\n", pairs.get(0).name, pairs.get(1).name));
+			pw.write(String.format("DA:%s,\n DB:%s\n", pairs.get(0).trainer.information(), pairs.get(1).trainer.information()));
 			pw.write(String.format("%5s%s","K",sep));
-			pw.write(String.format("%7s%s","pA",sep));
-			pw.write(String.format("%7s%s","pB",sep));
-			pw.write(String.format("%7s%s","pI",sep));
-			pw.write(String.format("%7s%s","pI-Mn",sep));
+			pw.write(String.format("%7s%s","pA1",sep));
+			pw.write(String.format("%7s%s","pB1",sep));
+			pw.write(String.format("%7s%s","pA2",sep));
+			pw.write(String.format("%7s%s","pB2",sep));
+			pw.write(String.format("%7s%s","p1",sep));
+			pw.write(String.format("%7s%s","p2",sep));
+			pw.write(String.format("%7s%s","pbar",sep));
+			pw.write(String.format("%7s%s","S2",sep));
 			pw.write("\n");
 	
 			for(int i=0;i < statistic.table.size();i++){
@@ -225,23 +254,26 @@ public class KFoldCrossValidation {
 				pw.write(String.format("%7.4f%s", statistic.table.get(i)[1],sep));
 				pw.write(String.format("%7.4f%s", statistic.table.get(i)[2],sep));
 				pw.write(String.format("%7.4f%s", statistic.table.get(i)[3],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[4],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[5],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[6],sep));
+				pw.write(String.format("%7.4f%s", statistic.table.get(i)[7],sep));
 				pw.write("\n");
 			}
 			pw.write("\n");
 			
-			pw.write(String.format("\npBar: %f\n", pbar));
 			pw.write(String.format("t   : %f\n\n", t));
 			pw.write(String.format("Note : have a look on the T-Table (two-tailed test),\n" +
-					" degree of freedom (df) -> %d at level of significance 0.05.\n" +
-					" state z = tabulated value, if t-value < -z or t-value > z then, H0(no significance) rejected", statistic.table.size()));
+					" degree of freedom (df) -> 5 at level of significance 0.05.\n" +
+					" state z = tabulated value, if t-value < (-z) or t-value > (z) then, H0(no significance) rejected"));
 			
 			pw.write("\n\n");
 			pw.write(String.format("-- ERROR RATE EACH CROSS -------\n"));
 			pw.write(String.format("%5s%s","K",sep));
-			pw.write(String.format("%7s%s","pErrA",sep));
-			pw.write(String.format("%7s%s","pErrB",sep));
-			pw.write(String.format("%7s%s","pI",sep));
-			pw.write(String.format("%7s%s","pI-Mn",sep));
+			pw.write(String.format("%7s%s","pErrA1",sep));
+			pw.write(String.format("%7s%s","pErrB1",sep));
+			pw.write(String.format("%7s%s","pErrA2",sep));
+			pw.write(String.format("%7s%s","pErrB2",sep));
 			pw.write("\n");
 	
 			for(int i=0;i < statistic.errTable.size();i++){

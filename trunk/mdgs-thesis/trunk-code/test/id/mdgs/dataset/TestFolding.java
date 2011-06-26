@@ -117,9 +117,9 @@ public class TestFolding {
 		trainset.load();
 		tmp.load();
 		
-		trainset.join(tmp);
-		int K = 10;
-		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.9d, false);
+//		trainset.join(tmp);
+		int K = 2;
+		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.5d, false);
 
 		KFoldedIterator kfit = kfold.iterator();
 		int iteration = 0;
