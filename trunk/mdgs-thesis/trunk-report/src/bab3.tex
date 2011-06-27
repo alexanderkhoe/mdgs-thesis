@@ -126,8 +126,8 @@ Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
 asli dan hasil proses BWR serta garis isoelectrik (estimasi)}
 
 %-----------------------------------------------------------------------------%
-\section{Ekstraksi Fitur}
-\label{sec:ekstractfitur}
+\section{Ekstraksi Beat}
+\label{sec:ekstractbeat}
 %-----------------------------------------------------------------------------%
 Untuk melakukan pengenalan kelaianan arrhytmia, ada 2 cara yang dapat dilakukan.
 Cara pertama adalah dengan mendeteksi karakteristik time interval dari sinyal
@@ -184,7 +184,7 @@ Empat jenis arrhytmia diplot seperti yang diilustrasikan pada
 \addFigure{width=1\textwidth}{pics/plotecgoutlier.jpg}{fig:plotecgoutlier}{Plot
 Empat tipe arrhytmia hasil proses ekstraksi fitur}
 
-\TODO{need to be reviewed}
+\TODO{need to be reviewed} 
 Dari hasil pengamatan terlihat bahwa terdapat beat ECG pada tiap-tiap tipe
 arrhytmia yang lain dari distribusi data kebanyakan, dimana dalam hal ini
 disebut outlier. Outlier ini jika digunakan untuk melatih jaringan saraf
@@ -250,6 +250,27 @@ sinyal ECG di-kecualikan/dihapus dan menghasilkan kumpulan beat dengan sebaran
 sesuai dengan rentang quartil yang ditentukan.
 
 %-----------------------------------------------------------------------------%
-\section{Reduksi Fitur}
+\section{Ekstraksi dan Reduksi Fitur}
 %-----------------------------------------------------------------------------%
+Ekstraksi fitur merupakan suatu bagian yang penting dalam sistem pngenalan pola
+karena pemilihan fitur yang digunakan sangat mempengaruhi performa dari sistem
+yang dikembangkan. Terdapat berbagai cara yang bisa digunakan untuk melakukan
+ekstraksi fitur, salah satunya adalah dengan menggunakan Discrete Wavelet
+Trasform (DWT).
 
+Studi tentang penggunaan beberapa macam mother wavelet pada pengolahan data
+sinyal jantung dilakukan oleh 
+
+
+\newpage
+\begin{enumerate}
+  \item Dari buku   Statistical Pattern Recognition (p414)
+	We now consider the problem of detecting outliers in multivariate data. This is one of
+	the aims of robust statistics. Outliers are observations that are not consistent with the
+	rest of the data. They may be genuine observations (termed discordant observations by
+	Beckman and Cook, 1983) that are surprising to the investigator. Perhaps they may be
+	the most valuable, indicating certain structure in the data that shows deviations from
+	normality. Alternatively, outliers may be contaminants, errors caused by copying and
+	transferring the data. In this situation, it may be possible to examine the original data
+	source and correct for any transcription errors. 
+\end{enumerate}

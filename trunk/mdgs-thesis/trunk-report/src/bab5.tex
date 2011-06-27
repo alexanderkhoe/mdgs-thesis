@@ -10,6 +10,15 @@ percobaan terhadap hasil yang diperoleh.
 %-----------------------------------------------------------------------------%
 \section{Percobaan algoritma terhadap data fitur}
 %-----------------------------------------------------------------------------%
+Pada subbab ini akan diuraikan mengenai beberapa skenario ujicoba yang dilakukan
+untuk mengetahui pengaruh ekstraksi fitur yang sudah dilakukan dan kinerja dari
+algoritma pengenalan yakni LVQ1, LVQ21, GLVQ, FPGLVQ dan MGLVQ.
+
+%-----------------------------------------------------------------------------%
+\subsection{Percobaan terhadap data hasil ekstraksi beat}
+%-----------------------------------------------------------------------------%
+Pada percobaan ini, data hasil ekstraksi beat akan dicoba digunakan untuk
+melatih algoritma pengenalan yang ada dan 
 
 %-----------------------------------------------------------------------------%
 \subsection{Percobaan terhadap data tanpa outlier}
@@ -20,14 +29,49 @@ percobaan terhadap hasil yang diperoleh.
 %-----------------------------------------------------------------------------%
 
 %-----------------------------------------------------------------------------%
-\subsection{Percobaan variasi iterasi pada algoritma}
+\subsection{Percobaan variasi urutan data terhadap algoritma}
 %-----------------------------------------------------------------------------%
+Pada percobaan ini, data pelatihan yang akan digunakan diurutkan secara
+round robin terhadap kelas. Variasi yang dilakukan adalah dengan
+membedakan jumlah data tiap kelas yang akan di saling silang, diantaranya;
+\begin{enumerate}
+  \item Pola#1 : jumlah data tiap kelas yang di saling silang adalah 1 data
+  \item Pola#3 : jumlah data tiap kelas yang di saling silang adalah 3 data
+  \item Pola#5 : jumlah data tiap kelas yang di saling silang adalah 5 data  
+\end{enumerate}
+
+Tujuan dari percobaan ini adalah untuk mengetahui bagaimana pengaruh pola
+pelatihan terhadap kinerja dari classifier. Untuk uji coba ini 
+
+urutan
+data pelatihan yang akan digunakan yang round robin divariasikan mulai dari round robin 1 data tiap kelas
 
 %-----------------------------------------------------------------------------%
 \subsection{Percobaan algoritma terhadap variasi parameter}
 %-----------------------------------------------------------------------------%
 
 %-----------------------------------------------------------------------------%
-\section{Analisis ANOVA}
+\section{Analisis Hasil}
 %-----------------------------------------------------------------------------%
+1. Analisis bisa menggunakan T-Test dari 
+Buku Combining Pattern Classifier
+Error Calculation (Counting estimator p8)
 
+2. McNemar Test
+	- tentukan bobot terbaik antara LVQ1m LVQ21, GLVQ dan FPGLVQ
+	- train dengan data 86 fitur, 6 kelas, simpan bobot nya
+	- testing dengan mencatat setiap single data, catat untuk tiap classifier,
+	dikenali atau tidak.
+
+
+Untuk memberikan ranking terhadap algoritma, bisa menggunakan amalisis ROC 
+\newpage
+\section{Revision}
+\begin{itemize}
+  \item Why? wavelet
+  \item Why? daubhechies
+  \item Why? proses Outlier , baik baseline wander, maupun Outlier removal,
+  knapa pake interquartile range? bukan mahalanobis?
+  \item 
+  \item 
+\end{itemize}

@@ -1,5 +1,6 @@
-\section{Wavelet}
+\section{Wavelet Transform}
 \label{sec:wt}
+
 
 wavelet digunakan untuk melakukan filter frekuensi tinggi,
 dimana setelah didekomposisi, kemudian signal direkonstruksi kembali.
@@ -8,3 +9,27 @@ pada penelitian ini, wavelet digunakan untuk mereduksi fitur dari setiap beat
 dengan menggunakan coefisien aproksimasi-nya sebagai fitur, sesuai dengan
 tingkat level dekomposisi dan mengabaikan coefisien detail, dimana mengandung
 signal frekuensi tinggi.
+
+
+Transformasi Fourier
+Sampai sekarang transformasi Fourier mungkin masih menjadi transformasi yang
+paling populer di area pemrosesan sinyal digital (PSD). Transformasi Fourier
+memberitahu kita informasi frekuensi dari sebuah sinyal, tapi tidak informasi
+waktu (kita tidak dapat tahu di mana frekuensi itu terjadi). Karena itulah
+transformasi Fourier hanya cocok untuk sinyal stationari (sinyal yang informasi
+frekuensinya tidak berubah menurut waktu). Untuk menganalisa sinyal yang
+frekuensinya bervariasi di dalam waktu, diperlukan suatu transformasi yang dapat
+memberikan resolusi frekuensi dan waktu disaat yang bersamaan, biasa disebut
+analisis multi resolusi (AMR). AMR dirancang untuk memberika resolusi waktu yang
+baik dan resolusi frekuensi yang buruk pada frekuensi tinggi suatu sinyal, serta
+resolusi frekuensi yang baik dan resolusi waktu yang buruk pada frekuensi rendah
+suatu sinyal. Pendekatan ini sangat berguna untuk menganalisa sinyal dalam
+aplikasi-aplikasi praktis yang memang memiliki lebih banyak frekuensi rendah.
+Transformasi wavelet adalah suatu AMR yang dapat merepresentasikan informasi
+waktu dan frekuensi suatu sinyal dengan baik. Transformasi wavelet menggunakan
+sebuah jendela modulasi yang fleksibel, ini yang paling membedakannya dengan
+transformasi Fourier waktu-singkat (STFT), yang merupakan pengembangan dari
+transformasi Fourier. STFT menggunakan jendela modulasi yang besarnya tetap, ini
+menyebabkan dilema karena jendela yang sempit akan memberikan resolusi frekuensi
+yang buruk dan sebaliknya jendela yang lebar akan menyebabkan resolusi waktu
+yang buruk.

@@ -1,0 +1,64 @@
+\section{Analisis Statistik}
+
+
+
+
+\newpage
+\section{Revision}
+\begin{itemize}
+  \item Cari paper yang menyatakan GLVQ menjamin konvergensi bobot
+  \item Cari paper yang menyatakan GLVQ tidak sensitif terhadap inisialisasi
+  bobot awal. ketemu -> \cite{Sato-1999}
+  
+\end{itemize}
+
+\newpage
+\section{Hasil presentasi Prof, Rudi di seminar reboan}
+
+differentiable method like sigmoid is used for possible to find the minimization
+of error.
+
+error prediction
+\begin{align}
+\end{align}
+
+cross entropy error function
+\begin{align}
+	E(W,V) = - \sum d_i \log p_i + (1 - d_i) \log(1 - p_i)
+\end{align}
+$d_i$ is desired output
+
+Optimization method
+\begin{itemize}
+  \item Gradient descent / error backprop
+  \item Conjugate gradient
+  \item Quasi newton method
+  \item Geneticalgorithm
+\end{itemize}
+
+neural network considered as well trained if it can predict training data and
+cross validation separtely
+
+
+Network Pruning : the way to remove unrelevant connection, so at the end we have
+network with connection that is relevant
+try to set a weight = 0 and if the performance is not affected, then it is more
+likely tobe unrelevant
+
+Rule extraction
+
+Re-RX
+Discreate / continous varaible
+algorithm Re-Rx(S, D, C)
+
+Card Dataset
+
+
+AUC , ACC, 
+\begin{align}
+=\sum_{i=1}^{m}\sum_{i=1}^{m}
+\end{align}
+
+$AUC_d$ = $AUC$ = 1 - fp + tp / 2
+
+%=============================================
