@@ -6,16 +6,75 @@ modifikasi yang dilakukan serta perancangan dan implementasi dari sistem
 pengenalan \gls{arrhytmia}. 
 
 %-----------------------------------------------------------------------------%
-\section{Metode Pelatihan LVQ}
+% \section{Metode Pelatihan LVQ}
 %-----------------------------------------------------------------------------%
-\subsection{Epoch}
-
-\subsection{Round Robin iteration}
-
-
-%-----------------------------------------------------------------------------%
-\section{Metode GLVQ-PSO}
-%-----------------------------------------------------------------------------%
+% \subsection{Epoch}
+% Dalam penelitian ini, studi dilakukan terhadap algoritma LVQ yang dikembangkan
+% oleh Kohonen et.al. \cite{Kohonen92lvqpak}. Dari hasil analisis terhadap
+% implementasi algoritma tersebut, yakni LVQ PAK package, \saya menyadari bahwa
+% mekanisme iterasi (epoch) yang penulis pahami dan kebanyakan digunakan
+% dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
+% \begin{itemize}
+%   \item Iterasi pada LVQ PAK, iterasi yang dilakukan untuk sekali proses
+%   pembelajaran (satu kali proses update bobot) dengan menggunakan satu data
+%   sampel. Hal ini akan berelasi dengan jumlah maksimal iterasi yang ditentukan
+%   sebagai parameter pembelajaran. Artinya jika jumlah data sampel yang digunakan
+%   sebanyak 100, sedangkan maksimal iterasi ditentukan sebanyak 50 kali, maka
+%   hanya 50 data sampel saja yang akan digunakan untuk proses pelatihan, dengan
+%   pemilihan data yang random maupun sequensial dan hanya akan terjadi 50 kali
+%   proses update bobot.
+%   \item Iterasi pada sistem epoch, makna dari satu iterasi adalah
+%   proses pelatihan dilakukan untuk semua data sampel yang diberikan. Jika data
+%   sampel yang diberikan sebanyak 100, maka jaringan saraf akan dilatih sebanyak
+%   100 kali untuk satu iterasi. Jika maksimum iterasi ditentukan sebanyak 50
+%   kali, maka akan setara dengan 1500 iterasi pada metode sebelumnya, atau 1500
+%   kali proses update bobot.
+% \end{itemize} 
+% 
+% Selain sensitif terhadap inisial bobot awal, LVQ original tersebut juga sangat
+% sensitif terhadap jumlah iterasi yang dilakukan dalam proses pembelajaran. Jika
+% terlalu banyak iterasi pelatihan dilakukan, maka kecenderungannya adalah bobot
+% yang dihasilkan melewati dan menjauhi bobot optimal (divergen). 
+% 
+% 
+% \subsection{Round Robin iteration}
+% Melihat karakteristik dari proses pembelajaran LVQ yang berbasis
+% winner-take-all dan proses update rule secara sequensial, maka muncul suatu ide
+% untuk merubah perilaku proses pembelajaran dari sisi iterasi data training. Pada
+% iterasi metode sebelumnya, proses iterasi pembelajaran dalam satu epoch
+% dilakukan sesuai dengan urutan data masukan yang diberikan, bisa berupa urutan
+% sejumlah N sampel data kategori 1 dan M sampel data kategori 2 dan seterusnya,
+% atau bisa juga berupa urutan data yang diambil secara random terhadap kategori
+% data. Pada penelitian ini, \saya mencoba untuk menerapkan mekanisme round-robin
+% dalam iterasi proses pembelajaran LVQ dimana dalam mekanisme ini, urutan data
+% sampel yang diberikan pada proses pembelajaran jaringan saraf dipastikan selang
+% seling untuk setiap kategori data sejumlah $k$ kategori. Jadi urutan data
+% sampelnya adalah $X_{1,c_1}, X_{1,c_2}, \dots, X_{1,c_k}, X_{2,c_1}, X_{2,c_2},
+% \dots, X_{2,c_k}, X_{n_1,c_1},X_{n_2,c_2}, \dots,X_{n_3,c_k}$.
+% 
+% Dengan menggunakan mekanisme round robin, diharapkan proses update rule secara
+% sequensial mempengaruhi proses pembelajaran secara merata untuk semua kategori
+% data. Berikut pada algoritma \ref{alg:opsi3} dapat dilihat pseudocode dari
+% mekanisme iterasi round-robin ini.
+% 
+% \begin{algorithm}  
+% \caption{Mekanisme iterasi secara round robin}          
+% \label{alg:opsi3}                           
+% \begin{algorithmic}                    % enter the algorithmic environment
+% 	\STATE \ldots
+% 	\STATE $max\_N \leftarrow findMaxNumOfDataInCategory()$
+% 	\FOR {$i=1 \to max\_N$}
+% 		\FORALL {$C$ in $Category$}
+% 			\IF {$i > nC$} continue \ENDIF
+% 			
+% 			\STATE $sample \leftarrow X_{c,i}$
+% 			\STATE $train(codebook, sample)$
+% 			\STATE \ldots
+% 		\ENDFOR
+% 	\ENDFOR
+% 	\STATE \ldots
+% \end{algorithmic}
+% \end{algorithm}
 
 
 %-----------------------------------------------------------------------------%

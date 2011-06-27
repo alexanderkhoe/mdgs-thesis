@@ -1,4 +1,5 @@
 %-----------------------------------------------------------------------------%
+\QEinstein
 \chapter{\babSatu}
 \label{bab:1}
 %-----------------------------------------------------------------------------%
@@ -182,6 +183,8 @@ terbagi menjadi beberapa permasalahan sebagai berikut;
   pengenalan Arrhytmia.
   \item Bagaimana metode pembelajaran berbasis kompetisi dapat digunakan untuk
   proses pengenalan Arrhytmia.
+  \item Bagaimana teori fuzzy dapat digunakan untuk memperbaiki kinerja dari
+  proses pengenalan Arrhytmia.
   \item Bagaimana metode perhitungan kemiripan mahalanobis distance dapat
   digunakan untuk memperbaiki kinerja dari proses pengenalan Arrhytmia.
 \end{enumerate}
@@ -283,7 +286,8 @@ Metode yang digunakan dalam penelitian ini adalah sebagai berikut;
   \item Implementasi sistem \\
 		Tahap ini merupakan implementasi dari tahap rancangan sebelumnya. pada tahap
 		ini diimplementasikan beberapa variasi dari supervised competitive based
-		learning mulai dari LVQ (1,21,3), GLVQ, GLVQ-PSO beserta beberapa varian-nya. 
+		learning mulai dari LVQ (1,21,3), GLVQ, GLVQ-Fuzzy, GLVQ-Mahalanobis beserta
+		beberapa varian-nya.
   \item Uji coba dan analisis sistem \\
 		Pada tahap ini dilakukan ujicoba sistem yang telah diimplementasikan terhadap
 		data yang telah diolah pada tahap sebelumnya dengan menggunakan berbagai
@@ -328,4 +332,22 @@ Sistematika penulisan laporan akhir ini adalah sebagai berikut:
 		Bab ini berisi kesimpulan yang diperoleh dari hasil ujicoba dan
 		analisis penelitian yang telah dilakukan dan saran bagi pengembangan
 		selanjutnya.
+\end{itemize}
+
+\newpage
+\section{Revision}
+\begin{itemize}
+  \item Inget, masukkan alasan, Why?, menggunakan data physionet ketimbang UCI,
+  kaitan dengan fitur yang dikandung. UCI, mengandung data interval, dan tiap
+  pasien udah ada anotasi menderita penyakit yang mana, tapi susah kalau
+  disesuaikan dengan keperluan alat. physionet, memberikan data seperti apoa
+  yang akan dihadapi nantinya. hanya saja cuman memberikan informasi beat
+  anotasi nya saja.
+  \item Why? mendeteksi penyakit berdasarkan beat? padahal kan tidak bisa
+  langsung menilai seseorang menderita penyakit arrhytmia. kaitan dengan
+  kemunculan kelainan beat, dengan seseorang mengalami kelainan, data physionet
+  tidak memberikan informasi mengenai seseorang menderita arhytmia, tapi
+  anotasi, yang dikandung pada ECG seseorang
+  \item Why? Competitive Learning? kayaknya gak pas cuman alasan, karena jarang
+  yang make.
 \end{itemize}
