@@ -126,18 +126,18 @@ public class TestBatchSkenario4 {
 	
 	@Test
 	public void mainTest() throws IOException{
-		testGlvq();
-		testFpglvq();
-//		testLvq1();
-//		testLvq21();
+//		testGlvq();
+//		testFpglvq();
+		testLvq1();
+		testLvq21();
 	}
 
 	String tag = "optimal-param";
 	
 	
 	public void testLvq1() throws IOException{
-		writer = createWriter("Skenario4.Lvq1" + ".detail");
-		resumeWriter = createWriter("Skenario4.Lvq1");
+		writer = createWriter("Skenario4.Lvq1." + tag + ".detail");
+		resumeWriter = createWriter("Skenario4.Lvq1." + tag);
 		
 		utils.header("Running testLvq1");
 		utils.log(writer, "TrainLvq1");
@@ -154,7 +154,7 @@ public class TestBatchSkenario4 {
 		utils.log(resumeWriter, sbh.toString());
 		
 		double alpha = 0.05;
-		int iteration = 150;
+		int iteration = 20;
 
 		for(int dt=0;dt < NUM_DATA;dt++){
 				utils.log(String.format("dt: %d, alpha: %f, iteration: %d", 
@@ -247,8 +247,8 @@ public class TestBatchSkenario4 {
 	}
 
 	public void testLvq21() throws IOException{
-		writer = createWriter("Skenario4.Lvq21" + ".detail");
-		resumeWriter = createWriter("Skenario4.Lvq21");
+		writer = createWriter("Skenario4.Lvq21." + tag + ".detail");
+		resumeWriter = createWriter("Skenario4.Lvq21." + tag);
 		
 		utils.header("Running testLvq21");
 		utils.log(writer, "TrainLvq21");
@@ -264,8 +264,8 @@ public class TestBatchSkenario4 {
 		utils.log(writer, sbh.toString());
 		utils.log(resumeWriter, sbh.toString());
 		
-		double alpha = 0.05;
-		int iteration = 150;
+		double alpha = 0.075;
+		int iteration = 100;
 		double window = 0.005;
 		for(int dt=0;dt < NUM_DATA;dt++){
 				utils.log(String.format("dt: %d, alpha: %f, iteration: %d", 

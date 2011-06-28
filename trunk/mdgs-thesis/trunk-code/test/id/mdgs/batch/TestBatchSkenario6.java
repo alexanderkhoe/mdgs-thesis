@@ -139,8 +139,8 @@ public class TestBatchSkenario6 {
 	public void mainTest() throws IOException{
 		testGlvqOut();
 		testFpglvqOut();
-//		testGlvqNon();
-//		testFpglvqNon();
+		testGlvqNon();
+		testFpglvqNon();
 	}
 	
 	public void testGlvqOut() throws IOException{

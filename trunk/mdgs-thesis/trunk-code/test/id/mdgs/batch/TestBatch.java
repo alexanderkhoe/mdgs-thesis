@@ -3,9 +3,11 @@ package id.mdgs.batch;
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.fnlvq.Fpglvq;
 import id.mdgs.lvq.Lvq;
+import id.mdgs.master.IClassify;
 import id.mdgs.utils.utils;
 
 import java.io.BufferedWriter;
@@ -69,6 +71,23 @@ public class TestBatch {
 			
 			cm.feed(win, target);
 		}
+		
+		return cm;
+	}
+	
+	public static <T> ConfusionMatrix testNetwork(IClassify<T, Entry> net, T codebook, FoldedDataset<?, Entry> testset, int numclass){
+		ConfusionMatrix cm = new ConfusionMatrix(numclass);
+		
+		net.loadCodebook(codebook);
+		Iterator<Entry> it = testset.iterator();
+		while(it.hasNext()){
+			Entry sample = it.next(); 
+			
+			int win = net.classify(sample);
+			int target = sample.label;
+			
+			cm.feed(win, target);
+		}		
 		
 		return cm;
 	}

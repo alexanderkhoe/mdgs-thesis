@@ -60,9 +60,9 @@ public class TestBatchScenario2 {
 	public String[] mcode = {
 			"Skenario2.1Lvq1",
 			"Skenario2.2Lvq21",
-			"Skenario2.3Lvq3",
 			"Skenario2.4Glvq",
 			"Skenario2.5Fpglvq",
+			"Skenario2.3Lvq3",			
 			};
 	public static int urut = 6;
 	public static int NUM_DATA = 6;
@@ -154,20 +154,65 @@ public class TestBatchScenario2 {
 		return cm;
 	}
 	
+	
+//	//optimal parameter dari acctest 
+//	double[][] optimal = { //LVQ1, LVQ21, GLVQ, FPGLVQ
+//			{0.05, 0.075, 0.075, 0.05}, //300-6class
+//			{0.075, 0.075, 0.05, 0.05}, //86 -6class
+//			{0.075, 0.05, 0.1, 0.001},  //24 -6class
+//			{0.05, 0.1, 0.1, 0.01}, //300-6class
+//			{0.001, 0.075, 0.05, 0.01}, //86 -6class
+//			{0.05, 0.05, 0.1, 0.001},  //24 -6class
+//	};
+//	
+//	int[][] optiter = {
+//			{20, 100, 100, 150},
+//			{20, 150, 100, 150},
+//			{20, 150, 150, 150},
+//			{50, 100, 100, 150},
+//			{20, 150, 100, 150},
+//			{20, 150, 100, 150},
+//	};
+	
+	//optimal parameter - base on train
+	double[][] optimal = { //LVQ1, LVQ21, GLVQ, FPGLVQ
+			{0.05, 0.075, 0.05, 0.005}, //300-6class
+			{0.05, 0.075, 0.05, 0.05}, //86 -6class
+			{0.075, 0.05, 0.1, 0.001},  //24 -6class
+			{0.05, 0.1, 0.075, 0.01}, //300-6class
+			{0.001, 0.075, 0.05, 0.01}, //86 -6class
+			{0.1, 0.075, 0.1, 0.001},  //24 -6class
+	};
+	//base on data train
+	int[][] optiter = {
+			{20, 100, 100, 150},
+			{20, 150, 100, 150},
+			{20, 150, 100, 150},
+			{50, 100, 100, 150},
+			{20, 150, 100, 150},
+			{50, 150, 100, 150},
+	};
+	
 	@Test 
 	public void MainTest() throws IOException{
-//		testLvq1();
-//		testLvq21();
-//		testGlvq();
+		testLvq1();
+		testLvq21();
+		testGlvq();
 		testFplvq();
 //		testLvq3();
 	}
 	
 	public void testLvq1() throws IOException{
-		double[] alphaset  = {0.05, 0.075, 0.075, 0.05, 0.075, 0.075};
+		int id = 0;
+		double[] alphaset = new double[optimal.length]; 
+		for(int i=0;i < optimal.length;i++){
+			alphaset[i] = optimal[i][id];
+		}
+		
+//		double[] alphaset  = {0.05, 0.075, 0.075, 0.05, 0.075, 0.075};
 		int[] iterationset = { 20 };
 		
-		int id = 0;
+		
 		writer = createWriter(mcode[id] + ".detail");
 		resumeWriter = createWriter(mcode[id]);
 		
@@ -285,11 +330,16 @@ public class TestBatchScenario2 {
 	}
 	
 	public void testLvq21() throws IOException{
-		double[] alphaset   = {0.075,0.075,0.05,0.075,0.075,0.05};
+		int id = 1;
+		double[] alphaset = new double[optimal.length]; 
+		for(int i=0;i < optimal.length;i++){
+			alphaset[i] = optimal[i][id];
+		}
+		
+//		double[] alphaset   = {0.075,0.075,0.05,0.075,0.075,0.05};
 		double[] windowset  = {0.01,0.005,0.005,0.01,0.005,0.005};
 		int[] iterationset = { 150 };
 		
-		int id = 1;
 		writer = createWriter(mcode[id] + ".detail");
 		resumeWriter = createWriter(mcode[id]);
 		
@@ -409,10 +459,15 @@ public class TestBatchScenario2 {
 	
 	
 	public void testGlvq() throws IOException{
-		double[] alphaset  = {0.075,0.05,0.1,0.075,0.05,0.1};
+		int id = 2;
+		double[] alphaset = new double[optimal.length]; 
+		for(int i=0;i < optimal.length;i++){
+			alphaset[i] = optimal[i][id];
+		}
+
+//		double[] alphaset  = {0.075,0.05,0.1,0.075,0.05,0.1};
 		int[] iterationset = { 150 };
 		
-		int id = 3;
 		writer = createWriter(mcode[id] + ".detail");
 		resumeWriter = createWriter(mcode[id]);
 		
@@ -532,10 +587,14 @@ public class TestBatchScenario2 {
 	
 	
 	public void testFplvq() throws IOException{
-		double[] alphaset  = {0.005,0.05,0.001,0.005,0.05,0.001};
+		int id = 3;
+		double[] alphaset = new double[optimal.length]; 
+		for(int i=0;i < optimal.length;i++){
+			alphaset[i] = optimal[i][id];
+		}
+//		double[] alphaset  = {0.005,0.05,0.001,0.005,0.05,0.001};
 		int[] iterationset = { 150 };
 		
-		int id = 4;
 		writer = createWriter(mcode[id] + ".detail");
 		resumeWriter = createWriter(mcode[id]);
 		
@@ -573,7 +632,7 @@ public class TestBatchScenario2 {
 				for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 					
 					Fpglvq net = new Fpglvq();
-					net.initCodes(trainsets[dt], 5 , true);
+					net.initCodes(trainsets[dt], 0.5d , true);
 					
 					TrainFpglvq train = new TrainFpglvq(net, trainsets[dt], alphaset[a]);
 					train.setMaxEpoch(iterationset[b]);
