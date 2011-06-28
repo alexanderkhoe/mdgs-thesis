@@ -18,7 +18,7 @@ import org.junit.Test;
 public class TestKFoldCrossValidation {
 	@Test
 	public void test(){
-		int id = 4;
+		int id = 0;
 		int pos = id * 4;
 		int nclass = 12;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
@@ -29,28 +29,51 @@ public class TestKFoldCrossValidation {
 		
 		trainset.join(testset);
 
-		int k = 10;
-		String fname = String.format("%d-fold.%d-class", k, 12); 
-		KFoldCrossValidation kfold = new KFoldCrossValidation(trainset, 10, 0.9, true, utils.getDefaultPath() + "/resources/evaluation/" + fname + ".log");
-		
-		//optimal parameter 
+		int k = 10; double porsi = 0.9;
+		String fname = String.format("%d.%.1f-fold.%d-class.%d-fitures", k, porsi, nclass, trainset.numFeatures); 
+		KFoldCrossValidation kfold = new KFoldCrossValidation(trainset, k, porsi, true, utils.getDefaultPath() + "/resources/evaluation/" + fname + ".log");
+
+		//optimal parameter - base on train
 		double[][] optimal = { //LVQ1, LVQ21, GLVQ, FPGLVQ
-				{0.05, 0.075, 0.075, 0.05}, //300-6class
-				{0.075, 0.075, 0.05, 0.05}, //86 -6class
+				{0.05, 0.075, 0.05, 0.005}, //300-6class
+				{0.05, 0.075, 0.05, 0.05}, //86 -6class
 				{0.075, 0.05, 0.1, 0.001},  //24 -6class
-				{0.05, 0.1, 0.1, 0.01}, //300-6class
+				{0.05, 0.1, 0.075, 0.01}, //300-6class
 				{0.001, 0.075, 0.05, 0.01}, //86 -6class
-				{0.05, 0.05, 0.1, 0.001},  //24 -6class
+				{0.1, 0.075, 0.1, 0.001},  //24 -6class
 		};
-		
+
+
+
+//		//optimal parameter - base on test
+//		double[][] optimal = { //LVQ1, LVQ21, GLVQ, FPGLVQ
+//				{0.05, 0.075, 0.075, 0.05}, //300-6class
+//				{0.075, 0.075, 0.05, 0.05}, //86 -6class
+//				{0.075, 0.05, 0.1, 0.001},  //24 -6class
+//				{0.05, 0.1, 0.1, 0.01}, //300-6class
+//				{0.001, 0.075, 0.05, 0.01}, //86 -6class
+//				{0.05, 0.05, 0.1, 0.001},  //24 -6class
+//		};
+
+		//base on data train
 		int[][] optiter = {
 				{20, 100, 100, 150},
 				{20, 150, 100, 150},
-				{20, 150, 150, 150},
+				{20, 150, 100, 150},
 				{50, 100, 100, 150},
 				{20, 150, 100, 150},
-				{20, 150, 100, 150},
+				{50, 150, 100, 150},
 		};
+		
+//		//base on data test
+//		int[][] optiter = {
+//				{20, 100, 100, 150},
+//				{20, 150, 100, 150},
+//				{20, 150, 150, 150},
+//				{50, 100, 100, 150},
+//				{20, 150, 100, 150},
+//				{20, 150, 100, 150},
+//		};
 		
 		//register trainer
 		ITrain train1 = new TrainLvq1(null, optimal[id][0]); 			train1.setMaxEpoch(optiter[id][0]);

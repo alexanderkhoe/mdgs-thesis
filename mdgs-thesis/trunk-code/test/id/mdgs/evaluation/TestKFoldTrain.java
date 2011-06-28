@@ -40,7 +40,7 @@ public class TestKFoldTrain {
 		
 		iris1.join(iris2);
 		
-		KFoldedDataset<Dataset, Entry> dataset = new KFoldedDataset<Dataset, Entry>(trainset, 10, 0.6, true);
+		KFoldedDataset<Dataset, Entry> dataset = new KFoldedDataset<Dataset, Entry>(trainset, 10, 0.9, true);
 		FoldedDataset<Dataset, Entry> train = dataset.getKFoldedForTrain(0);
 		FoldedDataset<Dataset, Entry> test = dataset.getKFoldedForTest(0);
 		

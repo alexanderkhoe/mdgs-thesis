@@ -68,14 +68,14 @@ public class Dietterich5x2FoldCrossValidation {
 			double p1  = pA1 - pB1;
 			double p2  = pA2 - pB2;
 			
-			double[] prow = new double[7];
+			double[] prow = new double[8];
 			prow[0] 	= pA1;
 			prow[1] 	= pB1;
 			prow[2] 	= pA2;
-			prow[3] 	= pA2;
+			prow[3] 	= pB2;
 			prow[4] 	= p1;
 			prow[5] 	= p2;
-			prow[6] 	= (p2 - p2) / 2;
+			prow[6] 	= (p1 + p2) / 2;
 			prow[7] 	= 0;	//s2
 			
 			tbl.add(prow);
@@ -99,7 +99,7 @@ public class Dietterich5x2FoldCrossValidation {
 			sum /= table.size();
 			sum = Math.sqrt(sum);
 			
-			double p11 = table.get(1)[4];
+			double p11 = table.get(0)[4];
 			double t = p11 / sum;
 			return t;
 		}
@@ -209,7 +209,7 @@ public class Dietterich5x2FoldCrossValidation {
 			statistic.add(statistic.table, pacc);
 			statistic.add(statistic.errTable, perr);
 			System.out.print(String.format("K=%2d\t%7.4f\t%7.4f\t%7.4f\t%7.4f\t|\t", iteration, pacc[0], pacc[1], pacc[2], pacc[3]));
-			System.out.print(String.format("\t%7.4f\t%7.4f\t%7.4f\t%7.4f\n", iteration, perr[0], perr[1], perr[2], perr[3]));
+			System.out.print(String.format("%7.4f\t%7.4f\t%7.4f\t%7.4f\n", perr[0], perr[1], perr[2], perr[3]));
 		}
 
 
@@ -250,14 +250,14 @@ public class Dietterich5x2FoldCrossValidation {
 	
 			for(int i=0;i < statistic.table.size();i++){
 				pw.write(String.format("%5s%s", "K:" + Integer.toString(i),sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[0],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[1],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[2],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[3],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[4],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[5],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[6],sep));
-				pw.write(String.format("%7.4f%s", statistic.table.get(i)[7],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[0],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[1],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[2],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[3],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[4],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[5],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[6],sep));
+				pw.write(String.format("%f%s", statistic.table.get(i)[7],sep));
 				pw.write("\n");
 			}
 			pw.write("\n");
