@@ -187,6 +187,43 @@ public class Lvq implements IClassify<Dataset, Entry> {
 		}
 	}
 	
+	public void initCodes(FoldedDataset<Dataset, Entry> data, double min, double max, int num){
+		DatasetProfiler profiler = new DatasetProfiler();
+		profiler.run(data);
+		
+		codebook.reset();
+		codebook.numFeatures = data.getMasterData().numFeatures;
+
+		MinMax[] dataRange = new MinMax[data.getMasterData().numFeatures];
+		if(MathUtils.equals((max - min) , 0)) {
+			for(int i=0;i<dataRange.length;i++) 
+				dataRange[i] = new MinMax();
+			
+			/*find min max data training*/
+			for(Entry e: data){			
+				for(int i = 0;i < e.size();i++){
+					dataRange[i].setMinMax(e.data[i]);
+				}
+			}
+		}
+		
+		for(PEntry pe: profiler){
+			for(int i=0;i<num;i++){
+				Entry code = new Entry(data.getMasterData().numFeatures);
+				code.label = pe.label;
+				for(int j=0;j < code.size();j++){
+					if(MathUtils.equals((max - min) , 0)) {
+						code.data[j] = MathUtils.randomDouble(dataRange[j].min, dataRange[j].max);
+					} else {
+						code.data[j] = MathUtils.randomDouble(min,max);
+					}
+				}
+			
+				codebook.add(code);
+			}
+		}
+	}
+	
 	@Override
 	public void loadCodebook(Dataset codebook) {
 		this.codebook.reset();
