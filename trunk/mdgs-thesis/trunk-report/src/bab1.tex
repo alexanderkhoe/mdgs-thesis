@@ -133,20 +133,28 @@ kategori tersebut merupakan pengelompokkan dari 15 kategori arrhytmia yang
 terdapat pada MIT-BIH database. Fitur yang digunakan adalah berdasarkan pada
 interval denyut jantung, interval RR dan morfologi dari ECG. 
 
-Dari beberapa literatur yang dipelajari, belum terlalu banyak peneliti yang
+Dari latar belakang tersebut diatas, terlihat belum terlalu banyak peneliti yang
 menggunakan pendekatan Competitive Based Learning seperti LVQ digunakan untuk
-mendeteksi kelainan jantung khusus-nya Arrhytmia. Oleh sebab itu pada penelitian
-ini, \saya akan melakukan studi tentang klasifikasi signal ECG arrhytmia dengan
-menggunakan pendekatan competitive based learning, yakni Generalized LVQ
-\cite{Sato.1}, yang merupakan generalisasi dari LVQ2.1 , dimana GLVQ memiliki
-keunggulan dalam hal menjamin konvergensi dalam proses pelatihan yang tidak
-dimiliki LVQ2.1. Disamping itu juga, LVQ dan varian-nya merupakan jenis JST yang
-arsitekturnya paling sederhana sehingga berimplikasi pada kecepatan proses
-pelatihan. Pada tahap berikutnya, GLVQ yang perhitungan kemiripannya
-berdasarkan euclidean distance dimodifikasi dengan menggunakan mahalanobis
-distance  karena mahalanobis distance memperhitungkan tingkat distribusi  dari
-vektor fitur dan berguna  dalam membandingkan vektor fitur dimana tiap  elemen
-memiliki rentang dan varian yang berbeda-beda.
+mendeteksi kelainan jantung khusus-nya Arrhytmia. Disamping itu, laboratorium
+dimana \saya melakukan penelitian, sebelumnya telah mengembangkan metode
+pengenalan aroma dengan menggunakan konsep COmpetitive Based Learningm yaitu
+FNLVQ. Oleh sebab itu pada penelitian ini, \saya akan melakukan studi tentang
+klasifikasi signal ECG arrhytmia dengan menggunakan pendekatan competitive based
+learning, yakni Generalized LVQ \cite{Sato:1995}, yang merupakan generalisasi
+dari LVQ2.1 , dimana GLVQ memiliki keunggulan dalam hal menjamin konvergensi
+dalam proses pelatihan yang tidak dimiliki LVQ2.1 serta memiliki karakteristik
+kinerja yang tidak sensitif terhadap inisialisasi bobot awal \cite{Sato:1999}.
+Disamping itu juga, LVQ dan varian-nya merupakan jenis JST yang arsitekturnya
+paling sederhana  sehingga berimplikasi pada kecepatan proses pelatihan. Pada
+tahap berikutnya,  GLVQ yang perhitungan kemiripannya berdasarkan euclidean
+distance dimodifikasi untuk menghasilkan varian baru metode klasifikasi LVQ 
+dengan menggunakan teori fuzzy dimana konsep ini juga diadaptasi dari metode
+FNLVQ yang telah dikembangkan sebelumnya oleh tim peneliti yang lain.
+
+% dengan pengklasifikasian  dengan
+% menggunakan mahalanobis distance karena mahalanobis distance memperhitungkan
+% tingkat distribusi  dari vektor fitur dan berguna  dalam membandingkan vektor
+% fitur dimana tiap  elemen memiliki rentang dan varian yang berbeda-beda.
 
 % Dataset yang akan digunakan pada penelitian ini adalah data yang
 % telah tersedia bebas dari physionet\footnote{http://physionet.net} yakni MIT-BIH
@@ -183,10 +191,11 @@ terbagi menjadi beberapa permasalahan sebagai berikut;
   pengenalan Arrhytmia.
   \item Bagaimana metode pembelajaran berbasis kompetisi dapat digunakan untuk
   proses pengenalan Arrhytmia.
-  \item Bagaimana teori fuzzy dapat digunakan untuk memperbaiki kinerja dari
-  proses pengenalan Arrhytmia.
-  \item Bagaimana metode perhitungan kemiripan mahalanobis distance dapat
-  digunakan untuk memperbaiki kinerja dari proses pengenalan Arrhytmia.
+  \item Bagaimana teori fuzzy diintegrasikan ke metode Generalized LVQ?
+  \item Bagaimana integrasi teori fuzzy dengan GLVQ dapat digunakan untuk
+  memperbaiki kinerja dari proses pengenalan Arrhytmia.
+%   \item Bagaimana metode perhitungan kemiripan mahalanobis distance dapat
+%   digunakan untuk memperbaiki kinerja dari proses pengenalan Arrhytmia.
 \end{enumerate}
 
 %-----------------------------------------------------------------------------%
@@ -207,7 +216,8 @@ Ruang lingkup yang digunakan dalam penelitian ini adalah sebagai berikut;
   sinyal hasil sandapan MLII.
   \item Frekuensi cuplik (sampling rate) dari sinyal ECG yang digunakan adalah
   360Hz.
-  \item 
+  \item Jumlah prototype/vektor pewakil untuk setiap kategori kelas yang
+  akan diujicoba hanya berjumlah satu.
 \end{enumerate} 
 %-----------------------------------------------------------------------------%
 \section{Tujuan}
@@ -230,7 +240,7 @@ Tujuan dari penelitian ini adalah sebagai berikut;
 % 	diagram yang menjelaskan hubungan dan keterkaitan antar 
 % 	penelitian-penelitian sebelumnya}
 Penelitian ini merupakan bagian dari penelitian dan pengembangan alat pendeteksi
-kelainan jantung portable oleh Wisnu J et.al, sehingga disamping hasil yang
+kelainan jantung portable oleh Wisnu J dkk, sehingga disamping hasil yang
 akurat, dibutuhkan juga sistem yang memiliki waktu eksekusi yang cepat. Oleh 
 karena itu, pada penelitian ini dipilih pendekatan competitive based Learning.
 Berikut adalah bagan posisi penelitian ini terhadap penelitian-penelitian
@@ -240,11 +250,11 @@ portable.
 \addFigure{width=1\textwidth}{pics/baganpospeneliti.png}{fig:bagan}{Diagram
 posisi penelitian dan kontribusi.}
 
-Pada bagan diatas dapat dilihat bahwa penelitian ini berfungsi sebagai
-penelitian awal dalam menginvestigasi berbagai kemungkinan struktur data /
+Pada bagan \pic~\ref{fig:bagan} dapat dilihat bahwa penelitian ini berfungsi
+sebagai penelitian awal dalam menginvestigasi berbagai kemungkinan struktur data /
 fitur yang nantinya dapat digunakan sebagai referensi dalam mengembangkan alat
-perekam ECG seperti yang dilakukan oleh Pak Asep. Berkaitan dengan alat
-perekam ECG yang dikembangkan, hal-hal yang perlu diperhatikan adalah mengenai
+perekam ECG seperti yang dilakukan oleh Saudara Asep Insani. Berkaitan dengan
+alat perekam ECG yang dikembangkan, hal-hal yang perlu diperhatikan adalah mengenai
 sampling rate yang digunakan dalam merekam denyut jantung. Karena pada
 penelitian ini menggunakan data dari physionet dengan sampling rate tertentu
 sebagai data pelatihan, maka ada baiknya sampling rate yang digunakan
@@ -252,14 +262,32 @@ sama, atau paling tidak dipertimbangkan langkah-langkah penyesuaian
 tertentu. Hal ini dikarenakan data yang dihasilkan dari alat perekam ECG
 yang dikembangkan tidak memiliki label, seperti data MIT-BIH dan juga akan
 mengandung noise yang tinggi. terkecuali nantinya akan ada pakar jantung
-yang akan memberikan label pada data hasil perekaman.
+yang akan memberikan label pada data hasil perekaman.  Selain itu penelitian ini
+juga digunakan sebagai referensi oleh tim FPGA dalam mengembangkan embeded
+system pada alat portable.
 
-Selain itu penelitian ini juga digunakan sebagai referensi oleh tim FPGA dalam
-mengembangkan embeded system pada alat portable. 
-
-Secara garis besar, kontribusi \saya pada penelitian ini adalah sebagai berikut;
+Secara garis besar, kontribusi \saya pada penelitian ini dapat dilihat
+dari dua aspek diantaranya sebagai berikut;
 \begin{enumerate}
-  \item 
+  \item Internal : kontribusi terhadap penelitian yang dilakukan oleh tim
+  peneliti arrhytmia Fasilkom Universitas Indonesia
+  \begin{itemize}
+    \item Sebagai bagian awal penelitian di bidang arrhytmia, dimana pada
+    penelitian ini dilakukan proses pengolahan data awal dengan melewati
+    beberapa tahap pemrosesan.
+    \item Pengembangan Java Engine metode klasifikasi yang dapat digunakan
+    dengan mudah dan dapat dikembangkan lebih lanjut untuk keperluan yang lebih
+    spesifik.
+  \end{itemize}
+  
+  \item Eksternal : kontribusi terhadap dunia penelitian khususnya dibidang
+  pengenalan arrhytmia.
+  \begin{itemize}
+    \item Pengembangan metode klasifikasi baru yaitu Fuzzy-Neuro Generalized
+    Learning Vector Quantization (FN-GLVQ).
+    \item Penggunaan metode FN-GLVQ dalam pendeteksian pengenalan kelaian
+    arrhytmia melalui sinyal ECG.
+  \end{itemize}
 \end{enumerate} 
 
 %-----------------------------------------------------------------------------%
@@ -286,8 +314,7 @@ Metode yang digunakan dalam penelitian ini adalah sebagai berikut;
   \item Implementasi sistem \\
 		Tahap ini merupakan implementasi dari tahap rancangan sebelumnya. pada tahap
 		ini diimplementasikan beberapa variasi dari supervised competitive based
-		learning mulai dari LVQ (1,21,3), GLVQ, GLVQ-Fuzzy, GLVQ-Mahalanobis beserta
-		beberapa varian-nya.
+		learning mulai dari LVQ (1,21, 3), GLVQ dan Fuzzy Neuro-GLVQ.
   \item Uji coba dan analisis sistem \\
 		Pada tahap ini dilakukan ujicoba sistem yang telah diimplementasikan terhadap
 		data yang telah diolah pada tahap sebelumnya dengan menggunakan berbagai
@@ -320,7 +347,7 @@ Sistematika penulisan laporan akhir ini adalah sebagai berikut:
 		yang dapat mengganggu performa dari sistem nantinya.
 	\item Bab 4 \babEmpat \\
 		Bab ini berisi pembahasan mengenai rancangan dan implementasi dari algoritma
-		yang telah ditentukan beserta beberapa modifikasi yang dilakukan untuk
+		yang telah dirumuskan beserta beberapa modifikasi yang dilakukan untuk
 		memperbaiki performa dari algoritma.
 	\item Bab 5 \babLima \\
 		Bab ini berisi pembahasan mengenai ujicoba yang dilakukan beserta
