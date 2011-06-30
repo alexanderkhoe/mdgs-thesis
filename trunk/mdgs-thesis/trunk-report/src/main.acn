@@ -1,6 +1,3 @@
-\glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{x}
-\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{x}
-\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{x}
 \glossaryentry{ECG?\glossaryentryfield{ecg}{\glsnamefont{ECG}}{Electrocardiogramm}{\relax }|setentrycounter[]{page}\glsnumberformat}{11}
 \glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{11}
 \glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{11}
@@ -11,19 +8,21 @@
 \glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{25}
 \glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{25}
 \glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{26}
-\glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{26}
-\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{29}
 \glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{29}
 \glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{31}
-\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
-\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
-\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
-\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
-\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
+\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{31}
+\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{31}
+\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{31}
+\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{31}
 \glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
 \glossaryentry{LVQ?\glossaryentryfield{lvq}{\glsnamefont{LVQ}}{Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
 \glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{32}
-\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{34}
-\glossaryentry{WFDB?\glossaryentryfield{wfdb}{\glsnamefont{WFDB}}{WaveForm DataBase}{\relax }|setentrycounter[]{page}\glsnumberformat}{41}
-\glossaryentry{WFDB?\glossaryentryfield{wfdb}{\glsnamefont{WFDB}}{WaveForm DataBase}{\relax }|setentrycounter[]{page}\glsnumberformat}{41}
-\glossaryentry{BWR?\glossaryentryfield{bwr}{\glsnamefont{BWR}}{Baseline Wander Removal}{\relax }|setentrycounter[]{page}\glsnumberformat}{42}
+\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{33}
+\glossaryentry{WFDB?\glossaryentryfield{wfdb}{\glsnamefont{WFDB}}{WaveForm DataBase}{\relax }|setentrycounter[]{page}\glsnumberformat}{45}
+\glossaryentry{WFDB?\glossaryentryfield{wfdb}{\glsnamefont{WFDB}}{WaveForm DataBase}{\relax }|setentrycounter[]{page}\glsnumberformat}{45}
+\glossaryentry{BWR?\glossaryentryfield{bwr}{\glsnamefont{BWR}}{Baseline Wander Removal}{\relax }|setentrycounter[]{page}\glsnumberformat}{46}
+\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{58}
+\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{59}
+\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{62}
+\glossaryentry{GLVQ?\glossaryentryfield{glvq}{\glsnamefont{GLVQ}}{Generelized Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{64}
+\glossaryentry{FNLVQ?\glossaryentryfield{fnlvq}{\glsnamefont{FNLVQ}}{Fuzzy-Neuro Learning Vector Quantization}{\relax }|setentrycounter[]{page}\glsnumberformat}{64}

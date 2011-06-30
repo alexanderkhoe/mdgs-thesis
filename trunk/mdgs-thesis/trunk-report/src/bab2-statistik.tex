@@ -1,7 +1,122 @@
-\section{Analisis Statistik}
+\section{Analisis Kinerja}
+Studi perbandingan umumnya dilakukan berdasarkan eksperimen  dengan
+menggunakan data simulasi maupun menggunakan data nyata. Untuk menunjukkan suatu
+algoritma memiliki kinerja yang signifikan terhadap yang lain, dapat dilakukan
+melalui beberapa ujicoba yang kemudian data yang dihasilkan dapat di analisis
+secara statistik untuk menunjukkan apakah suatu algoritma lebih baik secara
+signifikan atau tidak. Kuncheva pada bukunya \cite{Kuncheva:2004} menyebutkan
+beberapa uji tersebut diantaranya;
 
+\subsection{McNemar Test}
+Pada uji test mcNemar, hasil ujicoba dianalisis dengan menghitung peluang
+perbedaan kesalahan pengenalan antara algoritma (\emph{Type I Error}). Misal
+terdapat dua algoritma $A$ dan $B$;\\
+\begin{tabular}{llp{0.7\textwidth}}
+$n_{00}$ &=& jumlah data yang salah dikenali oleh $A$ dan $B$ \\
+$n_{01}$ &=& jumlah data yang salah dikenali oleh $A$ tapi tidak $B$ \\
+$n_{10}$ &=& jumlah data yang salah dikenali oleh $B$ tapi tidak $A$ \\
+$n_{11}$ &=& jumlah data yang benar dikenali oleh $A$ dan $B$ \\
+\end{tabular}
 
+\noindent Maka perbedaan antara yang diharapkan dengan hasil observasi dapat
+dihitung secara statistik dengan persamaan \ref{};
 
+\begin{align}
+\label{eq:mcnemar}
+x^2 = \frac{(\lvert n_{01} - n_{10}\rvert - 1)^2}{n_{01} + n_{10}}
+\end{align}
+
+\noindent dimana nilai dari $x^2$ mendekati distribusi dari $\chi^2$ dengan 1
+degree of freedom. null hypothesis ($H_0$=algoritma memiliki tingkat error yang
+sama) dapat ditolak jika nilai $\lvertx^2\rvert > z$ dimana $z$ adalah nilai
+tabular pada level signifikan tertentu, misal 0.05 dengan 1 derajat kebebasan.
+Hal ini berarti kedua algoritma memiliki perbedaan tingkat error yang
+signifikan.
+
+\subsection{Cross-Validation}
+Validasi silang (\emph{cross-validation}) merupakan metode statistik yang
+digunakan untuk uji coba dengan memperhitungkan tingkat variasi dari data
+set. Variasi tersebut dilakukan dengan membagi data menjadi beberapa sub bagian
+dan menggunakannya baik sebagai data training maupun testing berdasarkan porsi
+tertentu. Terdapat beberapa variasi \emph{cross validation} yang dapat dilakukan
+diataranya;
+
+\subsubsection*{K-Hold Out paired t-test}
+Uji K-Hold out sangat umum digunakan untuk membandingkan algoritma dalam machine
+learning. Ujicoba dilakukan dengan menggunakan data set $Z$ dimana data tersebut
+akan dipartisi menjadi training dan testing set dengan porsi biasanya
+$\frac{2}{3}$ training dana $\frac{1}{3}$ untuk testing (\emph{hold-out
+method}), atau mungkin juga dengan mebagi data sama rata $\frac{1}{2}$ untuk
+training dan testing. Kemudian algoritma diujicobakan dengan kedua data
+tersebut, pelatihan dengan training set, dan di uji dengan testing set. 
+
+Proses ujicoba akan dilakukan berulang sebanyak $K$ kali dimana umumnya nilai
+ $K=30$.Jika akurasi dari hasil eksperimen dinotasikan $P_A$ untuk algoritma $A$
+ dan $P_B$ untuk algoritma $B$, maka untuk $K$ ujicoba didapat $P^1 = P_A^1 -
+ P_B^1$ sampai $P^K = P_A^K - P_B^K$. Asumsi yang dipakai disini adalah bahwa
+ perbedaan akurasi disini adalah independent dari distribusi normal.
+ 
+Untuk menguji tingkat signifikansi kinerja algoritma $A$ dan $B$, digunakan
+\emph{paired t-test}, dimana null hypothesis ($H_0$ = akurasi tidak berbeda
+secara signifikan), maka persamaan berikut memiliki \emph{t-distribution} dengan
+$K-1$ \emph{degree of freedom}
+
+\begin{align}
+\label{eq:t-test}
+t = \frac{\bar{P}\sqrt{K}}{\sqrt{\sum_{i=1}^K (P^i - \bar{P})^2 / (K - 1)}}
+\end{align}
+
+\noindent dimana $\bar{P} = \frac{1}{K} \sum_{i=1}^K P^i$. Untuk menarik
+kesimpulan apakah null hypothesis di tolak atau diterima, nilai $t$ test yang
+didapat dari persamaan \ref{equ:t-test} dibandingkan dengan nilai pada
+tabel distribusi $t$ pada tingkat signifikansi yang diinginkan pada $K-1$ degree
+of freedom. Umumnya pada perbandingan algoritma ini, tingkat signifikasi 0.05
+digunakan. Jika nilai $\lvert t \rvert > z$ dengan $z$ adalah nilai tabular yang
+didapat, maka $H_0$ dapat ditolak, dan menerima bahwa memang terdapat perbedaan
+yang signifikan antara kedua algoritma yang dibandingkan.
+
+\subsubsection*{K-Hold Cross Validation paired t-test}
+Metode validasi silang \emph{K-Hold} berusaha untuk menghindari overlap pada
+testing data, dimana pada metode ini, data sampel di partisi menjadi $K$ bagian
+dengan jumlah yang hampir sama, dan setiap bagian digunakan untuk testing
+algoritma yang telah dilatih menggunakan $K-1$ bagian yang lain-nya. Pada metode
+ini diasumsikan perbedaan yang dihasilkan adalah independen dari distribusi
+normal. Dengan menggunakan perhitungan statistik $t$ yang sama pada persamaan
+\ref{eq:t-test}, kemudian nilai $t$ dibandingkan dengan nilai dari tabel
+distribusi $t$ untuk menarik kesimpulan.
+
+\subsubsection*{Dietterich’s 5 3 2-Fold Cross-Validation Paired t-Test}
+Pada metode ini, prosedur ujicoba dilakukan dengan mengulang \emph{2-fold cross
+validation} sebanyak 5 kali, dimana disetiap eksekusi validasi silang, data
+sampel dipartisi menjadi dua sama banyak. Algoritma $A$ dan $B$ dilatih
+menggunakan setengah data #1 dan diuji dengan setengah data #2, kemudian
+dihitung akurasi $P_A^1$ dan $P_B^1$. kemudian data training dan testing di
+silang, dan dihitung $P_A^2$ dan $P_B^2$. Perbedaannya kemudian dihitung sebagai
+berikut;
+\begin{align}
+P^1 = P_A^1 - P_B^1 \nonumber \\
+\text{dan} \nonumber \\
+P^2 = P_A^2 - P_B^2 \nonumber 
+\end{align}
+
+\noindent estimasi dari rata-rata dan varian dari perbedaan diatas, untuk
+tow-fold cross validation dihitung sebagai berikut;
+\begin{align}
+\bar{P} = \frac{P^1 + P^2}{2}; \qquad s^2 = (P^1 - \bar{P})^2 + (P^2 -
+\bar{P})^2
+\end{align}
+
+\noindent dengan $P_i^1$ adalah selisih $P^1$ pada eksekusi ke-$i$, dan $s_i^2$
+adalah estimasi varian dari setiap eksekusi $i, i = 1, \dots, 5$, maka
+perhitungan $\tilde{t}$ adalah sebagai berikut;
+\begin{align}
+\tilde{t} = \frac{P_1^1}{\sqrt{\frac{1}{5}\sum_{i=1}^5 s_i^2}}
+\end{align}
+
+\noindent Hanya satu dari 10 nilai perbedaan yang didapat akan dipergunakan
+dalam perhitungan statistik diatas. Pada metode ini, $\tilde{t}$ mendekati 
+distribusi $t$ dengan 5 derajat kebebasan. Penarikan kesimpulan sama dengan
+metode-metode sebelumnya.
 
 \newpage
 \section{Revision}
@@ -12,53 +127,53 @@
   
 \end{itemize}
 
-\newpage
-\section{Hasil presentasi Prof, Rudi di seminar reboan}
-
-differentiable method like sigmoid is used for possible to find the minimization
-of error.
-
-error prediction
-\begin{align}
-\end{align}
-
-cross entropy error function
-\begin{align}
-	E(W,V) = - \sum d_i \log p_i + (1 - d_i) \log(1 - p_i)
-\end{align}
-$d_i$ is desired output
-
-Optimization method
-\begin{itemize}
-  \item Gradient descent / error backprop
-  \item Conjugate gradient
-  \item Quasi newton method
-  \item Geneticalgorithm
-\end{itemize}
-
-neural network considered as well trained if it can predict training data and
-cross validation separtely
-
-
-Network Pruning : the way to remove unrelevant connection, so at the end we have
-network with connection that is relevant
-try to set a weight = 0 and if the performance is not affected, then it is more
-likely tobe unrelevant
-
-Rule extraction
-
-Re-RX
-Discreate / continous varaible
-algorithm Re-Rx(S, D, C)
-
-Card Dataset
-
-
-AUC , ACC, 
-\begin{align}
-=\sum_{i=1}^{m}\sum_{i=1}^{m}
-\end{align}
-
-$AUC_d$ = $AUC$ = 1 - fp + tp / 2
-
-%=============================================
+% \newpage
+% \section{Hasil presentasi Prof, Rudi di seminar reboan}
+% 
+% differentiable method like sigmoid is used for possible to find the minimization
+% of error.
+% 
+% error prediction
+% \begin{align}
+% \end{align}
+% 
+% cross entropy error function
+% \begin{align}
+% 	E(W,V) = - \sum d_i \log p_i + (1 - d_i) \log(1 - p_i)
+% \end{align}
+% $d_i$ is desired output
+% 
+% Optimization method
+% \begin{itemize}
+%   \item Gradient descent / error backprop
+%   \item Conjugate gradient
+%   \item Quasi newton method
+%   \item Geneticalgorithm
+% \end{itemize}
+% 
+% neural network considered as well trained if it can predict training data and
+% cross validation separtely
+% 
+% 
+% Network Pruning : the way to remove unrelevant connection, so at the end we have
+% network with connection that is relevant
+% try to set a weight = 0 and if the performance is not affected, then it is more
+% likely tobe unrelevant
+% 
+% Rule extraction
+% 
+% Re-RX
+% Discreate / continous varaible
+% algorithm Re-Rx(S, D, C)
+% 
+% Card Dataset
+% 
+% 
+% AUC , ACC, 
+% \begin{align}
+% =\sum_{i=1}^{m}\sum_{i=1}^{m}
+% \end{align}
+% 
+% $AUC_d$ = $AUC$ = 1 - fp + tp / 2
+% 
+% %=============================================
