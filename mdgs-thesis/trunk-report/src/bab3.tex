@@ -76,6 +76,9 @@ dilakukan sedemikian sehingga menginterpolasi setiap titik secara halus. Oleh
 karena itu, sebelum langkah ini dilakukan, QRS complex harus dideteksi  terlebih
 dahulu dan PQ interval sudah ditentukan.
 
+\addFigure{width=0.7\textwidth}{pics/bwrsample.png}{fig:bwrsample}{Sinyal ECG
+asli dan hasil proses BWR serta garis isoelectrik (estimasi)}
+
 Metode interpolasi cubic spline adalah salah satu cara untuk fitting kurva pada
 data eksperimental yang bentuk dari fungsinya maupun turunannya tidak diketahui.
 Metode ini menggunakan polinomial pangkat tiga yang diasumsikan berlaku pada
@@ -122,20 +125,20 @@ dikembangkan oleh Gari Clifford \cite{clifford-2005} yang bersifat open source.
 Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
 \pic~\ref{fig:bwrsample}.
 
-\addFigure{width=0.8\textwidth}{pics/bwrsample.png}{fig:bwrsample}{Sinyal ECG
-asli dan hasil proses BWR serta garis isoelectrik (estimasi)}
-
 %-----------------------------------------------------------------------------%
 \section{Ekstraksi Beat}
 \label{sec:ekstractbeat}
 %-----------------------------------------------------------------------------%
 Untuk melakukan pengenalan kelaianan arrhytmia, ada 2 cara yang dapat dilakukan.
-Cara pertama adalah dengan mendeteksi karakteristik time interval dari sinyal
-ECG seperti PR interval, PR segment, QRS interval, ST segment, ST interval, QT
-interval dan karakteristik morfologi lainnya. Cara yang kedua adalah dengan
-mendeteksi kelainan berdasarkan informasi sinyal beat-by-beat, dimana pada
-metode ini, rangkaian sinyal ECG di segmentasi menjadi sekumpulan beat seperti
-yang dilakukan pada \cite{Ghongade.1}, \cite{zhao-2005}.
+Cara (1) adalah dengan mendeteksi karakteristik time interval dari sinyal ECG
+seperti PR interval, PR segment, QRS interval, ST segment, ST interval, QT
+interval dan karakteristik morfologi lainnya. Cara (2) adalah dengan mendeteksi
+kelainan berdasarkan informasi sinyal \emph{beat-by-beat}, dimana pada metode
+ini, rangkaian sinyal ECG di segmentasi menjadi sekumpulan beat seperti yang
+dilakukan pada \cite{Ghongade.1}, \cite{zhao-2005}.
+
+\addFigure{width=0.6\textwidth}{pics/ecgcutoff.png}{fig:ecgcutoff}{Ilustrasi
+teknik segmentasi beat.}
 
 Pada penelitian ini, segmentasi beat dipilih karena dataset sudah menyediakan 
 anotasi tambahan mengenai posisi puncak gelompang R (R-peak). Dengan informasi
@@ -146,62 +149,52 @@ dimulai dari posisi $R-150$ sampai $R+149$, sehingga didapat beat dengan lebar
 300 sampel data. Ilustrasi dapat dilihat pada \pic~\ref{fig:ecgcutoff}. Hasil 
 dari proses segmentasi tersebut dapat dilihat pada \pic~\ref{fig:ecgplot}.
 
-\addFigure{width=0.8\textwidth}{pics/ecgcutoff.png}{fig:ecgcutoff}{Ilustrasi
-teknik segmentasi beat.}
-
-\addFigure{width=0.8\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh  beat dari
+\addFigure{width=0.6\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh  beat dari
 5 jenis arrhytmia dan 1 beat normal.}
 
 Dari proses segmentasi yang telah dilakukan didapat sejumlah beat yang
 dilengkapi dengan label anotasi nya seperti yang ditunjukkan pada
 \tab~\ref{tbl:beatstat}.
 
-\addTableFromFigures{width=0.7\textwidth}{pics/beatstat.png}{tbl:beatstat}{Jumlah
-Beat untuk setiap jenis anotasi pada MIT-BIH database}
-
 Dari \tab~\ref{tbl:beatstat} dapat dilihat jumlah beat untuk tiap label anotasi
 tidak berimbang dan bahkan ada yang berjumlah sangat kecil, yaitu 2 beat untuk
 jenis Supraventrikular premature beat. 
+
+\addTableFromFigures{width=0.7\textwidth}{pics/beatstat.png}{tbl:beatstat}{Jumlah
+Beat untuk setiap jenis anotasi pada MIT-BIH database}
 
 Sesuai dengan standar AAMI, seperti yang terlihat pada \tab~\ref{tbl:aami}, maka
 jenis beat yang akan digunakan adalah 15 beat pertama yang ditunjukkan dengan
 kotak hitam pada \tab~\ref{tbl:beatstat}. Karena jumlah 3 beat terakhir sangat
 kecil, maka untuk saat ini hanya 12 kelas saja yang nantinya akan digunakan
-dalam proses pengenalan. \\
+dalam proses pengenalan. 
 
 \addTableFromFigures{width=1\textwidth}{pics/tblaami.png}{tbl:aami}{Pemetaan
 jenis beat pada MIT-BIH Arrhytmia database dengan kelas beat pada
 AAMI\cite{Philip.1}}
+
 %-----------------------------------------------------------------------------%
 \section{Noise/Outlier Removal}
 %-----------------------------------------------------------------------------%
 Untuk menganalisis hasil ekstraksi beat yang dilakukan pada tahap sebelumnya
-(sub-bab \ref{sec:ekstractfitur}), beat yang dihasilkan kemudian dikelompokkan
+(sub-bab \ref{sec:ekstractbeat}), beat yang dihasilkan kemudian dikelompokkan
 berdasarkan tipe masing-masing arrhytmia dan diplot menggunakan aplikasi matlab.
 Empat jenis arrhytmia diplot seperti yang diilustrasikan pada
-\pic~\ref{fig:ecg:plotecgoutlier}.
+\pic~\ref{fig:plotecgoutlier}.
 
 \addFigure{width=1\textwidth}{pics/plotecgoutlier.jpg}{fig:plotecgoutlier}{Plot
 Empat tipe arrhytmia hasil proses ekstraksi fitur}
 
-\TODO{need to be reviewed} 
 Dari hasil pengamatan terlihat bahwa terdapat beat ECG pada tiap-tiap tipe
-arrhytmia yang lain dari distribusi data kebanyakan, dimana dalam hal ini
-disebut outlier. Outlier ini jika digunakan untuk melatih jaringan saraf
-yang dibangun dapat menyebabkan ketidak-akuratan data karena model akan mencoba
-mengakomodasi outlier tersebut, namun akan berimbas pada kinerja dari jaringan
-saraf karena akan menurunkan tingkat pengenalan terhadap beat tersebut. 
-Oleh karena itu, beat yang terindikasi menjadi outlier harus dihilangkan.
+arrhytmia yang berada diluar distribusi masing-masing tipe, dimana dalam
+hal ini diistilahkan dengan outlier. Outlier ini jika digunakan untuk melatih
+jaringan saraf yang dibangun dapat menyebabkan ketidak-akuratan data karena 
+model akan mencoba mengakomodasi outlier tersebut, namun akan berimbas pada 
+kinerja dari jaringan saraf karena akan menurunkan tingkat pengenalan terhadap
+beat tersebut. Oleh karena itu, beat yang terindikasi menjadi outlier harus dihilangkan.
 
-Untuk menghilangkan outlier pada tiap kelas, ada beberapa teknik yang dapat
-dilakukan salah satunya adalah teknik Inter-Quartile Range (IQR). Pada umumnya
-IQR digunakan untuk univariate data, tapi pada penelitian ini, teknik IQR
-digunakan untuk multivariate data dengan asumsi penerapannya dilakukan tanpa
-memperhitungkan korelasi antar fitur yang biasanya didapat dengan covariance
-matrix. Algoritma untuk menghilangkan outlier dapat dilihat pada 
-algoritma~\ref{alg:outlier}.
- 
-\begin{algorithm}  
+\begin{algorithm}
+\scriptsize 
 \caption{Mencari dan menghilangkan outlier beat}          
 \label{alg:outlier}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -231,23 +224,44 @@ algoritma~\ref{alg:outlier}.
 \end{algorithmic}
 \end{algorithm}
 
+Untuk menghilangkan outlier pada tiap kelas, ada beberapa teknik yang dapat
+dilakukan salah satunya adalah teknik Inter-Quartile Range (IQR). Pada umumnya
+IQR digunakan untuk univariate data, tapi pada penelitian ini, teknik IQR
+digunakan untuk multivariate data dengan asumsi penerapannya dilakukan tanpa
+memperhitungkan korelasi antar fitur yang biasanya didapat dengan covariance
+matrix. Algoritma untuk menghilangkan outlier dapat dilihat pada 
+algoritma~\ref{alg:outlier}.
+
+\addFigure{width=0.7\textwidth}{pics/detectoutlier.png}{fig:detectoutlier}{Ilustrasi
+Outlier detection menggunakan IQR}
+
 Pada \pic~\ref{fig:detectoutlier}  dapat dilihat ilustrasi pendeteksian outlier
 dengan menggunakan teknik IQR. Sampel data yang memiliki fitur berada diluar
 rentang quartil yang ditentukan akan dianggap outlier, dalam hal ini sampel data
 dengan fitur bertanda $+$ berwarna merah.
-\addFigure{width=1\textwidth}{pics/detectoutlier.png}{fig:detectoutlier}{Ilustrasi
-Outlier detection menggunakan IQR}
+
+\addFigure{width=0.7\textwidth}{pics/hasiloutlierremoval.png}{fig:hasilremove}{Plot
+beat RBBB setelah dilakukan proses penghapusan outlier beat}
 
 Setelah dilakukan proses pendeteksian dan penghapusan outlier beat dengan
 menggunakan algoritma~\ref{alg:outlier}, maka didapatkan hasil beat yang jika
 diplot seperti yang ditunjukkan pada \pic~\ref{fig:hasilremove}
 
-\addFigure{width=1\textwidth}{pics/hasiloutlierremoval.png}{fig:hasilremove}{Plot
-beat RBBB setelah dilakukan proses penghapusan outlier beat}
+\addTableFromFigures{width=0.7\textwidth}{pics/beatstat-nonoutlier.png}
+{tbl:beatstat-nonoutlier}{Data Statistik jumlah beat untuk setiap  kategori
+arrhymia setelah dilakukan proses penghilangan outlier.}
 
 Dari \pic~\ref{fig:hasilremove} dapat dilihat beat outlier yang terdapat pada
 sinyal ECG di-kecualikan/dihapus dan menghasilkan kumpulan beat dengan sebaran
-sesuai dengan rentang quartil yang ditentukan.
+sesuai dengan rentang quartil yang ditentukan. Pada
+Tabel~\ref{tbl:beatstat-nonoutlier} dapat dilihat data statistik jumlah beat
+yang dihasilkan untuk setiap tipe arrhytmia setelah dilakukan penghilangan outlier
+pada data. Seperti yang telah disebutkan sebelumnya, karena jumlah beat yang
+sedikit, untuk saat ini, proses pengenalan akan dilakukan hanya pada 12 kategori
+pertama yang terdapat pada tabel tersebut (dapat dilihat pada bagian yang
+didalam kotak hitam).
+
+
 
 %-----------------------------------------------------------------------------%
 \section{Ekstraksi dan Reduksi Fitur}
@@ -255,22 +269,105 @@ sesuai dengan rentang quartil yang ditentukan.
 Ekstraksi fitur merupakan suatu bagian yang penting dalam sistem pngenalan pola
 karena pemilihan fitur yang digunakan sangat mempengaruhi performa dari sistem
 yang dikembangkan. Terdapat berbagai cara yang bisa digunakan untuk melakukan
-ekstraksi fitur, salah satunya adalah dengan menggunakan Discrete Wavelet
-Trasform (DWT).
+ekstraksi fitur, salah satunya adalah dengan menggunakan \emph{Discrete Wavelet
+Trasform} (DWT). 
 
-Studi tentang penggunaan beberapa macam mother wavelet pada pengolahan data
-sinyal jantung dilakukan oleh 
+Seperti yang telah diuraikan pada tinjauan pustaka \ref{sec:wt}, disebutkan
+bahwa kegunaan dari wavelet itu adalah (1) Untuk mengkstraksi informasi dari
+suatu data sinyal, (2) Untuk melakukan kompresi data, (3) Untuk
+memfilter/membersihkan data sinyal. Yang pertama dilakukan untuk mendapat
+informasi karakteristik dari sinyal tersebut seperti waktu kemunculan suatu
+frekuensi tertentu pada sinyal. Yang kedua sangat jelas adalah untuk memampatkan
+data, umumnya untuk keperluan transmisi dll. Yang ketiga adalah untuk memfilter,
+misal frekuensi tinggi, yang terdapat pada sinyal tersebut. Umumnya langkah yang
+dilakukan adalah dengan melakukan dekomposisi, aproksimasi dan detil, dimana
+aproksimasi mengandung komponen frekuensi rendah dan detil mengandung komponen
+frekuensi tinggi. Setelah dilakukan sampai level tertentu, kemudian sinyal
+direkonstruksi kembali, sehingga akan menghasilkan sinyal dengan mereduksi
+kandungan frekuensi tinggi. Jadi disini terdapat langkah
+dekomposisi-rekonstruksi.
 
+\addFigure{height=0.7\textheight}{pics/norm-wavelet.png}{fig:norm-wavelet}{Contoh
+sinyal Normal ECG hasil dekomposisi (aproksimasi) tiap level dengan menggunakan
+wavelet daubechies8} 
 
-\newpage
+Di bidang biomedical, transformasi wavelet dapat digunakan untuk mengekstraksi
+dan mendeteksi kemunculan gelombang P, Q, R, S, T maupun time interval antar
+gelombang seperti yang dilakukan Zheng dkk\cite{Zheng:1995} dan Haque dkk
+\cite{haque:2002}. Namun, pada penelitian ini transformasi wavelet diskrit 
+akan digunakan untuk mengekstraksi dan mereduksi fitur dari data dasar
+yang dihasilkan dari ekstraksi beat pada tahap sebelumnya, dimana tujuannya
+adalah untuk mencari fitur yang dapat merepresentasikan pola dengan baik.
+\emph{Mother wavelet} yang akan digunakan adalah wavelet daubechies dimana Guler
+dkk.\cite{guler:2005} telah menunjukkan bahwa proses ekstraksi fitur menggunakan
+wavelet daubechies memberikan hasil yang lebih baik dibandingkan dengan wavelet
+orthogonal yang lain.
+
+\addFigure{height=0.7\textheight}{pics/norm-wavelet-det.png}{fig:norm-wavelet-det}{
+Contoh sinyal Normal ECG hasil dekomposisi (detail) tiap level dengan
+menggunakan  wavelet daubechies8}
+
+Pada proses ekstraksi fitur ini, ECG beat akan didekomposisi secara bertahap
+dari level 1 sampai dengan level 5, yang artinya proses dekomposisi akan
+menghasilkan lima komponen detail $d_1,\dots, d_5$ dan salah satu dari
+aproksimasi $a_1, \dots, a_5$, tergantung dari level dekomposisi yang akan
+dipakai. Jika kita memilih dekomposisi level 5, maka akan didapat $a_5,
+d_1,\dots,d_5$, dan kemudian dipilih koefisien yang tepat untuk
+merepresentasikan sinyal dengan baik. Pada dasarnya, koefisien wavelet ini
+merupakan representasi distribusi energi dari sinyal dalam dimensi waktu dan
+frekuensi. Pada \pic~\ref{fig:norm-wavelet} ditunjukkan komponen aproksimasi tiap
+level dari hasil dekomposisi dengan menggunakan wavelet daubechies8 sebanyak 5
+level. Setiap level proses dekomposisi menghasilkan jumlah koefisien $a_1,
+\dots, a_5$ secara berurutan 157, 86, 50,32 dan 23 koefisien wavelet. 
+
+Pada \pic~\ref{fig:norm-wavelet-det} ditunjukkan komponen detail dari proses
+dekomposisi sebanyak 5 level dimana jumlah koefisien untuk masing-masing
+komponen $d_1,\dots, d_5$ secara berurutan adalah 157, 86, 50,32 dan 23
+koefisien wavelet.  
+
+Pada penelitian ini, ekstraksi fitur menggunakan dua pendekatan yang nantinya
+akan diujicobakan pada tahap selanjutnya, diantaranya adalah;
 \begin{enumerate}
-  \item Dari buku   Statistical Pattern Recognition (p414)
-	We now consider the problem of detecting outliers in multivariate data. This is one of
-	the aims of robust statistics. Outliers are observations that are not consistent with the
-	rest of the data. They may be genuine observations (termed discordant observations by
-	Beckman and Cook, 1983) that are surprising to the investigator. Perhaps they may be
-	the most valuable, indicating certain structure in the data that shows deviations from
-	normality. Alternatively, outliers may be contaminants, errors caused by copying and
-	transferring the data. In this situation, it may be possible to examine the original data
-	source and correct for any transcription errors. 
-\end{enumerate}
+  \item Fitur Aproksimasi: fitur akan diekstrak dari setiap level dekomposisi,
+  dan hanya memilih komponen aproksimasi pada setiap level. Sehingga akan
+  dihasilkan 5 model data fitur yaitu 
+  \begin{itemize}
+    \item Fit1($a_1$) dengan 157 fitur , 
+    \item Fit2($a_2$) dengan 86 fitur, 
+    \item Fit3($a_3$) dengan 50 fitur,
+    \item Fit4($a_4$) dengan 32 fitur, 
+    \item Fit5($a_5$) dengan 23 fitur 
+  \end{itemize}
+   
+  \item Fitur Statistik: dari 5 level dekomposisi, akan dihasilkan
+  $a_5,d_1,\dots,d_5$. Semua komponen koefisien yang dihasilkan akan digunakan.
+  Karena jumlah fitur menjadi 371 (23+157+86+50+32+23) maka untuk mereduksi
+  jumlah fitur, dicari fitur statistik untuk setiap komponen,  yakni \emph{min},
+  \emph{mean}, \emph{max} dan \emph{standard deviasion}. Karena  ada enam
+  komponen wavelet, satu aproksimasi dan lima detail, maka akan  didapat Fit6
+  dengan jumlah 24 fitur data.
+\end{enumerate} 
+
+
+
+% Input selection has two
+% meanings: (1) which components of a pattern, or (2) which
+% set of inputs best represent a given pattern. The computed
+% discrete wavelet coefficients provide a compact representation
+% that shows the energy distribution of the signal in time
+% and frequency
+
+% \newpage
+% \begin{enumerate}
+%   \item Apakah mungkin penyebab kegagalan pendeteksian unknown karena outlier
+%   nya menggunakan IQR
+%   \item Dari buku   Statistical Pattern Recognition (p414)
+% 	We now consider the problem of detecting outliers in multivariate data. This is one of
+% 	the aims of robust statistics. Outliers are observations that are not consistent with the
+% 	rest of the data. They may be genuine observations (termed discordant observations by
+% 	Beckman and Cook, 1983) that are surprising to the investigator. Perhaps they may be
+% 	the most valuable, indicating certain structure in the data that shows deviations from
+% 	normality. Alternatively, outliers may be contaminants, errors caused by copying and
+% 	transferring the data. In this situation, it may be possible to examine the original data
+% 	source and correct for any transcription errors. 
+% \end{enumerate}

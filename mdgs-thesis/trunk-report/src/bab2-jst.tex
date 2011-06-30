@@ -99,8 +99,7 @@ $w_p$, neuron pemenang adalah;
 
 Terdapat beberapa metode JST yang mengadopsi aturan ini diantaranya adalah SOM
 dan LVQ.
-\glsreset{lvq}
-\subsection{\Gls{lvq}}
+\subsection{Learning Vector Quantization (LVQ)}
 \glsreset{lvq}
 
 \Gls{lvq} yang dikembangkan oleh Teuvo Kohonen (1986) \cite{Kohonen-1986b}
@@ -128,6 +127,7 @@ dengan masukkannya, $f(x) = x$.
 Secara umum, algoritma LVQ dapat ditunjukkan pada algoritma \ref{alg:lvq}.
 
 \begin{algorithm}  
+\scriptsize 
 \caption{Pseudocode Algoritma LVQ}          
 \label{alg:lvq}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -137,20 +137,20 @@ Secara umum, algoritma LVQ dapat ditunjukkan pada algoritma \ref{alg:lvq}.
 	\STATE $t \leftarrow 0$
 	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
 		\STATE $x \leftarrow $ getNextSample()
-		\STATE $train(W, x)$
-		\STATE $\qquad $$w \leftarrow $ getClosestPrototipe()
-		\STATE $\qquad $updatePrototipe($w$)
+		\STATE $train(W, x) \Downarrow$
+		\STATE $\qquad \leadsto w \leftarrow $ getClosestPrototipe()
+		\STATE $\qquad \leadsto $updatePrototipe($w$)
 		\STATE $t \leftarrow t + 1$
 	\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
-
+ 
 Terdapat beberapa versi dari \gls{lvq} dimana setiap versi merupakan
 penyempurnaan dari versi sebelumnya, baik dari sisi konvergensi 
 maupun inisialisasi awal prototipe. Berikut akan diuraikan beberapa versi
 dari \gls{lvq};
 
-\subsubsection{LVQ1}
+\subsubsection*{LVQ1}
 Pada \gls{lvq} versi pertama, setiap pemberian satu sampel data akan
 mengakibatkan proses update terhadap satu prototipe. Pada setiap iterasi dari
 proses pelatihan, prototipe dengan jarak minimal terhadap input
@@ -184,6 +184,7 @@ pembelajaran.
 Aturan pembelajaran diatas dapat ditunjukkan lebih detail seperti
 yang terlihat pada algoritma \ref{alg:lvq1}
 \begin{algorithm}  
+\scriptsize 
 \caption{Aturan pembelajaran LVQ1 $train(W, x)$}          
 \label{alg:lvq1}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -199,7 +200,7 @@ yang terlihat pada algoritma \ref{alg:lvq1}
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{LVQ2}
+\subsubsection*{LVQ2}
 Pada algoritma LVQ1, proses penyesuaian bobot hanya ditentukan berdasarkan
 prototipe pemenang saja. Namun, pada algoritma LVQ2, proses pembelajaran
 memperhitungkan prototipe tentangga dimana proses pembelajaran ditentukan
@@ -257,6 +258,7 @@ Aturan pembelajaran diatas dapat ditunjukkan lebih detail seperti
 yang terlihat pada algoritma \ref{alg:lvq2}
 
 \begin{algorithm}  
+\scriptsize 
 \caption{Aturan pembelajaran LVQ2 $train(W, x)$}          
 \label{alg:lvq2}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -279,7 +281,7 @@ yang terlihat pada algoritma \ref{alg:lvq2}
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{LVQ2.1}
+\subsubsection*{LVQ2.1}
 Algoritma LVQ2.1 merupakan penyempurnaan dari LVQ2 dimana algoritma ini
 mengabaikan aturan (2) dari kondisi update prototipe LVQ2. Pada algoritma
 LVQ2.1, kategori dari sampel data ($C_x$) \underline{tidak harus sama} dengan
@@ -290,6 +292,7 @@ sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
 \ref{alg:lvq21}, dimana diasumsikan $C_{w_1} = C_x$.
 
 \begin{algorithm}  
+\scriptsize 
 \caption{Aturan pembelajaran LVQ2.1 $train(W, x)$}          
 \label{alg:lvq21}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -310,7 +313,7 @@ sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{LVQ3}
+\subsubsection*{LVQ3}
 Algoritma LVQ2.1 memiliki kelemahan dimana prototipe kemungkinan mengalami
 divergensi selama proses pembelajaran dilakukan\cite{Sato:1998}. Pada algoritma
 LVQ3, koreksi dilakukan terhadap LVQ2.1 dimana untuk memastikan prototipe agar
@@ -326,6 +329,7 @@ dimana $i \in {1,2}$, jika $x, w_1, w_2$ berasal dari kelas yang sama.
 Berikut pada algoritma \ref{alg:lvq3} untuk metode pembelajaran LVQ3
 
 \begin{algorithm}  
+\scriptsize 
 \caption{Aturan pembelajaran LVQ3 $train(W, x)$}          
 \label{alg:lvq3}                           
 \begin{algorithmic}                    % enter the algorithmic environment
@@ -354,8 +358,9 @@ hanya direpresentasikan dengan \underline{hanya satu} prototipe, maka algoritma
 LVQ3 akan sama dengan algoritma LVQ2.1. Algoritma LVQ3 hanya akan berguna, jika
 kategori kelas direpresentasikan dengan lebih dari satu prototipe. 
 
-\glsreset{glvq}
-\subsection{\Gls{glvq}}
+
+\subsection{Generalized Learning Vector Quantization (GLVQ)}
+\label{ssec:glvq}
 \glsreset{glvq}
 
 \Gls{glvq} merupakan algoritma yang dikembangkan oleh A. Sato dan Yamada pada
@@ -464,7 +469,7 @@ pelatihan. Keungulan yang lain adalah bahwa \gls{glvq} tidak sensitif terhadap
 inisialisasi bobot awal yang umumnya dialami oleh LVQ standar \cite{Sato:1999}. 
 
  
-\subsection{\Gls{fnlvq}}
+\subsection{Fuzzy-Neuro Learning Vector Quantization (FNLVQ)}
 
 \Gls{fnlvq} merupakan algoritma pembelajaran yang berbasis kompetisi yang
 dikembangkan oleh Kusumoputro dan Wisnu J \cite{Kusumoputro:2002} dimana
@@ -545,16 +550,16 @@ adalah aturan pembelajaran untuk setiap kondisi;
   	\begin{enumerate}
   	  \item Modifikasi dengan faktor konstan
   	  \begin{align}
-  	  f_l(t+1) &= f_l(t) - (1+\beta) (f(t) - f_l(t)) \nonumber \\
+  	  f_l(t+1) &= f_l(t) - (1+\beta) (f(t) - f_l(t))  \\
   	  f_r(t+1) &= f_r(t) - (1+\beta) (f_r(t) - f(t)) \nonumber \\
-  	  f(t+1)   &= w_i(t+1) 
+  	  f(t+1)   &= w_i(t+1) \nonumber
   	  \end{align}
   	  
   	  \item Modifikasi dengan faktor variabel
 	  \begin{align}
-  	  f_l(t+1) &= f_l(t) - (1 - \mu)(1+\eta)(f(t) - f_l(t)) \nonumber \\
+  	  f_l(t+1) &= f_l(t) - (1 - \mu)(1+\eta)(f(t) - f_l(t))  \\
   	  f_r(t+1) &= f_r(t) - (1 + \mu)(1+\eta)(f_r(t) - f(t)) \nonumber \\
-  	  f(t+1)   &= w_i(t+1)
+  	  f(t+1)   &= w_i(t+1) \nonumber
   	  \end{align}  	  
   	\end{enumerate}
   \end{enumerate}
@@ -571,16 +576,16 @@ adalah aturan pembelajaran untuk setiap kondisi;
   	\begin{enumerate}
   	  \item Modifikasi dengan faktor konstan
   	  \begin{align}
-  	  f_l(t+1) &= f_l(t) + (1+\gamma) (f(t) - f_l(t)) \nonumber \\
+  	  f_l(t+1) &= f_l(t) + (1+\gamma) (f(t) - f_l(t)) \\
   	  f_r(t+1) &= f_r(t) - (1+\gamma) (f_r(t) - f(t)) \nonumber \\
-  	  f(t+1)   &= w_i(t+1) s
+  	  f(t+1)   &= w_i(t+1) \nonumber 
   	  \end{align}
   	  
   	  \item Modifikasi dengan faktor variabel
 	  \begin{align}
-  	  f_l(t+1) &= f_l(t) + (1 - \mu)(1-\kappa)(f(t) - f_l(t)) \nonumber \\
+  	  f_l(t+1) &= f_l(t) + (1 - \mu)(1-\kappa)(f(t) - f_l(t)) \\
   	  f_r(t+1) &= f_r(t) - (1 - \mu)(1-\kappa)(f_r(t) - f(t)) \nonumber \\
-  	  f(t+1)   &= w_i(t+1)
+  	  f(t+1)   &= w_i(t+1) \nonumber
   	  \end{align}  	  
   	\end{enumerate}
   \end{enumerate}
@@ -637,13 +642,13 @@ yang digunakan sebagai nilai threshold. Matrix ideal yang diharapkan untuk
 mendapatkan kinerja terbaik adalah jika menghasilkan matrik identitas.
 
 Selain itu, pendekatan lain yang dilakukan untuk menangani
-sensitifitas pemilihan prototipe awal adalah penelitian yang
-dilakukan oleh Rohmatullah dalam thesis-nya, dimana pendekatan yang dilakukan
-menggunakan konsep Particle Swarm Optimization (PSO) digabungkan dengan
-FNLVQ-MSA. Tujuan dari PSO ini adalah untuk menentukan inisialisasi vektor awal
-terbaik yang dihasilkan dari proses pencarian dengan menggunakan faktor kognitif
-dan sosial sebagai salah satu parameter pencarian. Namun, kelemahannya adalah,
-proses komputasi yang dibutuhkan sangat lama.
+sensitifitas pemilihan prototipe awal adalah penelitian yang dilakukan oleh
+Rohmatullah dalam tesis-nya \cite{Rochmatullah:2009}, dimana pendekatan yang
+dilakukan menggunakan konsep Particle Swarm Optimization (PSO) digabungkan
+dengan FNLVQ-MSA. Tujuan dari PSO ini adalah untuk menentukan inisialisasi
+vektor awal terbaik yang dihasilkan dari proses pencarian dengan menggunakan
+faktor kognitif dan sosial sebagai salah satu parameter pencarian. Namun,
+kelemahannya adalah, proses komputasi yang dibutuhkan sangat lama.
 
 % Dari beberapa uraian diatas, dapat diberikan
 % ilustrasi mengenai pohon algoritma seperti yang terlihat pada \pic~\ref{fig:pohon-alg}
