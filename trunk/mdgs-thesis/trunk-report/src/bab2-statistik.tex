@@ -1,4 +1,5 @@
-\section{Analisis Kinerja}
+\section{Analisis Kinerja secara statistik}
+\label{sec:ujittest}
 Studi perbandingan umumnya dilakukan berdasarkan eksperimen  dengan
 menggunakan data simulasi maupun menggunakan data nyata. Untuk menunjukkan suatu
 algoritma memiliki kinerja yang signifikan terhadap yang lain, dapat dilakukan
@@ -75,7 +76,7 @@ digunakan. Jika nilai $\lvert t \rvert > z$ dengan $z$ adalah nilai tabular yang
 didapat, maka $H_0$ dapat ditolak, dan menerima bahwa memang terdapat perbedaan
 yang signifikan antara kedua algoritma yang dibandingkan.
 
-\subsubsection*{K-Hold Cross Validation paired t-test}
+\subsubsection*{K-Fold Cross Validation paired t-test}
 Metode validasi silang \emph{K-Hold} berusaha untuk menghindari overlap pada
 testing data, dimana pada metode ini, data sampel di partisi menjadi $K$ bagian
 dengan jumlah yang hampir sama, dan setiap bagian digunakan untuk testing
@@ -85,7 +86,7 @@ normal. Dengan menggunakan perhitungan statistik $t$ yang sama pada persamaan
 \ref{eq:t-test}, kemudian nilai $t$ dibandingkan dengan nilai dari tabel
 distribusi $t$ untuk menarik kesimpulan.
 
-\subsubsection*{Dietterich’s 5 3 2-Fold Cross-Validation Paired t-Test}
+\subsubsection*{Dietterich’s 5 x 2-Fold Cross-Validation Paired t-Test}
 Pada metode ini, prosedur ujicoba dilakukan dengan mengulang \emph{2-fold cross
 validation} sebanyak 5 kali, dimana disetiap eksekusi validasi silang, data
 sampel dipartisi menjadi dua sama banyak. Algoritma $A$ dan $B$ dilatih
@@ -118,14 +119,14 @@ dalam perhitungan statistik diatas. Pada metode ini, $\tilde{t}$ mendekati
 distribusi $t$ dengan 5 derajat kebebasan. Penarikan kesimpulan sama dengan
 metode-metode sebelumnya.
 
-\newpage
-\section{Revision}
-\begin{itemize}
-  \item Cari paper yang menyatakan GLVQ menjamin konvergensi bobot
-  \item Cari paper yang menyatakan GLVQ tidak sensitif terhadap inisialisasi
-  bobot awal. ketemu -> \cite{Sato-1999}
-  
-\end{itemize}
+% \newpage
+% \section{Revision}
+% \begin{itemize}
+%   \item Cari paper yang menyatakan GLVQ menjamin konvergensi bobot
+%   \item Cari paper yang menyatakan GLVQ tidak sensitif terhadap inisialisasi
+%   bobot awal. ketemu -> \cite{Sato-1999}
+%   
+% \end{itemize} 
 
 % \newpage
 % \section{Hasil presentasi Prof, Rudi di seminar reboan}

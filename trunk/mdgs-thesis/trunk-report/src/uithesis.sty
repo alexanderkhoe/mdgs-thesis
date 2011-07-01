@@ -98,7 +98,8 @@
 % 
 % Digunakan untuk mengatur caption dalam dokumen.
 % 
-\usepackage[font=footnotesize,format=plain,labelfont=bf,up,textfont=up]{caption}
+\usepackage[font=footnotesize,format=plain,labelfont=bf,up,textfont=it,up,skip=0pt,
+center]{caption}
 
 % 
 % Membantu penulisan notasi matematika terutama untuk dokumen dengan banyak 
@@ -357,7 +358,7 @@
 		\begin{center}
 		%\vspace{-10pt}
 		\caption{#4}
-		\vspace{-5pt}
+% 		\vspace{-5pt}
 		\label{#3}
 		\includegraphics[#1]{#2}
 		\end{center}

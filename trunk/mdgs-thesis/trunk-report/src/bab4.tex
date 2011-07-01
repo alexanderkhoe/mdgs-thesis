@@ -89,14 +89,18 @@ pembelajaran secara keseluruhan.
 %-----------------------------------------------------------------------------%
 Metode Fuzzy-Neuro GLVQ yang dikembangkan merupakan metode yang
 mengadaptasi mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode
-Generalized LVQ, dimana hal ini dimotivasi oleh Kelemahan dari FNLVQ yang sensitif terhadap
-inisialisasi bobot awal dan keunggulan dari GLVQ yang menjamin konvergensi dari
-prototipe selama proses pelatihan, dan juga tidak sensitif terhadap inisialisasi
-bobot awal. Sedangkan keunggulan dari FNLVQ adalah memiliki kemampuan untuk
-mengenali data \emph{unknown}.  Dengan penggabungan 2 konsep ini diharapkan
-dihasilkan metode yang tidak sensitif terhadap inisialisasi data awal dan juga
-memiliki kemampuan untuk mengenali \emph{unknown} data. Berikut akan diuraikan
-mengenai metode FNGLVQ.
+Generalized LVQ, dengan harapan dapat meningkatkan tingkat akurasi pengenalan
+kelainan arrhytmia dimana sebaran dari tiap kelas kategori arrhytmia overlapping
+satu sama lain. Berikut akan diuraikan mengenai metode FNGLVQ.
+
+% dimana hal ini  dimotivasi oleh Kelemahan dari FNLVQ yang
+% sensitif terhadap inisialisasi  bobot awal dan keunggulan dari GLVQ yang
+% menjamin konvergensi dari prototipe  selama proses pelatihan, dan juga tidak
+% sensitif terhadap inisialisasi bobot awal. Sedangkan keunggulan dari FNLVQ
+% adalah memiliki kemampuan untuk mengenali data \emph{unknown}.  Dengan
+% penggabungan 2 konsep ini diharapkan dihasilkan metode yang tidak sensitif
+% terhadap inisialisasi data awal dan juga memiliki kemampuan untuk mengenali
+% \emph{unknown} data. 
 
 \subsection{Konsep dasar}
 Perbedaan yang mendasar dari karakteristik pengenalan arrhytmia berdasarkan beat
@@ -115,8 +119,8 @@ similarity antara vektor masukan dengan vektor pewakil adalah 0 (nol), maka
 vektor masukkan tersebut polanya belum pernah diketahui oleh jaringan saraf
 (\emph{unknown}).
 
-\addFigure{width=0.6\textwidth}{pics/overlap.png}{fig:overlap}{Ilustrasi data
-arrhytmia yang tumpang tindih (\emph{overlap}) antar kategori.}
+\addFigure{width=0.6\textwidth}{pics/plotoverlap.png}{fig:overlap}{Ilustrasi
+data arrhytmia yang tumpang tindih (\emph{overlap}) antar kategori.}
 
 Pada pengenalan arrhytmia yang dilakukan pada penelitian ini, yang dikenali
 adalah beat dalam ECG, dimana kemunculan suatu kelainan beat ditandai dengan
