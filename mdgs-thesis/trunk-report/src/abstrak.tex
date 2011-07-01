@@ -18,13 +18,34 @@
 \vspace*{0.5cm}
 
 \noindent
-Tulis abstrak disini
 
+Aritmia atau cardiac aritmia merupakan salah satu penyakit jantung yang dapat
+didiagnosa menggunakan standar ECG. dengan menggunakan ECG, para dokter dapat
+menganalisis aktifitas elektrik jantung dan menentukan tipe dari aritmia yang
+diderita oleh pasien. 
+Pada penelitian ini, proses pengenalan aritmia dilakukan secara
+otomatis menggunakan pendekatan jaringan saraf tiruan. Proses ini dibagi menjadi
+tiga tahap yaitu; pemrosesan data, ekstraksi fitur dan proses pengenalan
+oleh jaringan saraf. Pada proses pengolahan data awal, sinyal ECG disegmentasi
+menjadi satuan beat dengan menggunakan puncak gelombang R sebagai pivot, dan
+dilanjutkan dengan proses baseline wander removal dan outlier removal.
+Transformasi Wavelet kemudian dilakukan untuk mengekstraksi dan mereduksi fitur.
+Setiap beat tunggal kemudian diklasifikasi menjadi 6 dan 12 kelas menggunakan
+metode baru yang dikembangkan disebut Fuzzy-Neuro Learning Vector
+Quantization (FNGLVQ) yang merupakan adaptasi metode Fuzzy-Neuro kedalam GLVQ
+yang dikembangkan oleh A.Sato. 
+
+Dengan menggunakan validasi silang, hasil dari penelitian ini menunjukkan bahwa
+rata-rata tingkat pengenalan beat aritmia 6 kelas menggunakan metode FN-GLVQ
+sebesar 98.53\% dan untuk 12 kelas sebesar 96.33\% dimana metode yang
+dikembangkan ini memberikan hasil yang lebih baik daripada GLVQ sebesar 97.03\%
+dan 94.13\% untuk 6 kelas dan 12 kelas.
+\\
 
 \vspace*{0.2cm}
 
 \noindent Kata Kunci: \\ 
-\noindent \todo{Tuliskan kata kunci yang berhubungan dengan laporan 
-	disini} \\
+\noindent Fuzzy-Neuro Generalized Learning Vector Quantization, FNGLVQ,
+GLVQ, sistem pengenalan beat aritmia\\
 
 \newpage
