@@ -1,0 +1,132 @@
+\section{Wavelet Transform}
+\label{sec:wt}
+
+Metode transformasi berbasis wavelet merupakan sarana yang dapat digunakan untuk
+menganalisis sinyal non-stasioner, yaitu sinyal dengan kandungan frequensi yang
+bervariasi terhadap waktu. Metode ini sangat populer dalam beberapa tahun
+terakhir. Analisis wavelet dapat digunakan untuk menunjukkan kelakuan sementara
+pada suatu sinyal, atau dapat juga digunakan untuk mem-filter, menghilangkan
+sinyal data yang tidak diinginkan (\emph{noise}) dan atau meningkatkan kualitas
+dari data. Selain itu, transformasi wavelet juga dapat digunakan untuk
+memampatkan (\emph{compressing}) data \cite{Agfi:2006}.
+
+Transformasi wavelet merupakan transformasi yang menggunakan kernel terintegrasi
+yang dinamakan dengan wavelet. Wavelet dapat digunakan sebagai kernel
+terintegrasi untuk analisis serta ekstraksi informasi suatu data dan juga
+sebagai basis penyajian/karakteristik dari suatu data. Kelebihan dari analisis
+sinyal menggunakan wavelet adalah terletak dari sifat terpenting wavelet yaitu
+lokalisasi waktu-frekuensi (\emph{time-frequency localization}) yang
+diistilahkan dengan \emph{compact support} \cite{guler:2005}. Dengan menggunakan
+wavelet dapat dipelajari karakteristik sinyal secara lokal dan detil sesuai dengan skala-nya,
+dimana hal ini menunjukkan kegunaan dari analisis pada sinyal non-stasioner,
+karakteristik berbeda pada skala yang berbeda. Pada dasarnya, cara kerja dari
+wavelet dalam mengekstraksi data adalah dengan menggunakan proses penguraian
+(\emph{decomposition}) atau ekspansi deret, yaitu dengan cara ekspansi tak
+berhingga dari wavelet yang diulur atau \emph{dilated} dan digeser atau
+\emph{translated}.
+
+Transformasi wavelet dikembangkan sebagi suatu alternatif pendekatan pada
+Transformasi Fourier Waktu Pendek (Short Time Fourier Transform = STFT) dalam
+mengatasi masalah resolusi. Pada STFT, skala dari jendela yang
+digunakan bersifat konstan, sedangkan pada Transformasi wavelet, lebar dari
+jendela akan berubah-ubah selama proses transformasi dilakukan dalam menghitung
+masing-masing komponen spektrum. Dimana hal ini merupakan ciri khas dari
+Transformasi Wavelet. Dengan karakteristik seperti itu, dengan transformasi
+wavelet akan dapat diperoleh resolusi waktu dan frekuensi yang jauh lebih baikdaripada metode-metode yang lain.
+Persamaan transformasi wavelet (WT) kontinu pada signal $f(x)$ dapat
+didefinisikan sebagai berikut;
+\begin{align}
+\label{eq:wavelet_transform}
+	W_{s}f(x) &= f(x) * \Psi_{s}(x) = \frac{1}{s}\int^{+\infty}_{-\infty}f(t)\Psi(\cfrac{x - t}{s})dt
+\end{align}
+
+\noindent dimana $s$ adalah faktor skala,  $\Psi_{s}(x) =
+\cfrac{1}{s}\Psi(\cfrac{x}{s})$ adalah dilatasi dari fungsi jendela, yang
+kemudian dikenal dengan wavelet penganalisis $\Psi(x)$, $t$ adalah  faktor
+translasi/pergeseran dari fungsi jendela tersebut. Dari persamaan
+\ref{eq:wavelet_transform} ditunjukkan bahwa fungsi jendela tersebut terdilatasi
+maupun termampatkan berdasarkan faktor skala. Dengan skala yang rendah, maka
+frekuensi tinggi akan terlokalisasi, sedangkan pada skala tinggi, yang
+terlokalisasi adalah frekuensi rendah. 
+
+\addFigure{width=1\textwidth}{pics/waveletcwt.png}{fig:cwt}{Contoh sinyal
+nonstasioner dan hasil dari WT (kontinu)} 
+
+Pada \pic~\ref{fig:cwt} ditunjukkan contoh sinyal nonstasioner dengan kandungan
+frekuensi 250, 500, 750 dan 1000Hz dengan tambahan noise yang kemudian
+ditransformasi menggunakan WT. Dari gambar tersebut terlihat bahwa frekuensi
+250Hz muncul pertama kali yang diikuti dengan frekuensi yang lain. Ketika kita
+akan menganalisis menggunakan wavelet, terdapat tradeoff resolusi antara waktu
+dan frekuensi(pada dasarnya pada WT, direpresetnasikan dengan waktu-skala,
+dimana skala dan frekuensi berbanding terbalik, semakin tinggi skala, maka
+dapat melokalisasi frekuensi rendah dan sebaliknya). Jika skala tinggi
+maka maka semakin tidak jelas resolusi frekuensi, namun
+semakin jelas resolusi waktunya, dan sebaliknya.
+
+\subsection{Descrete Wavelet Transform}
+Pada dasarnya, nilai koefisien dari wavelet untuk jendela wavelet dan
+signal tertentu menunjukkan seberapa dekat korelasi antara wavelet 
+dengan bagian tertentu dari signal tersebut. semakin tinggi koefisien, maka akan
+semakin mirip dimana hasilnya akan sangat tergantung dari bentuk wavelet yang
+dipilih\cite{wavelet:matlab}. Namun jika perhitungan nilai koefisien dilakukan
+untuk semua skala dan posisi (kontinu), maka akan dihasilkan jumlah data yang
+sangat besar. Mallat \cite{Mallat:1989} mengembangkan suatu cara untuk
+menghitung koefisien wavelet dengan mengambil sebagian saja dari skala dan
+posisi berdasarkan pangkat-dua, yang kemudian dikenal dengan istilah
+\emph{dyadic WT}. Hal ini juga dikenal dengan \emph{Discrete Wavelet
+Transform (DWT)}. Dengan menggunakan \emph{dyadic WT} maka analisis akan lebih
+efisien dan cukup  akurat. Algoritma Mallat ini menggunakan filter seperti dalam
+skema \emph{two channel subband coder} dan dikenal juga dengan Transformasi
+Wavelet Cepat (\emph{Fast Wavelet Transform}).
+Dalam banyak kasus pemrosesan sinyal, kandungan frekuensi rendah adalah hal yang
+penting karena memberikan indentitas dari sinyal yang bersangkutan. Kandungan
+frekuensi tinggi hanya sebagai ``nuansa sinyal'' tambahan. Hal ini dapat
+dianalogikan seperti sinyal suara manusia, jika komponen frekuensi tinggi
+dihilangkan, maka suara akan berubah, namun masih mampu untuk mengetahui apa
+yang diucapkan \cite{wavelet:matlab}. Hal inilah yang mendasari mengapa dalam
+analisis berbasis wavelet banyak digunakan istilah aproksimasi dan detail.
+
+Diberikan $s = 2^j$ dengan $j \in Z, Z$ set integer, maka dyadic WT dari sinyal
+$f(x)$  dapat dihitung menggunakan algoritma Mallat sebagai berikut;
+
+\begin{align}
+	\label{eq:sfn}
+	S_{2^{j}}f(x) &= \sum_{k \in~Z} h_{k}S_{2^{j-1}}f(x - 2^{j-1}k) \\
+	\label{eq:wfn}
+	W_{2^{j}}f(x) &= \sum_{k \in~Z} g_{k}S_{2^{j-1}}f(x - 2^{j-1}k)
+\end{align}
+
+\noindent dimana $S_{2^{j}}$ merupakan operator penghalus, $S_{2^{j}} f(n) =
+a_{j}$. $a_{j}$  adalah koefisien dari frekuensi rendah (skala tinggi) yang
+mengaproksimasi sinyal yang asli, sedangkan $W_{2^{j}} f(n) = d_{j}$, $d_{j}$ 
+adalah koefisien frekuensi tinggi (skala rendah) yang merepresentasikan detail
+dari sinyal asli.
+
+\addFigure{width=0.8\textwidth}{pics/dwtdecompos.png}{fig:decompos}{Ilustrasi
+proses dekomposisi, (a) Dekomposisi satu tingkat, (b) dekomposisi multi tingkat}
+
+Pada \pic~\ref{fig:decompos}a dapat dilihat proses filtering wavelet dimana
+$f(x)$ adalah sinyal asli, kemudian dilewatkan ke filter lolos-rendah
+(\emph{lowpass})  lolos-tinggi (\emph{highpass}) dan menghasilkan dua sinyal,
+\textbf{A}-proksimasi dan \textbf{D}-etail. 
+
+Jika dekomposisi sinyal diteruskan secara iteratif untuk bagian aproksimasinya,
+sehingga suatu sinyal dapat dibagi-bagi kedalam banyak komponen resolusi rendah,
+maka proses ini dinamakan sebagai dekomposisi banyak tingkat atau
+\emph{multilple-level decomposition} seperti yang ditunjukkan pada
+\pic~\ref{fig:decompos}b.
+ 
+Pemilihan fungsi jendela \emph{mother wavelet} dan jumlah level dekomposisi
+dalam analisis menggunakan transformasi wavelet adalah sangat penting.
+Pemilihan jumlah level dekomposisi berdasarkan atas komponen frekuensi
+yang dominan dalam sinyal. Pemilihan yang tepat bertujuan untuk menjaga agar
+bagian signal yang memiliki korelasi yang baik dengan frekuensi yang dibutuhkan
+dalam proses pengenalan tetap ada pada koefisien wavelet. Terdapat berbagai
+macam \emph{mother wavelet} yang dapat digunakan dalam analisis wavelet. Menurut
+Senhadji \cite{Senhadji:1995}, proses dekomposisi dengan menggunakan wavelet
+yang orthonormal akan memberikan informasi yang \emph{non-redundant}. Kelompok
+wavelet orthonormal dan juga \emph{compactly supported} diantaranya adalah
+Daubechies, Symlet dan Coiflet \cite{Agfi:2006}.
+     
+ 
+% calculated with Mallat algorithm as follows:% % Informasi yang dapat% diekstraksi menggunakan wavelet adalah % % % wavelet digunakan untuk melakukan filter frekuensi tinggi,% dimana setelah didekomposisi, kemudian signal direkonstruksi kembali.% % pada penelitian ini, wavelet digunakan untuk mereduksi fitur dari setiap beat% dengan menggunakan coefisien aproksimasi-nya sebagai fitur, sesuai dengan% tingkat level dekomposisi dan mengabaikan coefisien detail, dimana mengandung% signal frekuensi tinggi.% % % Transformasi Fourier% Sampai sekarang transformasi Fourier mungkin masih menjadi transformasi yang% paling populer di area pemrosesan sinyal digital (PSD). Transformasi Fourier% memberitahu kita informasi frekuensi dari sebuah sinyal, tapi tidak informasi% waktu (kita tidak dapat tahu di mana frekuensi itu terjadi). Karena itulah% transformasi Fourier hanya cocok untuk sinyal stationari (sinyal yang informasi% frekuensinya tidak berubah menurut waktu). Untuk menganalisa sinyal yang% frekuensinya bervariasi di dalam waktu, diperlukan suatu transformasi yang dapat% memberikan resolusi frekuensi dan waktu disaat yang bersamaan, biasa disebut% analisis multi resolusi (AMR). AMR dirancang untuk memberika resolusi waktu yang% baik dan resolusi frekuensi yang buruk pada frekuensi tinggi suatu sinyal, serta% resolusi frekuensi yang baik dan resolusi waktu yang buruk pada frekuensi rendah% suatu sinyal. Pendekatan ini sangat berguna untuk menganalisa sinyal dalam% aplikasi-aplikasi praktis yang memang memiliki lebih banyak frekuensi rendah.% Transformasi wavelet adalah suatu AMR yang dapat merepresentasikan informasi% waktu dan frekuensi suatu sinyal dengan baik. Transformasi wavelet menggunakan% sebuah jendela modulasi yang fleksibel, ini yang paling membedakannya dengan% transformasi Fourier waktu-singkat (STFT), yang merupakan pengembangan dari% transformasi Fourier. STFT menggunakan jendela modulasi yang besarnya tetap, ini% menyebabkan dilema karena jendela yang sempit akan memberikan resolusi frekuensi% yang buruk dan sebaliknya jendela yang lebar akan menyebabkan resolusi waktu% yang buruk.

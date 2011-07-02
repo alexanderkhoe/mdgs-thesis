@@ -1,0 +1,645 @@
+%-----------------------------------------------------------------------------%
+\chapter{\babEmpat}
+%-----------------------------------------------------------------------------%
+Pada bab ini akan diuraikan mengenai sekilas metode pelatihan LVQ, metode
+klasifikasi yang dikembangkan, modifikasi yang dilakukan serta perancangan dan
+implementasi dari metode tersebut.
+
+%-----------------------------------------------------------------------------%
+\section{Metode Pelatihan LVQ}
+%-----------------------------------------------------------------------------%
+\subsection{Sistem Epoch}
+Dalam penelitian ini, studi dilakukan terhadap algoritma LVQ yang dikembangkan
+oleh Kohonen dkk \cite{Kohonen92lvqpak}. Dari hasil analisis terhadap
+implementasi algoritma tersebut, yakni LVQ PAK package, \saya menyadari bahwa
+mekanisme iterasi (epoch) yang penulis pahami dan kebanyakan digunakan
+dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
+\begin{enumerate}
+  \item Iterasi pada LVQ PAK, iterasi yang dilakukan untuk sekali proses
+  pembelajaran (satu kali proses update bobot) dengan menggunakan satu data
+  sampel. Hal ini akan berelasi dengan jumlah maksimal iterasi yang ditentukan
+  sebagai parameter pembelajaran. Artinya jika jumlah data sampel yang digunakan
+  sebanyak 100, sedangkan maksimal iterasi ditentukan sebanyak 50 kali, maka
+  hanya 50 data sampel saja yang akan digunakan untuk proses pelatihan, dengan
+  pemilihan data yang random maupun sequensial dan hanya akan terjadi 50 kali
+  proses update bobot.
+  \item Iterasi pada sistem epoch, makna dari satu iterasi adalah
+  proses pelatihan dilakukan untuk semua data sampel yang diberikan. Jika data
+  sampel yang diberikan sebanyak 100, maka jaringan saraf akan dilatih sebanyak
+  100 kali untuk satu iterasi. Jika maksimum iterasi ditentukan sebanyak 50
+  kali, maka akan setara dengan 1500 iterasi pada metode sebelumnya, atau 1500
+  kali proses update bobot.
+\end{enumerate}
+
+Selain sensitif terhadap inisial bobot awal, LVQ standar tersebut juga sangat
+sensitif terhadap jumlah iterasi yang dilakukan dalam proses pembelajaran. Jika
+terlalu banyak iterasi pelatihan dilakukan, maka kecenderungannya adalah bobot
+yang dihasilkan menjauhi bobot optimal (divergen)\cite{Sato:1995}.
+
+\noindent Dalam penelitian ini, sistem iterasi yang akan digunakan adalah
+mengikuti cara yang kedua diatas.
+% 
+% 
+\subsection{Iterasi dengan data Round Robin}
+\label{ssec:round-robin}
+Melihat karakteristik dari proses pembelajaran LVQ dimana aturan update pada
+proses pembelajaran dilakukan secara sequensial, maka perilaku proses
+pembelajaran akan dimodifikasi dari sisi urutan data training. Pada iterasi metode sebelumnya,
+proses iterasi pembelajaran dalam satu epoch dilakukan sesuai  dengan urutan
+data masukan yang diberikan, bisa berupa urutan sejumlah N sampel data kategori
+1 diikuti dengan  M sampel data kategori 2 dan seterusnya, atau bisa juga berupa
+urutan data yang diambil secara random terhadap kategori data. Pada penelitian ini, \saya
+mencoba untuk menerapkan mekanisme round-robin dalam iterasi proses pembelajaran
+LVQ dimana dalam mekanisme ini, urutan data sampel yang diberikan pada proses
+pembelajaran jaringan saraf dipastikan selang seling untuk setiap kategori data
+sejumlah $k$ kategori. Jadi urutan data sampel akan menjadi; $X_{1,c_1},
+X_{1,c_2}, \dots, X_{1,c_k}, X_{2,c_1}, X_{2,c_2}, \dots, X_{2,c_k},
+X_{n_1,c_1},X_{n_2,c_2}, \dots,X_{n_3,c_k}$ dimana $n_i$ adalah jumlah data
+untuk kelas ke-$i$.
+
+Dengan menggunakan mekanisme round-robin diharapkan dapat memperbaiki proses
+pembelajaran secara keseluruhan.
+
+
+% . Berikut pada algoritma \ref{alg:opsi3} dapat dilihat pseudocode dari
+% mekanisme iterasi round-robin ini.
+% 
+% % \begin{algorithm}
+% % \scriptsize
+% % \caption{Mekanisme iterasi secara round robin}
+% % \label{alg:opsi3}
+% % \begin{algorithmic}                    % enter the algorithmic environment
+% % 	\STATE \ldots
+% % 	\STATE $max\_N \leftarrow findMaxNumOfDataInCategory()$
+% % 	\FOR {$i=1 \to max\_N$}
+% % 		\FORALL {$C$ in $Category$}
+% % 			\IF {$i > nC$} continue \ENDIF
+% % 
+% % 			\STATE $sample \leftarrow X_{c,i}$
+% % 			\STATE $train(codebook, sample)$
+% % 			\STATE \ldots
+% % 		\ENDFOR
+% % 	\ENDFOR
+% % 	\STATE \ldots
+% % \end{algorithmic}
+% % \end{algorithm}
+
+%-----------------------------------------------------------------------------%
+\section{Metode Fuzzy Neuro GLVQ}
+%-----------------------------------------------------------------------------%
+Metode Fuzzy-Neuro GLVQ yang dikembangkan merupakan metode yang
+mengadaptasi mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode
+Generalized LVQ, dengan harapan dapat meningkatkan tingkat akurasi pengenalan
+kelainan arrhytmia dimana sebaran dari tiap kelas kategori arrhytmia overlapping
+satu sama lain. Berikut akan diuraikan mengenai metode FNGLVQ.
+
+% dimana hal ini  dimotivasi oleh Kelemahan dari FNLVQ yang
+% sensitif terhadap inisialisasi  bobot awal dan keunggulan dari GLVQ yang
+% menjamin konvergensi dari prototipe  selama proses pelatihan, dan juga tidak
+% sensitif terhadap inisialisasi bobot awal. Sedangkan keunggulan dari FNLVQ
+% adalah memiliki kemampuan untuk mengenali data \emph{unknown}.  Dengan
+% penggabungan 2 konsep ini diharapkan dihasilkan metode yang tidak sensitif
+% terhadap inisialisasi data awal dan juga memiliki kemampuan untuk mengenali
+% \emph{unknown} data. 
+
+\subsection{Konsep dasar}
+Perbedaan yang mendasar dari karakteristik pengenalan arrhytmia berdasarkan beat
+dengan pengenalan aroma adalah dari sisi data yang akan menjadi masukan
+jaringan LVQ. Pada pengenalan aroma, data masukan merupakan data himpunan
+fuzzy, dimana merupakan representasi dari ketidakpastian (\emph{fuzziness})
+sensor dalam membaca informasi aroma, dimana hal ini berimplikasi pada model
+dari vektor pewakil yang diimplementasikan juga dengan himpunan fuzzy. Sedangkan
+pada pengenalan arrhytmia, distribusi data masing-masing kategori saling tumpang
+tindih (\emph{overlaping}) satu sama lain, seperti yang dapat ditunjukkan pada
+\pic~\ref{fig:overlap} sehingga diharapkan dengan menggunakan vektor pewakil
+fuzzy, maka ketidakpastian pola suatu kelas dapat diturunkan. Selain itu, kunci
+utama proses pengenalan \emph{unknown} data pada \gls{fnlvq} adalah terletak
+pada model vektor pewakil dengan menggunakan fuzzy, dimana jika nilai
+similarity antara vektor masukan dengan vektor pewakil adalah 0 (nol), maka
+vektor masukkan tersebut polanya belum pernah diketahui oleh jaringan saraf
+(\emph{unknown}).
+
+\addFigure{width=0.6\textwidth}{pics/plotoverlap.png}{fig:overlap}{Ilustrasi
+data arrhytmia yang tumpang tindih (\emph{overlap}) antar kategori.}
+
+Pada pengenalan arrhytmia yang dilakukan pada penelitian ini, yang dikenali
+adalah beat dalam ECG, dimana kemunculan suatu kelainan beat ditandai dengan
+morfologinya. Menurut dr. Jolanda Jonas, tidak semua kemunculan kelainan beat
+menandakan seorang pasien menderita arrhytmia. Terdapat kelainan beat yang hanya muncul
+sekali dalam data ECG dimana hal ini sering digunakan sebagai indikasi untuk
+pemeriksaan lanjutan, seperti pemasangan alat observasi ECG 24 jam
+(\emph{Holter ECG}). Sehingga himpunan fuzzy sebagai masukan
+sistem, seperti pada sistem pengenalan aroma, tidak cocok untuk digunakan. Oleh
+karena itu pada pengenalan arrhytmia ini, digunakan masukan berupa data
+\emph{crisp}.
+ 
+Seperti yang sudah diuraikan pada sub-bab \ref{ssec:glvq}, fungsi
+diskriminan yang digunakan \gls{glvq} adalah menggunakan \emph{\gls{metric}}, 
+yakni jarak euclidean, sehingga semakin kecil jarak antara input dengan vektor
+pewakil, maka kedua vektor akan semakin mirip. Pada metode yang dikembangkan,
+fungsi diskriminan yang digunakan adalah dengan menggunakan \emph{fuzzy similarity},
+seperti yang digunakan \gls{fnlvq} dalam aplikasi pengenalan aroma.
+
+\addFigure{width=0.6\textwidth}{pics/fmtrim.png}{fig:fmtrim}{Ilustrasi
+Perhitungan similarity crisp data dengan menggunakan fungsi keanggotaan
+segitiga}
+
+Pada fuzzy similarity, perhitungan kemiripan dilakukan dengan mencari derajat
+keanggotaan setiap fitur ($x_i$) terhadap fungsi keanggotaannya ($h_{ij}(x)$), 
+dengan $i=$ fitur ke-$i$ dan $j=$ vektor pewakil kategori ke-$j$ seperti yang
+diilustrasikan pada \pic~\ref{fig:fmtrim}
+\begin{align}
+	\mu_{ij} = h_{ij}(x_i)
+\end{align}
+
+Kemudian nilai derajat keanggotaan ($\mu_{j}$) vektor pewakil
+(\emph{cluster}) dipropagasi ke neuron keluaran dengan menggunakan operasi
+rata-rata (\emph{mean}).
+
+\begin{align}
+	\mu_j = \text{mean}_{\substack{j}} [\mu_{ij}]
+\end{align}
+
+Untuk menentukan pemenang (\emph{winner-take-all}), dipilih vektor
+pewakil dengan nilai similarity ($\mu_j$) terbesar (\emph{max}).  
+\begin{align}
+	w_p = \max_j ( \mu_j )
+\end{align}
+
+dimana vektor pewakil pemenang akan di-update selama proses pembelajaran 
+tergantung dari vektor masukan yang diberikan. Namun pada metode ini, vektor
+pewakil yang akan di-update tidak hanya berdasarkan vektor pemenang saja,
+melainkan ditentukan oleh \emph{missclassification error} dengan menghitung
+jarak relatif antara jarak vektor masukkan($x$) dengan vektor pewakil dari
+kelas yang sama ($C_x = C_w$) dan jarak terbesar vektor masukan dengan vektor
+pewakil yang tidak berasal dari kelas yang sama ($C_x \neq C_{\max_{j}(w_j)}$).
+Lebih jelas dapat dilihat kembali pada sub-bab \ref{ssec:glvq}.
+
+\subsection{Metode FN-GLVQ}
+Pada fuzzy similarity, semakin besar nilainya, maka kedua vektor akan semakin
+mirip. Untuk dapat menggunakan konsep similarity pada \gls{glvq}, maka dicari
+nilai \emph{disimilarity}  dengan menggunakan persamaan $d = 1 - \mu$, dimana
+$d$ adalah nilai jarak (\emph{disimilarity}). Kemudian disubstitusikan ke
+\equ~\ref{eq:mce} didapat;
+
+\begin{align}
+\label{eq:}
+	\varphi(x) &= \frac{(1 - \mu_1) - (1 - \mu_2)}{(1 - \mu_1) + (1 -
+	\mu_2)}\nonumber\\
+	&= \frac{\mu_2 - \mu_1}{2 - \mu_1 - \mu_2}
+\end{align}
+
+dengan $\varphi(x)$ adalah nilai \emph{miss-classification error (MCE)},
+$\mu_1$ adalah nilai similarity vektor masukkan($x$) dengan vektor pewakil dari
+kelas yang sama ($C_x = C_w$), dan $\mu_2$ adalah nilai similarity
+terbesar antara vektor masukan dengan vektor pewakil yang tidak berasal dari
+kelas yang sama ($C_x \neq C_{\max_{j}(w_j)}$).  Untuk dapat mengintegrasikan
+teori fuzzy dengan \gls{glvq}, maka akan dilakukan penurunan  cost function
+terhadap bobot $w$ sebagai berikut; (dengan mengacu pada cost function
+\equ~\ref{eq:costS} dan update rule pada \equ~\ref{eq:genuprule})
+
+\begin{align}
+\label{eq:turunancostS}
+	\frac{\delta S}{\delta w_i} =  
+	\frac{\delta S}{\delta \varphi} . \frac{\delta \varphi}{\delta \mu}.
+	\frac{\delta \mu}{\delta w_i}
+\end{align}
+
+% \begin{align}
+% \label{eq:}
+% 	\Psi(x) &= \frac{f(x)}{g(x)} \nonumber \\
+% 	\frac{\delta \Psi}{\delta x} &=  
+% 	\frac{f'(x)g(x) - f(x)g'(g)}{g(x)^2}
+% \end{align}
+
+\noindent Berikut adalah turunan dari masing-masing bagian turunan berantai pada
+\equ~\ref{eq:turunancostS} adalah sebagai berikut; 
+\begin{align}
+\label{eq:turunanmce1}
+	\frac{\delta \varphi}{\delta \mu_1} &= 
+	\frac{\delta \left(\frac{\mu_2-\mu_1}{2-\mu_1-\mu_2}\right)}{\delta \mu_1} 
+	\nonumber \\ \frac{\delta \varphi}{\delta \mu_1} &=  
+	\frac{-1 . (2 - \mu_1 - \mu_2) - (-1).(\mu_2-\mu_1)}
+	{(2 - \mu_1 - \mu_2)^2} \nonumber \\
+	\frac{\delta \varphi}{\delta \mu_1} &=  
+	-2.\frac{(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}
+\end{align}
+
+\begin{align}
+\label{eq:turunanmce2}
+	\frac{\delta \varphi}{\delta \mu_2} &= 
+	\frac{\delta \left(\frac{\mu_2-\mu_1}{2-\mu_1-\mu_2}\right)}{\delta \mu_2} 
+	\nonumber \\ \frac{\delta \varphi}{\delta \mu_2} &=  
+	\frac{1 . (2 - \mu_1 - \mu_2) - (-1).(\mu_2-\mu_1)}
+	{(2 - \mu_1 - \mu_2)^2} \nonumber \\
+	\frac{\delta \varphi}{\delta \mu_2} &=  
+	2.\frac{(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}
+\end{align}
+
+$\frac{\delta \varphi}{\delta \mu_1}$ dan $\frac{\delta \varphi}{\delta
+\mu_2}$ merupakan turunan MCE terhadap nilai similarity $\mu_1$ dan $\mu_2$.
+Untuk mencari $\frac{\delta \mu}{\delta w_i}$, maka perhitungannya tergantung
+dari fungsi keanggotaan yang digunakan pada setiap vektor pewakil. Pada
+penelitian ini, fungsi keanggotaan $h(x)$ yang dipakai adalah fungsi segitiga,
+seperti yang juga digunakan pada algoritma \gls{fnlvq}, karena fungsi segitiga adalah
+fungsi yang paling sederhana untuk diimplementasikan, dan untuk mendapatkan
+parameter-nya hanya membutuhkan nilai minimum, rata-rata dan maksimum yang
+dihitung dari sebaran data pelatihan. Oleh karena itu, elemen vektor pewakil
+pada algoritma ini akan direpresentasikan sebagai berikut;
+
+\begin{align}
+\label{eq:trimbobot}
+	w_{ij} = (w_{min,ij}, w_{mean,ij}, w_{max,ij})
+\end{align}
+
+\noindent dimana $w_{ij}$ adalah vektor pewakil untuk fitur ke-$i$ dengan
+kategori $j$, dan $w_{min,ij}, w_{mean,ij}, w_{max,ij}$ secara
+berturut-turut nilai minimum, rata-rata dan maksimum dari distribusi data sampel
+fitur ke-$i$ dengan kategori $j$. Untuk lebih menyederhanakan notasi, akan
+digunakan $w_{min}, w_{mean}, w_{max}$ untuk mewakili notasi diatas.
+
+\noindent Jika fungsi keanggotaan segitiga didefinisikan sebagai;
+\begin{align}
+\label{eq:trim}
+	\mu = h(x, w_{min}, w_{mean}, w_{max}) = \left\{ 
+	\begin{array}{ll}
+	0 & , x \leq w_{min}\\
+	\frac{x - w_{min}}{w_{mean} - w_{min}} & , w_{min} < x \leq w_{mean} \\
+	\frac{w_{max} - x}{w_{max} - w_{mean}} & , w_{mean} < x < w_{max} \\
+	0 & , x \geq w_{max}
+	\end{array}
+\end{align}
+
+\noindent maka turunan dari fungsi segitiga diatas, dalam hal ini akan
+diturunkan terhadap nilai rata-rata bobot ($w_{mean}$), didapat sebagai berikut;
+\begin{itemize}
+  \item Untuk nilai $x$ dengan kondisi $w_{min} < x \leq w_{mean}$ :
+  \begin{align}
+	\label{eq:trim1}
+		\mu &= \frac{x - w_{min}}{w_{mean} - w_{min}} \nonumber \\
+			&= (x - w_{min}) . (w_{mean} - w_{min})^{-1} \nonumber \\
+		\frac{\delta \mu}{\delta w_{mean}} &=
+		(x - w_{min}).(-1).(w_{mean} - w_{min})^{-2}.(1) \nonumber \\
+		 &=
+		- \frac{x - w_{min}}{(w_{mean} - w_{min})^2}
+	\end{align}
+
+	\item Untuk nilai $x$ dengan kondisi  $w_{mean} < x < w_{max}$ :
+	\begin{align}
+	\label{eq:trim2}
+		\mu &= \frac{w_{max} - x}{w_{max} - w_{mean}} \nonumber \\
+			&= (w_{max} - x) . (w_{max} - w_{mean})^{-1} \nonumber \\
+		\frac{\delta \mu}{\delta w_{mean}} &=
+		(w_{max} - x).(-1).(w_{max} - w_{mean})^{-2}.(-1) \nonumber \\
+		 &=
+		+ \frac{w_{max} - x}{(w_{max} - w_{mean})^2}
+	\end{align}
+	
+	\item Untuk nilai $x$ dengan kondisi $x <= w_{min}\ \text{AND}\ x >= w_{max}$ :
+	\begin{align}
+	\label{eq:trim3}
+		\mu &= 0 \nonumber \\
+		\frac{\delta \mu}{\delta w_{mean}} &= 0
+	\end{align}
+\end{itemize}
+
+Dari \equ~\ref{eq:trim1}, \ref{eq:trim2} dan \ref{eq:trim3} kemudian
+disubstitusikan ke \equ~\ref{eq:genuprule} didapat aturan update pada proses
+pembelajaran sebagai berikut;
+\begin{itemize}
+  \item Untuk nilai $x$ dengan kondisi $w_{min} < x \leq w_{mean}$ :
+  	\begin{align}
+	\label{eq:uprule11}
+		w_1(t+1) \leftarrow & w_1(t) - \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{x - w_{min}}{(w_{mean} - w_{min})^2}\Bigg) \\
+	\label{eq:uprule12}
+		w_2(t+1) \leftarrow & w_2(t) + \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{x - w_{min}}{(w_{mean} - w_{min})^2}\Bigg) 
+	\end{align}
+  \item Untuk nilai $x$ dengan kondisi  $w_{mean} < x < w_{max}$ :
+	\begin{align}
+	\label{eq:uprule21}
+		w_1 \leftarrow & w_1 + \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{w_{max} - x}{(w_{max} - w_{mean})^2}\Bigg) \\
+	\label{eq:uprule22}
+		w_2 \leftarrow & w_2 - \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{w_{max} - x}{(w_{max} - w_{mean})^2})\Bigg)
+	\end{align}  
+  \item Untuk nilai $x$ dengan kondisi  $x \leq w_{min}$ dan $x \geq w_{max}$ :
+  	\begin{align}
+	\label{eq:}
+		w_i(t+1) \leftarrow & w_i(t) \qquad, i=1, 2     
+	\end{align}  
+\end{itemize}
+
+\noindent dengan $w_1$ adalah vektor pewakil dari kelas yang sama dengan vektor
+masukkan $x$ ($C_x = C_w$), dan $w_2$ adalah vektor pewakil dari kelas yang
+berbeda dengan vektor masukkan dengan nilai similarity terbesar ($C_x \neq
+C_{\max_{j}(w_j)}$). Proses update pada persamaan diatas (\ref{eq:uprule11},
+\ref{eq:uprule12},\ref{eq:uprule21},\ref{eq:uprule22}) dilakukan pada $w_{mean}$
+sedangkan $w_{min}, w_{max}$ mengikuti pergeseran dari $w_{mean}$. 
+\begin{align}
+\label{eq:upruleminmax}
+	w_{min} \leftarrow & w_{mean}(t+1) - (w_{mean}(t) - w_{min}(t)) \\
+	w_{max} \leftarrow & w_{mean}(t+1) + (w_{max}(t) - w_{mean}(t)) \nonumber \\
+\end{align} 
+
+Fungsi Monoton naik yang dipakai pada algoritma ini akan tetap sama dengan yang
+dipakai pada \glvq standar, yakni menggunakan fungsi sigmoid, sehingga
+$\frac{\delta \varphi}{\delta \mu}$ akan sama seperti pada
+\equ~\ref{eq:deltasigmoid}. Sedangkan nilai laju pembelajaran $\alpha$ yang
+digunakan adalah berkisar [0, 1] dan menurun seiring bertambahnya iterasi proses
+pembelajaran. 
+\begin{align}
+\label{eq:alpha}
+	\alpha(t+1) = \alpha_0 \times (1 - \frac{t}{t_{max}})
+\end{align}
+
+Sebagai bagian dari karakteristik algoritma \gls{glvq} dimana terlepas dari
+apakah jaringan saraf benar mengenali vektor masukan maupun tidak, vektor
+pewakil $w_1, w_2$ keduanya secara simultan akan di-update. Namun pada algoritma
+ini, selain melakukan penyesuaian $w_1$ dan $w_2$, dilakukan penyesuaian
+tambahan seperti yang dilakukan pada \gls{fnlvq} yaitu proses penyesuaian
+lebar interval dari fungsi keanggotaan tiap vektor pewakil. 
+\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  \item Jika jaringan bisa mengenali dengan benar vektor masukan yang diberikan,
+  maka fungsi keanggotaan akan diperlebar dengan harapan tingkat pengenalan-nya
+  meningkat. 
+  \item Sebaliknya jika jaringan salah mengenali vektor masukan, maka fungsi
+  keanggotaan akan dipersempit dengan harapan tingkat pengenalan terhadap 
+  vektor masukan menurun. 
+\end{enumerate}
+
+\noindent Kedua langkah diatas hanya akan dilakukan jika nilai $\mu_1 > 0$ atau
+$\mu_2 > 0$. Jika  kedua nilai similarity adalah 0, $\mu_1=0$ dan $\mu_2=0$, 
+maka hal ini berarti semua vektor pewakil sama sekali tidak mengenali vektor 
+masukan yang diberikan. Terdapat 2 kemungkinan; 
+\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  \item Vektor masukan memang berada diluar distribusi dari kategori yang
+  dikenali, 
+  \item Interval dari fungsi keanggotaan (fuzzy) dari vektor pewakil
+  terlalu sempit, sehingga tingkat pengenalan-nya rendah. 
+\end{enumerate}
+
+\noindent Karena ini merupakan proses pelatihan, maka asumsi adalah
+yang ke-2, sehingga untuk membuat jaringan mengenali vektor pewakil, semua
+interval dari fungsi keanggotaan vektor pewakil diperlebar. Berikut adalah
+aturan perlebaran/penyempitan fungsi keanggotaan vektor pewakil yang telah
+dijelaskan pada uraian diatas;
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  \item Jika  $\mu_1 > 0$ atau $\mu_2 > 0$, minimal salah satu dari kedua
+  vektor pewakil mengenali vektor masukan:
+  \begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+    \item Jika pengenalan-nya benar ($\varphi < 0$), maka interval
+    ketidakpastian (\emph{fuzziness}) dari vektor pewakil diperlebar
+    	\begin{align}
+    	\label{eq:increasefuzzy}
+    	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 + (\beta .
+    	\alpha)) \nonumber \\
+    	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean}) . (1 + (\beta .
+    	\alpha)) 
+    	\end{align}
+    \item Jika pengenalan-nya salah ($\varphi \geq 0$), maka interval
+    ketidakpastian (\emph{fuzziness}) dari vektor pewakil dipersempit
+    	\begin{align}
+    	\label{eq:decreasefuzzy}
+    	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 - (\beta .
+    	\alpha)) \nonumber \\
+    	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean}) . (1 - (\beta .
+    	\alpha)) 
+    	\end{align}
+  \end{itemize}
+  
+  Disini, nilai $\beta$ adalah diantara [0,1]. Pada studi kasus yang dilakukan
+  disini, dipilih nilai $\beta = 0.00005$.
+  
+  \item Jika  $\mu_1=0$ dan $\mu_2=0$, yang artinya kedua vektor pewakil
+  tidak mengenali vektor masukan, maka semua fungsi keanggotaan pada semua
+  vektor pewakil pada jaringan diperlebar dengan aturan sebagai berikut:
+  	\begin{align}
+  	\label{eq:increaseall}
+	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 - (\alpha .
+	\gamma)) \nonumber \\ 
+	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean})
+	. (1 + (\alpha . \gamma)) 
+	\end{align}
+	
+	Disini, nilai $\gamma$ adalah diantara [0,1]. Pada studi kasus yang dilakukan
+	disini, dipilih nilai $\gamma = 0.1$.
+\end{itemize}
+  
+\clearpage
+
+\noindent Berikut ini adalah algoritma FNGLVQ secara keseluruhan dalam bentuk
+pseudocode;
+
+\begin{algorithm}  
+\scriptsize 
+\caption{Algoritma FNGLVQ}          
+\label{alg:fnglvq}                           
+\begin{algorithmic}                    % enter the algorithmic environment
+	\REQUIRE $X$ in round-robin mode
+	\STATE Initialize weight vector $W$
+	\STATE Initialize learning rate $\alpha_0$
+	\STATE Initialize maximum iteration $t_{max}$
+	\STATE $t \leftarrow 0$
+	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
+		\FOR{$x_i \in X$}
+% 			\STATE $x \leftarrow $ getNextSampleData()
+			\STATE $\mu_1 \leftarrow $ findSimilarity1($x, W$) where $C_x = C_{w_i}$
+			\STATE $\mu_2 \leftarrow $ findSimilarity2($x, W$) where $\mu_j = \max_{j
+			\wedge j \neq i}(\mu_j) \wedge (C_x \neq C_{w_j})$
+			\IF {$\mu_1 > 0$ OR $\mu_2 > 0$}
+				\STATE $mce \leftarrow $ equation \ref{eq:mce}
+				\STATE $factor1 \leftarrow $ equation \ref{eq:turunanmce1}
+				\STATE $factor2 \leftarrow $ equation \ref{eq:turunanmce2}
+				\STATE
+				\STATE \COMMENT{adjust prototype 1}
+				\IF {$ w_{1, min} < x \leq w_{1,mean}$}
+					\STATE $w_{1,mean} \leftarrow $ equation \ref{eq:uprule11}
+				\ELSIF {$ w_{1, mean} < x \leq w_{1,max}$}
+					\STATE $w_{1,mean} \leftarrow $ equation \ref{eq:uprule21}
+				\ENDIF
+	
+				\STATE $w_{1,min} \leftarrow $ equation \ref{eq:upruleminmax}
+				\STATE $w_{1,max} \leftarrow $ equation \ref{eq:upruleminmax}
+				\STATE
+				\STATE \COMMENT{adjust prototype 2}
+				\IF {$ w_{2, min} < x \leq w_{2,mean}$}
+					\STATE $w_{2,mean} \leftarrow $ equation \ref{eq:uprule12}
+				\ELSIF {$ w_{2, mean} < x \leq w_{2,max}$}
+					\STATE $w_{2,mean} \leftarrow $ equation \ref{eq:uprule22}
+				\ENDIF
+	
+				\STATE $w_{2,min} \leftarrow $ equation \ref{eq:upruleminmax}
+				\STATE $w_{2,max} \leftarrow $ equation \ref{eq:upruleminmax}
+	
+				\STATE
+				\IF {$mce < 0$}
+					\STATE \COMMENT{Increase Fuzziness}
+					\STATE $w_1 \leftarrow$ equation \ref{eq:increasefuzzy}
+				\ELSE
+					\STATE \COMMENT{Decrease Fuzziness}
+					\STATE $w_2 \leftarrow$  equation \ref{eq:decreasefuzzy}
+				\ENDIF
+			\ELSE
+				\STATE \COMMENT{Increase Fuzziness for all vector ref.}
+				\FOR{$w_j \in W$}
+					\STATE $w_j \leftarrow $ equation \ref{eq:increaseall}
+				\ENDFOR
+			\ENDIF
+		\ENDFOR
+	\ENDWHILE
+	\STATE $\alpha \leftarrow $ equation \ref{eq:alpha} 
+\end{algorithmic}
+\end{algorithm}  
+
+\clearpage
+%-----------------------------------------------------------------------------%
+\section{Implementasi Sistem}
+%-----------------------------------------------------------------------------%
+Secara garis besar, sistem pengenalan arrhytmia yang dibangun dapat dilihat
+melalui diagram pada \pic~\ref{fig:diagramAll}. 
+
+\addFigure{width=1\textwidth}{pics/block-diagram.png}{fig:diagramAll}{Blok
+diagram sistem pengenal arrhytmia yang dikembangkan.}
+
+Seperti yang ditunjukkan pada \pic~\ref{fig:diagramAll}, pengembangan sistem
+terdiri dari empat tahap diantaranya;
+\begin{enumerate}
+  \item \emph{Data acquisition} : yaitu tahap perekaman data ECG. Pada tahap
+  ini untuk sementara menggunakan data digital yang disediakan secara bebas di
+  physionet.net khususnya data MIT-BIH arrhytmia database. Kedepannya, tahap ini dapat
+  disubstitusi dengan penelitian yang telah dilakukan oleh peneliti lain dalam tim Arrhytmia.
+  \item \emph{Data preprocessing} : yaitu tahap pengolahan data awal. Pada tahap
+  ini, data dasar diolah sedemikian rupa sehingga dapat merepresentasikan data
+  ECG dengan baik agar dapat meningkatkan kinerja proses pengenalan. Untuk
+  sementara proses pengolahan masih menggunakan paket aplikasi MATLAB v2009a.
+  Kedepannya, proses pengolahan agar dapat diimplementasikan di lingkungan java.
+  \item \emph{Pattern Classification} : yaitu tahap pengembangan metode
+  pengenalan. Pada tahap ini, dikembangkan metode baru FN-GLVQ seperti yang
+  telah diuraikan pada bagian awal bab ini. Semua Metode yang dikembangkan telah
+  di implementasikan di lingkungan java dan siap untuk digunakan dan
+  dikembangkan lebih lanjut.
+  \item \emph{Visualisation} : yaitu tahap visualisasi hasil proses pengenalan.
+  Tahap ini sebenarnya tidak terlalu berbeda dengan tahap ke-3, hanya saja tahap
+  ini diperlukan untuk mempermudah penggunaan aplikasi. Untuk sementara,
+  visualisasi yang dikembangkan merupakan antar muka sederhana, dimana
+  kedepannya dapat disempurnakan.
+\end{enumerate}
+
+Pada diagram \ref{fig:diagramAll}, langkah pengolahan data ECG paper tidak
+dilakukan karena sementara data yang dibutuhkan sudah memadai, dan usaha untuk
+melakukan langkah tersebut tidak-lah mudah, sehingga tidak  mendesak untuk
+dikembangkan.
+
+\subsection{Lingkungan pengembangan}
+Seperti yang telah diuraikan sebelumnya, penelitian ini difokuskan untuk
+menggali representasi data ECG yang memadai serta mengembangkan metode
+pengenalan ECG arrhytmia (\emph{Data preprocessing} dan \emph{Pattern
+Classification}). 
+\begin{enumerate}
+  \item Untuk tahap pengolahan data, dilakukan dengan menggunakan aplikasi
+  Matlab v2009a. Beberapa tahap pengolahan menggunakan kode yang
+  dikembangkan sendiri seperti Beat Extraction, Outlier Removal dan
+  Feature Extraction. Sedangkan untuk tahap baseline wander removal (BWR)
+  menggunakan kode yang disediakan oleh Gari Clifford \cite{clifford-2005} yang
+  bersifat open source.
+  \item Untuk tahap pengembangan sistem pengenal arrhytmia, difokuskan pada
+  pengembangan engine tahap awal dimana tujuannya adalah agar lebih mudah untuk
+  digunakan dan dikembangkan lebih lanjut (\emph{Usability} dan
+  \emph{Modifiability}). Pengembangan engine dilakukan di lingkungan :
+  \begin{itemize}
+    \item Menggunakan Bahasa pemrograman Java dengan JDK v1.6.0\_02
+    \item Dikembangkan dengan menggunakan Eclipse IDE for Java Developers
+    versi: Helios SR2 dengan plugin tambahan Subclipse untuk mendukung
+    Versioning System.
+    \item Library yang digunakan diantaranya;
+    \begin{itemize}
+      \item JFreeChart-1.0.13 untuk dukungan charting, 
+      \item common-lang-2.6, common-math-2.2 dari apache project untuk dukungan
+      fungsi-fungsi IO dan math.
+	\end{itemize}
+  \end{itemize}
+\end{enumerate}
+Seperti disebutkan diatas, pengembangan dilakukan dengan menggunakan eclipse +
+subversion agar pengembangan engine nantinya dapat dikembangkan oleh tim
+peneliti yang lain. Oleh karena itu, untuk sementara kode sumber di-hosting di
+\url{http://code.google.com/p/mdgs-thesis/source/browse/#svn\ trunk\
+mdgs-thesis\ trunk-code} dengan Code license GNU Lesser GPL.
+
+\subsection{Arsitektur}
+Untuk mendukung kemudahan penggunaan dan pengembangan lebih lanjut, Engine
+dirancang seperti yang ditunjukkan pada \pic~\ref{fig:packaged}.
+
+\addFigure{width=0.8\textwidth}{pics/package-diagram.png}{fig:packaged}{Package
+diagram dari engine yang dikembangkan}.
+
+\noindent Seperti yang terlihat pada package diagram \pic~\ref{fig:packaged},
+berikut adalah uraian dari masing-masing package
+\begin{itemize}
+  \item \textbf{master} : merupakan package untuk \texttt{interface} class
+  dimana dapat digunakan untuk mengembangkan metode klasifikasi yang lain.
+  \item \textbf{dataset} : merupakan package untuk menangani data yang akan
+  digunakan untuk proses training maupun testing. Disini ada dua jenis
+  \texttt{class} yang diimplementasikan untuk mengakomodasi jenis data Crisp
+  (\texttt{Dataset}) dan data Fuzzy (\texttt{FCodeBook}), khususnya Fuzzy dengan
+  membership function segitiga. \\ 
+  Untuk memudahkan pengelolaan data, serta mengimplementasikan metode
+  Round-Robin yang diuraikan pada sub-bab \ref{ssec:round-robin},
+  diimplementasikan dengan konsep folding, yaitu pada class
+  \texttt{FoldedDataset} dan untuk tujuan Cross Validation, diimplementasikan
+  class \texttt{KFoldedDataset}. Disamping itu diimplementasikan juga mekanisme
+  untuk normalisasi data (\texttt{DataNormalization}  dan
+  \texttt{ZScoreNormalization}).
+  \item \textbf{lvq, glvq} dan \textbf{fn-glvq} : merupakan package yang
+  terdiri dari metode pengenalan lvq, glvq dan metode baru yang dikembangkan
+  yaitu fn-glvq.
+  \item \textbf{evaluation} : yaitu package yang digunakan untuk melakukan uji
+  test statistik yang umum dilakukan dalam pengembangan suatu metode klasifikasi.
+  \item \textbf{gui} : merupakan package yang digunakan untuk memonitor proses
+  pelatihan yang dilakukan dimana dapat menampilkan perkembangan vektor pewakil
+  tiap iterasi dan tingkat error yang dihasilkan.
+  \item \textbf{utils} : merupakan package utility yang digunakan disebagian
+  beasar paket engine yang dikembangkan.
+\end{itemize} 
+
+Untuk lebih jelasnya, pada \pic~\ref{fig:classdiag} ditunjukkan class diagam
+dari engine yang dikembangkan.
+
+\clearpage
+
+\addFigure{width=1\textwidth}{pics/class-diagram.png}{fig:classdiag}{Class
+diagram dari engine yang dikembangkan.}
+
+
+Berikut ditunjukkan antarmuka sistem yang dapat digunakan untuk menunjukkan
+kerja dari engine yang dikembangkan, pada \pic~\ref{fig:mainform}
+\addFigure{width=0.8\textwidth}{pics/mainform.png}{fig:mainform}{Contoh Antar
+muka yang dikembangkan.}
+
+Seperti yang disebutkan diatas, berikut pada \pic~\ref{fig:codemonitor} adalah
+tampilan antar muka untuk melakukan pengawasan perkembangan proses pembelajaran,
+terutama untuk melihat perkembangan perubahan vektor pewakil untuk setiap  kali
+proses iterasi epoch.
+\addFigure{width=1\textwidth}{pics/codemonitor.png}{fig:codemonitor}{Form
+Codebook Monitor yang digunakan untuk memonitor perkembangan proses
+pembelajaran.}
+
+
