@@ -1,0 +1,224 @@
+% -----------------------------------------------------------------------------%
+\chapter{\babDua}
+% -----------------------------------------------------------------------------%
+% \todo{tambahkan kata-kata pengantar bab 2 disini}
+Pada bab ini akan dijelaskan mengenai berbagai literatur yang mendukung
+penelitian ini diantaranya mulai dari uraian mengenai penyakit jantung,
+khususnya \gls{arrhytmia}, \gls{ecg}, jaringan saraf tiruan, pembelajaran
+berbasis kompetisi, algoritma \gls{lvq} dan beberapa varian-nya, seperti
+algoritma \gls{glvq}.
+
+% -----------------------------------------------------------------------------%
+\section{Penyakit Jantung}
+\label{sec:jantung}
+Penyakit Jantung (\textit{Heart Disease, Cardiopathy}) adalah segala gangguan
+yang timbul dan mempengaruhi jantung \cite{medicinenet.1}. Penyakit jantung
+sering juga disebut dengan \textit{Cardiac Disease}. Jika sudah melibatkan
+kinerja dari jantung dan pembuluh darah, maka disebut dengan
+\textit{Cardiovascular Disease}. Terdapat beberapa jenis penyakit jantung
+diantaranya; Angina, Arrhytmia, Congenital heart disease, Coronary artery
+disease (CAD), Dilated cardiomyopathy, Heart Attack (Myocardial infarction),
+Heart Failure, Hypertrophic cardiomyopathy, Mitral regurgitation, Mitral valve
+prolapse, dan Pulmonary stenosis. 
+
+Secara umum, penyakit Jantung disebabkan oleh beberapa faktor, dimana dapat 
+dikategorikan menjadi 2 berdasarkan Faktor resikonya yaitu  \textit{Major} dan
+\textit{Contributing}.
+\begin{enumerate}
+    \item \textit{Major Risk Factors} : yaitu faktor yang telah terbukti 
+    menyebabkan meningkatnya resiko terhadap penyakit jantung.  Beberapa faktor
+    utama yang menyebabkan terjadinya penyakit jantung adalah;
+	\begin{itemize}
+	    \setlength{\itemsep}{1pt}
+  		\setlength{\parskip}{0pt}
+  		\setlength{\parsep}{0pt}
+	    \item Diabetes (Gula Darah)
+	    \item Tekanan darah tinggi (Hypertension)
+	    \item Merokok (Smoking)
+	    \item Kolesterol tinggi (High cholesterol)
+	    \item Jarang untuk beraktifitas fisik seperti Olahraga  (Lack of physical
+	    activity)
+	    \item Kegemukan (Obesity)
+	\end{itemize}
+
+	\item \textit{Contributing risk factors} ; yaitu salah satu  yang
+	dipertimbangkan oleh dokter yang dapat menyebabkan penyakit jantung seperti;
+	\begin{itemize}
+	  	\setlength{\itemsep}{1pt}
+		\setlength{\parskip}{0pt}
+  		\setlength{\parsep}{0pt}
+	    \item Tingkat Stres
+	    \item Akibat Pil KB (Birth control pills)
+	    \item Hormon Sex (Sex hormones)
+	    \item Alkohol
+	\end{itemize}
+\end{enumerate}
+
+Pada bab ini \saya akan memfokuskan pembahasan
+mengenai arrhytmia, definisi, penyebab dan beberapa kategori penyakit arrhytmia
+yang nantinya akan dikenali oleh sistem.
+
+% -----------------------------------------------------------------------------%
+\subsection{Arrhytmia}
+\label{ssec:arrhytmia}
+\Gls{arrhytmia} atau juga disebut dengan Dysrhytmia adalah kelaian/gangguan
+urutan irama jantung atau gangguan kecepatan dari proses depolarisasi, repolarisasi
+atau keduanya pada jantung \cite{karim.1}. Beberapa pasien terkadang tidak
+menyadari akan kondisi tersebut, dan beberapa pasien lainnya merasakan
+gejala-gejala klinis yang timbul seperti \gls{palpitasi}, pusing, nyeri dada,
+nafas yang pendek. Di lain pihak, orang normal juga memungkinkan mengalami perasaan
+yang sama seperti \gls{palpitasi}, tapi hal tersebut bukan termasuk arrhytmia.
+
+\Gls{heartrate} atau laju denyut jantung orang normal berkisar
+antara 60 sampai dengan 100 denyut per menit\cite{medicinenet.2}. Jika dilihat
+dari \gls{heartrate}, terdapat dua kelompok penyakit \gls{arrhytmia} yaitu;
+\begin{itemize}
+	\item \textbf{Tachycardia} ; yaitu denyut jantung yang cepat, biasanya
+	ditentukan lebih dari 100 denyut per menit. Termasuk didalamnya adalah 
+	\textit{sinus tachycardia}, \textit{paroxysmal atrial tachycardia} (PAT), dan
+	\textit{ventricular tachycardia}. \textit{Tachycardia}  dapat mengakibatkan
+	\gls{palpitasi}. Namun, Tachycardia belum tentu sebuah 	\textit{Arrhythmia}.
+	Peningkatan denyut jantung adalah respon  normal pada latihan fisik atau stres
+	secara emosional.
+
+	\item \textbf{Bradycardia} ; yaitu denyut jantung yang lambat, biasanya kurang
+	dari 60 denyut per menit. Termasuk didalamnya \textit{sinus bradycardia}.
+\end{itemize}
+ 
+Menurut Dr. Sjukri Karim dalam bukunya \cite{karim.1}, \gls{arrhytmia}
+disebabkan oleh faktor aritmogenik yaitu diantaranya;
+\begin{itemize}
+  \item Hipoksia : semua penyakit yang menyebabkan defisiensi oksigen pada
+  miokard misalnya penyakit paru, kardiomiopati, atau penyakit jantung koroner
+  dapat menyebabkan \gls{arrhytmia}.
+  \item Iskemia : miokard yang iskemik oleh sebab apa saja merupakan faktor
+  pencetus timbulnya \gls{arrhytmia}
+  \item Rangsamgam sisimam saraf otonom : rangsangan berlebihan pada saraf
+  simpatis mapun parasimpatis dapat menimbulkan \gls{arrhytmia}.
+  \item Obat-obatan : semua antiaritmia mempengaruhi fase depolarisasi dan
+  repolarisasi jantung, sehingga obat-bat tersebut memiliki efek aritmogenik.
+  Selain itu obat-obatan seperti kafein, aminofilin, antidepresan trisiklik dan
+  digitalis juga memiliki efek aritmogenik.
+  \item Gangguan keseimbangan elektrolit dan gas darah : fase depolarisasi dan
+  repolarisasi otot jantung ditimbulkan oleh perpindahan berbagai ion elektrolit
+  melalui membran sel.
+  \item Regangan dinding otot jantung : dinding jantung yang teregang seperti
+  pada dilatasi atrium atau ventrikel akibat gagal jantung, kardiomiopati atau
+  penyakit-penyakit katub dapat menyebabkan aritmia.
+  \item Kelainan struktur sistem konduksi : penderita yang memiliki fetal
+  despersi di AV-node dan fasciculo-ventricular connection, atau yang memiliki
+  jalur tambahan (accessory pathway) seperti sindrom Wolff-Parkinson-White
+  sangat mudah mengalami aritmia melalui mekanisme preeksitasi.
+  \item Interval QT yang memanjang : pada penderita penyakit jantung koroner,
+  kelainan struktur jantung atau gangguan elektrolit yang disertai interval QT
+  memanjang akan lebih sering terjadi aritmia dibandingkan dengan individu
+  normal.
+\end{itemize} 
+
+Beberapa penyakit/kelainan yang termasuk dalam \gls{arrhytmia} adalah sebagai
+berikut;
+\begin{enumerate}
+  \item Atrial Fibrilation/Flutter (AF) \\
+  AF merupakan irama jantung tidak teratur yang umum yang menyebabkan atrial,
+  bagian atas bilik jantung, berkontraksi tidak normal. Penyebab tersering dari
+  AF adalah infark miokard, dilatasi atrium kiri, penyakit paru kronis, gagal
+  jantung, pasca pembedahan kardiotorasik dan tirotoksikosis.
+  
+  \item Supraventricular tachycardia (SVT) \\
+  Denyut jantung cepat yang	tidak  normal secara teratur yang disebabkan oleh
+  tembakan secara cepat impuls listrik  dari atas \textit{atrioventricular} node
+  (AV node) di dalam jantung. Termasuk didalamnya adalah takikardia atrium,
+  takikardia atrium multifokal, takikardia supraventrikular paroksismal.
+
+  \item Sindrom Wolff-Parkinson-White (WPW) \\
+  Merupakan kumpulan gejala yang ditimbulkan oleh impuls dari atrium yang
+  dikonduksi ke ventrikel lebih cepat dari biasanya (pre-eksitasi) melalui jalur
+  tambahan.
+
+  \item Sick-Sinus Syndrome (SSS) \\
+  merupakan kelainan dimana nodus SA tidak dapat mencetuskan impuls secara
+  normal akibat dari fibrosis di nodus SA. Gejala klinis yang muncul berupa
+  bradikardia sinus, episode henti sinus yang intermiten, dan sindrom
+  bradi-takikardia sehingga penderita mengeluh palpitasi, presinkope atau
+  sinkope. Biasanya diagnosis SSS dapat dilakukan dengan menggunakan Holter
+  Monitor ECG (ECG 24 jam atau lebih).
+  
+  \item Premature Ventricular Contractions (PVC) \\
+  Atau juga disebut Ventricular Premature beat, merupakan kejadian umum  dimana
+  denyut jantung diinisiasi oleh ventrikel jantung,   bukan  oleh
+  \textit{sinoatrial node} yang merupakan  inisiator denyut jantung yang normal.
+  Akibatnya, muncul denyut tambahan yang tidak normal sebelum denyut normal
+  mumcul.
+
+  \item Ventricular Tachycardia (VT) \\
+  Merupakan suatu irama jantung yang cepat yang berasal dari ruang bawah (atau
+  ventrikel) jantung. Laju denyut yang cepat mencegah jantung mengisi cukup
+  darah , sehingga sejumlah kecil darah dipompa ke seluruh tubuh. Ini bisa
+  menjadi \textit{arrhytmia} yang serius,  terutama pada orang dengan penyakit
+  jantung, dan dapat berhubungan dengan banyak  gejala. Seorang dokter harus
+  mengevaluasi \textit{arrhytmia} ini.
+		
+  \item Ventricular fibrillation (VF) \\
+  Tembakan impuls yang tidak teratur dan tidak menentu dari ventrikel. Ventrikel
+  bergetar dan tidak bisa berkontraksi atau memompa darah ke tubuh.  Ini adalah
+  keadaan darurat medis yang harus diobati  dengan \textit{cardiopulmonary
+  resuscitation} (CPR) dan \textit{defibrillation} sesegera mungkin.
+    
+  \item Blok \\
+  Blok atau hambatan konduksi dapat dibagi menadi 3 jenis menurut lokasi
+  kejadiannya yaitu:
+  \begin{itemize}
+    \item Blok nodus SA : pada kondisi ini, serabut sinus adalah normal, hanya
+    saja gelombang depolarisasi yang dicetuskan terhambat sebelum mencapai
+    atrium. Blok SA biasanya tidak memberi gejala sehingga tidak memerlukan
+    pengobatan.
+    \item Blok nodus AV : semua hambatan konduksi yang terjadi antara nodus SA
+    sampai pada berkas HIS-Sistem Purkinje. Blok AV dibagi menjadi Blok AV
+    derajat I, II dan III. Mungkin jantung berdetak tidak teratur dan kadang sering
+	lebih lambat. Jika serius, \textit{Heart Block} diobati dengan alat pacu
+	jantung (PaceMaker). Sebagian besar muncul dari patologi di simpul
+	atrioventrikular dimana penyakit ini penyebab paling umum dari \textit{Bradycardia}.
+    \item Blok Infranodal : hambatan konduksi yang terjadi pada sistem
+    infranodal. Sistem infranodal terdiri dari berkas His dan 3 cabang berkas
+    infra-ventrikular yaitu satu right bundle branch (RBB), dan 2 fasikulus dari
+    left bundle branch (LBB).\\
+	Jika konduksi terhambat pada bagian berkas cabang kanan (RBB), maka disebut
+	sebagai Right Bundle Branch Block (RBBB), dan jika konduksi terhambat pada
+	bagian berkas cabang kiri (LBB), maka disebut Left Bundle Branch Block (LBBB).
+  \end{itemize}
+  
+  \item Sudden Arrhythmia Death Syndrome (SADS) \\
+  Merupakan kematian mendadak yang yang tidak diharapkan yang disebabkan oleh
+  kehilangan fungsi jantung secara tiba-tiba \textit{sudden cardiac arrest}.
+	
+\end{enumerate}
+
+Penanggulangan arrhytmia dapat dilakukan secara farmakologik, kardioversi,
+ablasi, pemasangan alat pacu jantung atau dengan tindakan operasi. Alat pacu
+jantung atau biasa disebut PaceMaker dapat dipasang secara permanen (PPM) atau
+secara temporer (TPM). Pemasangan PPM maupun TPM dapapt dilakukan berdasarkan
+indikasi terjadinya SSS,  AV block, gagal jantung. Pemasangan alat pacu jantung
+akan menimbulkan denyut jantung yang sedikit berbeda dengan denyut jantung
+normal, dan terkadang bergabung dengan denyut normal.
+
+\glsreset{ecg}
+ 
+Pendekatan yang dilakukan untuk mendiagnosa \gls{arrhytmia} adalah
+mendengarkan denyut jantung dengan menggunakan stetoskop dimana dengan cara ini
+dapat memberikan indikasi-indikasi yang umum dari denyut jantung dan apakah
+teratur atau tidak. Namun tidak semua impuls elektrik dari jantung dapat
+didengar, seperti di banyak cardiac arrhytmia. Cara yang sederhana dilakukan
+untuk mendiagnosa irama jantung adalah dengan \gls{ecg}.
+
+% -----------------------------------------------------------------------------%
+% ECG section
+\input{bab2-ecg.tex}
+% -----------------------------------------------------------------------------%
+\input{bab2-jst.tex}
+% -----------------------------------------------------------------------------%
+\input{bab2-wavelet.tex}
+% -----------------------------------------------------------------------------%
+\input{bab2-fuzzy.tex}
+% -----------------------------------------------------------------------------%
+\input{bab2-statistik.tex}
+% -----------------------------------------------------------------------------%

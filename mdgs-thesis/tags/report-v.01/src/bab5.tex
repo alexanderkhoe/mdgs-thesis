@@ -1,0 +1,787 @@
+%-----------------------------------------------------------------------------%
+\chapter{\babLima}
+%-----------------------------------------------------------------------------%
+Pada bab ini akan dijelaskan mengenai percobaan, simulasi berbagai skenario
+terhadap sistem yang dikembangkan yang dilanjutkan dengan analisis terhadap
+hasil yang diperoleh untuk mengukur kinerja dari sistem, dibandingkan dengan
+beberapa metode lain yang telah dicoba dan memperhitungkan tingkat kevalidan
+percobaan terhadap hasil yang diperoleh.
+
+%-----------------------------------------------------------------------------%
+\section{Ujicoba algoritma terhadap data fitur}
+%-----------------------------------------------------------------------------%
+Pada subbab ini akan diuraikan mengenai beberapa skenario ujicoba yang dilakukan
+untuk mengetahui pengaruh ekstraksi fitur yang sudah dilakukan dan kinerja dari
+algoritma pengenalan yakni LVQ1, LVQ21, GLVQ, FN-GLVQ. Algoritma LVQ3 tidak
+diujicobakan pada bab ini karena fokus dari penelitian pada saat ini adalah
+hanya untuk satu vektor pewakil untuk setiap kategori kelas. Sedangkan LVQ3,
+seperti yang telah diuraikan pada sub-bab sebelumnya akan sama dengan LVQ2.1.
+Ujicoba dilakukan dilingkungan dengan spesifikasi sebagai berikut; 
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \item Komputer Intel i7-9500
+  \item Memory 6Gb
+  \item Sistem Operasi Windows 7
+\end{itemize} 
+
+Jenis Data yang akan diujicobakan ada dua kelompok yaitu data 6 kelas dan data
+12 kelas. Berikut adalah rincian untuk masing-masing kelompok;
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \item Data 6 kelas terdiri dari kategori penyakit arrhytmia;
+  \begin{enumerate}
+    \setlength{\itemsep}{1pt}
+    \item Normal beat (NOR)
+    \item Left Bundle Branch Block (LBBB)
+    \item Right Bundle Branch Block (RBBB)
+    \item Premature Ventricular Contraction (PVC)
+    \item Paced beat (PACE)
+    \item Atrial Premature beat (AP) 
+  \end{enumerate}
+  \item Data 12 kelas terdiri dari kategori 6 kelas diatas ditambah dengan;
+  \begin{enumerate}
+    \setlength{\itemsep}{1pt}
+    \item Fusion of Ventricular and Normal beat (fVN)
+    \item Fusion of Paced and Normal beat (fPN)
+    \item Nodal (junctional) Escape beat (NE)
+    \item Aberrated Atrial Premature beat (aAP) 
+    \item Ventricular escape beat (VE)
+    \item Nodal (juctional) Premature beat (NP)
+  \end{enumerate}
+\end{itemize}
+
+Dari data hasil ekstraksi yang telah didapat berdasarkan
+\tab~\ref{tbl:beatstat-nonoutlier}, untuk keperluan ujicoba ini hanya akan
+dipakai maksimal 2000 sampel data untuk setiap kategori kelas arrhytmia, untuk
+menurunkan faktor ketidak-seimbangan data. Meskipun demikian, untuk data
+kategori 12 kelas, ketidak-seimbangan data akan tetap ada dan akan diujicobakan
+terhadap algoritma yang ada. 
+
+Pada uji coba ini, tingkat akurasi akan digunakan untuk menunjukkan kinerja dari
+algoritma terhadap data fitur yang ada.
+%-----------------------------------------------------------------------------%
+\subsection{Ujicoba Skenario 1: mother wavelet daubhecies}
+%-----------------------------------------------------------------------------%
+Ujicoba ini dilakukan untuk mengetahui fitur terbaik yang dapat
+merepresentasikan sinyal ECG dari 4 buah varian daubechies berdasarkan
+tingkatannya yakni db2, sb4,sb6 dan db8. Mother wavelet daubhecies digunakan
+karena seperti yang telah disampaikan diawal, banyak penelitian pada bidang ECG
+telah menunjukkan bahwa daubechies lebih baik daripada wavelet ortogonal yang
+lainnya.
+
+Ujicoba ini akan dilakukan dengan mengggunakan 2 algoritma yaitu algoritma GLVQ
+dan FN-GLVQ. Parameter ujicoba dapat dilihat pada \tab~\ref{tbl:paramset1}.
+\begin{table}
+\small  
+\label{tbl:paramset1}
+\caption{Parameter untuk uji kinerja dengan\\ fitur hasil berbagai jenis
+wavelet daubechies}
+\begin{center}
+	\begin{tabular}{ccc}
+	\hline
+	 & GLVQ & FN-GLVQ\\ \hline
+	 $\alpha$ & 0.05 & 0.05\\
+	 epoch 	  & 150  & 150 \\
+	 inisial bobot & random & random \\
+	\hline
+	\end{tabular}
+\end{center} 
+\end{table}
+
+Data yang diujicobakan adalah data arrhytmia 6 kelas, tanpa outlier dengan
+total jumlah data 11.134 dimana akan dibagi menjadi dua dengan porsi yang  sama
+untuk training dan testing dan telah dilakukan proses round-robin 1 data. Sedangkan pada
+\tab~\ref{tbl:statdatask1} ditunjukkan detail jumlah fitur untuk masing-masing
+order daubechies setiap level dekomposisi.
+\begin{table}
+\small
+\label{tbl:statdatask1}
+\caption{Jumlah fitur untuk setiap dekomposisi\\ dari order daubechies yang
+berbeda.} 
+\begin{center}
+	\begin{tabular}{ccccc}
+	\hline
+	& \multicolumn{4}{c}{daubechies wavelet}\\
+	Level & db2 & db4 & db6 & db8\\\hline
+	L1 & 151 & 153 & 155 & 157\\
+	L2 & 77 & 80 & 83 & 86\\
+	L3 & 40 & 43 & 47 & 50\\
+	L4 & 21 & 25 & 29 & 32\\
+	L5 & 12 & 16 & 20 & 23\\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+
+Ujicoba dilakukan sebanyak 10 kali untuk setiap data dan akurasi dihitung dengan
+mencari rata-rata dari 10 akurasi hasil percobaan. Dari ujicoba skenario
+diatas didapatkan hasil akurasi untuk setiap algoritma dan data adalah seperti
+yang ditunjukkan pada \tab~\ref{tbl:sk1-tab}.
+\begin{table}
+\small
+\label{tbl:sk1-tab}
+\caption{Hasil ujicoba dengan tingkat akurasi (dalam \%) dengan algoritma GLVQ
+dan FN-GLVQ.}
+\begin{center}
+	\begin{tabular}{lccccclcccc}
+	\cline{1-5} \cline{7-11}
+	\multicolumn{5}{c}{GLVQ} & & \multicolumn{5}{c}{FN-GLVQ}\\
+	Level & db2 & db4 & db6 & db8 & & Level & db2 & db4 & db6 & db8\\
+	\cline{1-5} \cline{7-11}
+	L1 & 95.24  &  96.51  &  96.27  &  96.68  &&  L1  &  97.49  &  98.13  &  97.86  &  98.09 \\
+	L2 & 96.05  &  96.38  &  96.06  &  96.30  &&  L2  &  97.98  &  98.09  &  97.99  &  97.96 \\
+	L3 & 93.60  &  93.22  &  93.43  &  93.67  &&  L3  &  97.52  &  97.74  &  97.38  &  97.64 \\
+	L4 & 89.95  &  92.55  &  93.30  &  92.77  &&  L4  &  96.41  &  96.56  &  96.95  &  96.72 \\
+	L5 & 86.99  &  81.39  &  85.75  &  85.07  &&  L5  &  93.89  &  94.35  &  91.67  &  94.28 \\ 
+	\cline{1-5} \cline{7-11}
+	avg & 92.37  &  92.01  &  92.96  &  92.90  &    & avg   &  96.66  &  96.97  &  96.37  &  96.94 \\
+	\cline{1-5} \cline{7-11}
+	\multicolumn{11}{c}{} \\
+	 GLVQ  &  92.37  &  92.01  &  92.96  &  92.90  &    &    &  &  &  &  \\
+  	 FN-GLVQ  &  96.66  &  96.97  &  96.37  &  96.94  &    &    &  &  &  &  \\
+  	\cline{1-5}
+     avg  &  94.51  &  94.49  &  94.67  &  94.92  &    &    & &  &  &   \\
+	\cline{1-5}
+	\end{tabular}
+\end{center}
+\end{table}
+
+Dari \tab~\ref{tbl:sk1-tab} dapat dilihat bahwa rata-rata akurasi untuk
+masing-masing tipe daubechies untuk setiap algoritma hampir sebandidng. Akurasi
+untuk algoritma GLVQ rata-rata 92\% dan untuk FN-GLVQ adalah 96\%. Dari kedua
+akurasi kemudian dicari rata-rata akurasi dan didapatkan rata-rata tertinggi
+untuk daubechies order 8 (\emph{db8}) kemudian diikuti oleh \emph{db6}, 
+\emph{db2} dan \emph{db4}. Namun pada dasarnya hasil yang diperoleh tidak
+terlalu jauh berbeda. Pemilihan daubhecies order yang akan digunakan
+nantinya tergantung dari resource yang tersedia nantinya. Pada
+\pic~\ref{fig:sk1chart} ditunjukkan perbandingan hasil  ujicoba dalam bentuk
+chart.
+
+\addFigure{width=1\textwidth}{pics/sk1-chart.png}{fig:sk1chart}{Perbandingan
+tingkat akurasi untuk beberapa family daubechies wavelet}
+
+Berdasarkan hasil ujicoba diatas, untuk ujicoba berikutnya, akan digunakan
+wavelet \emph{db8} sebagai default.
+
+%---------------------------------------- -------------------------------------%
+\subsection{Ujicoba Skenario 2 : 5 level dekomposisi db5 + data statstik}
+%awalnya skenario 4
+%-----------------------------------------------------------------------------%
+Ujicoba ini dilakukan untuk mengetahui kinerja terbaik dari beberapa model
+fitur yang sudah diuraikan pada sub-bab \ref{sec:ekstrakwt} khususnya untuk
+daubechies order 8 (\emph{db8}) sesuai dengan yang dipilih pada skenario
+sebelumnya. Ujicoba akan dilakukan dengan 4 algoritma yaitu LVQ1, LVQ21, GLVQ
+dan FN-GLVQ. Pada \tab~\ref{tbl:paramsk2} dapat dilihat parameter yang digunakan
+untuk keempat algoritma tersebut.
+
+\begin{table}
+\small  
+\label{tbl:paramsk2}
+\caption{Parameter untuk uji kinerja dengan\\ pada data fitur  hasil dekomposisi
+daubechies 5 level + fitur statistik + sinyal asli}
+\begin{center}
+	\begin{tabular}{ccccc}
+	\hline
+	 & LVQ1 & LVQ21 & GLVQ & FN-GLVQ\\ \hline
+	 $\alpha$ & 0.05 & 0.075  & 0.05 & 0.05\\
+	 window & 0.005 & -  & - & -\\
+	 epoch 	  & 20 & 100 & 150  & 150 \\
+	 Init bobot & random & random & random & random \\
+	 porsi init dtset   & ALL & ALL & ALL & 0.5 \\
+	\hline 
+	\end{tabular}
+\end{center} 
+\end{table}
+
+Seperti pada ujicoba sebelumnya, eksekusi masing-masing algoritma dilakukan
+sebanyak 10 kali untuk setiap data dan akurasi dihitung dengan mencari rata-rata 
+dari 10 akurasi hasil percobaan. Ujicoba dilakukan terhadap data dengan 6 kelas
+tanpa outlier dengan total jumlah data 11.134 dimana akan dibagi  menjadi dua
+dengan porsi yang  sama untuk training dan testing dan telah dilakukan  proses
+round-robin 1 data. Hasil dari ujicoba dapat dilihat pada
+\tab~\ref{tbl:sk2-hasil}.
+
+\begin{table}
+\small
+\label{tbl:sk2-hasil}
+\caption{Hasil ujicoba dengan tingkat akurasi (dalam \%) dengan empat algoritma
+LVQ1, LVQ21, GLVQ dan FN-GLVQ pada data fitur hasil dekomposisi daubechies 5
+level + fitur statistik + sinyal asli.}
+\begin{center}
+	\begin{tabular}{cccccccc}
+	\hline
+	& \multicolumn{7}{c}{Fitures Model}\\
+	  &  300  &  157  &  86  &  50  &  32  &  23  &  24 \\
+	\hline
+	LVQ1  &  77.39  &  78.15  &  77.50  &  77.72  &  75.23  &  74.57  &  77.92 \\
+	LVQ21  &  86.82  &  91.15  &  92.10  &  89.23  &  88.65  &  85.19  &  92.21 \\
+	GLVQ  &  96.39  &  96.20  &  95.39  &  94.69  &  92.58  &  85.24  &  93.58 \\
+	FN-GLVQ  &  95.06  &  97.66  &  98.15  &  98.00  &  97.42  &  93.20  &  93.12\\
+	\hline
+ 	avg  &  88.92  &  90.79  &  90.79  &  89.91  &  88.47  &  84.55  &  89.21 \\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+
+Dari \tab~\ref{tbl:sk2-hasil} dapat dilihat nilai akurasi rata-rata antara
+masing-masing model fitur dimana akurasi tertinggi dicapai oleh fitur dengan
+jumlah 157 dan 86, sedangkan terendah pada fitur 23. Namun perbedaan antara
+masing-masing model fitur, terutama untuk algoritma FN-GLVQ tidak terlalu
+besar antara fitur 157, 86, 50 dan 32, yakni rata-rata 97-98\%. sedangkan
+algoritma yang lain stabil di fitur 157 dan 86. Yang menarik disini adalah 3
+algoritma menghasilkan fitur diatas 93\% untuk fitur 24, yakni LVQ21, GLVQ dan
+FNGLVQ. 
+
+Secara keseluruhan dapat ditunjukkan bahwa ekstraksi dan reduksi fitur dengan
+dekomposisi menggunakan daubechies wavelet dapat mempertahankan tingkat akurasi
+pengenalan arrhytmia, bahkan pada beberapa kasus diatas dapat meningkatkan
+akurasi. Fitur dengan jumlah 86 dapat dipilih untuk digunakan dalam proses pengenalan
+selanjutnya, karena dari \tab~\ref{tbl:sk2-hasil} dapat dilihat fitur 157 dan 86
+memiliki rata-rata akurasi yang sama, namun fitur 86 memiliki hampir setengah
+jumlah fitur 157. Namun seandainya jumlah fitur yang dibutuhkan nantinya
+mensyaratkan jumlah yang kecil, Fitur 24 dapat dipertimbangkan untuk digunakan.
+
+%-----------------------------------------------------------------------------%
+\subsection{Ujicoba Skenario 3 : Round-robin data}
+%awalnya skenario 5
+%-----------------------------------------------------------------------------%
+Pada percobaan ini, data pelatihan yang akan digunakan diurutkan secara
+round robin terhadap kategori kelas arrhytmia seperti yang telah diuraikan
+pada sub-bab \ref{ssec:round-robin}. Tujuan dari percobaan ini adalah  untuk
+mengetahui bagaimana pengaruh round-robin data training terhadap proses
+pembelajaran dari algoritma. Untuk uji coba ini, data yang akan digunakan adalah
+data 6 kelas dengan fitur 300.  dan algoritma yang akan digunakan untuk
+ujicoba adalah LVQ1, LVQ21, GLVQ dan FN-GLVQ. Berikut pada
+\tab~\ref{tbl:sk3-param1} adalah parameter yang digunakan pada ujicoba ini;
+
+\begin{table}
+\small  
+\label{tbl:sk3-param1}
+\caption{Parameter untuk ujicoba round-robin data}
+\begin{center}
+	\begin{tabular}{ccccc}
+	\hline
+	 & LVQ1 & LVQ21 & GLVQ & FN-GLVQ\\ \hline
+	 $\alpha$ & 0.05 & 0.05  & 0.05 & 0.05\\
+	 window & 0.005 & -  & - & -\\
+	 epoch 	  & 150 & 150 & 150  & 150 \\
+	 Init bobot & random & random & random & random \\
+	 porsi init dtset   & ALL & ALL & ALL & 0.5 \\
+	\hline 
+	\end{tabular}
+\end{center} 
+\end{table}
+
+Pada ujicoba ini, dataset dipartisi menjadi 2 untuk training dan testing, dimana
+jumlah maksimal data tiap kelas untuk data training adalah 1000. Sehingga untuk 
+ujicoba ini dilakukan sebanyak 1000 iterasi, dimana setiap iterasi $i$ dilakukan
+ujicoba round-robin dengan jumlah data $i$ yang saling silang. Pada
+\pic~\ref{fig:sk4-hasil} ditunjukkan hasil ujicoba untuk keempat algoritma
+tersebut diatas.
+
+\addFigure{\width=0.7\textwidth}{pics/efekroundrobin.png}{fig:sk4-hasil}{Hasil
+ujicoba data round-robin 1000 kombinasi.}
+
+Dari \pic~\ref{fig:sk4-hasil} dapat dilihat masing-masing algoritma memberikan
+hasil yang bervariasi terhadap kombinasi round-robin yang diujocobakan.
+Algoritma LVQ1 masih tetap stabil untuk nilai approximasi $i$ dari 1 - 30,
+setelah itu tingkat akurasi berfluktuasi cenderung menurun, bahkan sangat
+signifikan. Untuk LVQ21, tingkat akurasi sangar bervariasi hampir disetiap nilai
+$i$, sehingga dibutuhkan kehati-hatian dalam menentukan nilai dari $i$. Untuk
+GLVQ, tingkat akurasi tetap stabil untuk nilai $i$ dari 1 - 130. kemudian secara
+gradual menurun seiring bertambahnya nilai $i$. Sedangkan untuk FN-GLVQ, tingkat
+akurasi stabil di rentang nilai $i$ yang hampir sama dengan GLVQ, yakni antara
+1 - 130. Namun seiring dengan bertambahnya nilai $i$, tingkat akurasi
+berfluktuasi naik turun, seperti yang ditunjukkan pada nilai $i=460$, tingkat
+akurasi tinggi (94\%-95\%), sedangkan pada nilai $i=485$, akurasi kembali turun
+ke level 75\%, dan pada nilai $i=881$, tingkat akurasi kembali naik ke level
+92\% - 94\%.
+
+Dari kondisi diatas dapat disimpulkan, dengan menggunakan mekanisme round-robin
+dapat meningkatkan level akurasi pengenalan arrhytmia, khususnya untuk nilai $i$
+yang tidak terlalu besar $i < 30$, hampir keempat algoritma memberikan nilai
+akurasi yang stabil di level tertinggi.
+
+%---------------------------------------- -------------------------------------%
+\subsection{Ujicoba Skenario 4 : Parameter terbaik}
+\label{ssec:paramterbaik}
+%awalnya skenario 1
+%-----------------------------------------------------------------------------%
+Ujicoba ini dilakukan untuk mengetahui parameter yang dapat memberikan
+kinerja pengenalan terbaik untuk setiap algoritma yang ada. Pada ujicoba ini,
+dataset yang akan digunakan adalah data 6 kelas dan 12 kelas dari fitur 300
+(fitur sinyal asli), fitur 86 dan fitur 24. Parameter yang akan digunakan,
+dipilih sedemikian rupa sehingga dapat mewakili sebaran parameter yang ada dan
+tidak terlalu presisi. Berikut pada \tab~\ref{tbl:sk4-param1} dapat dilihat
+parameter yang akan diujicobakan pada empat algoritma.
+
+\begin{table}
+\small  
+\label{tbl:sk4-param1}
+\caption{Parameter yang akan diuji untuk proses pencarian parameter terbaik}
+\begin{center}
+	\begin{tabular}{cp{0.5\textwidth}}
+	\hline
+	 Parameter & nilai \\ \hline
+	 $\alpha$ 	& 0.1, 0.075, 0.05, 0.01, 0.005, 0.001 \\
+	 window 	& 0.1, 0.75, 0.05, 0.01, 0.005, 0.001\\
+	 epoch 	  	& 20, 50, 100, 150\\
+	 max-attempt& 1 \\
+	 Init bobot & LVQ1, LVQ21, GLVQ (knn 1) - \newline 
+	              FNLVQ (statistik) \\
+	 porsi init dtset  & ALL \\
+	\hline 
+	\end{tabular}
+\end{center} 
+\end{table}
+
+Pada ujicoba ini, setiap algoritma dicoba sebanyak 1 kali untuk setiap kombinasi
+paramater. INisialisasi bobot yang digunakan adalah dengan menggunakan knn-1
+pada semua data training yang digunakan, dimana artinya selama proses ujicoba
+ini, vektor pewakil untuk LVQ1, LVQ21 dan GLVQ akan tetap sama. Sedangkan untuk
+FN-GLVQ, inisialisasi bobot dilakukan dengan mencari nilai statistik (min, mean
+dan max) untuk semua data training, sehingga vektor pewakil akan tetap sama
+untuk semua kombinasi parameter. Dataset dipartisi menjadi 2 untuk
+training dan sebagian untuk testing. Berikut pada \tab~\ref{tbl:sk4-hasil}
+ditunjukkan hasil parameter terbaik yang didapatkan  disertai dengan akurasi
+terhadap data testing.
+
+\begin{table}
+\small
+\label{tbl:sk4-hasil}
+\caption{Hasil ujicoba dengan tingkat akurasi (acc dalam \%) dengan empat
+algoritma LVQ1, LVQ21, GLVQ dan FN-GLVQ dalam menentukan parameter terbaik
+untuk 6 macam data fitur}
+\begin{center}
+	\begin{tabular}{cc|ccccccccc}
+	\hline
+	\multirow{2}{*}{Kelas} &  
+	\multirow{2}{*}{Fit}  &  
+	\multicolumn{2}{c}{LVQ1}  &
+	\multicolumn{3}{c}{LVQ21}  &
+	\multicolumn{2}{c}{GLVQ}  &
+	\multicolumn{2}{c}{FN-GLVQ} \\ \cline{3-11}
+    &    &  $\alpha$  &  acc  &  $\alpha$  &  width  &  acc  &  $\alpha$  &  acc  &  $\alpha$  & acc\\ 
+    \hline
+    \multirow{3}{*}{6}  &  300  &  0.05  &  76.04  &  0.075  &  0.01  &  90.03  &  0.05  &  96.69  &  0.005  &  98.01 \\
+  &  86  &  0.05  &  75.70  &  0.075  &  0.005  &  90.30  &  0.05  &  96.57  &  0.05  &  98.02 \\
+  &  24  &  0.075  &  77.47  &  0.05  &  0.005  &  93.50  &  0.1  &  92.69  &  0.001  &  93.89 \\
+    \hline
+    \multirow{3}{*}{12}  &  300  &  0.05  &  80.16  &  0.1  &  0.005  &  87.01  &  0.075  &  93.73  &  0.01  &  94.88 \\
+  &  86  &  0.001  &  75.99  &  0.075  &  0.01  &  83.23  &  0.075  &  94.43  &  0.01  &  92.95 \\
+  &  24  &  0.1  &  70.72  &  0.075  &  0.005  &  87.48  &  0.075  &  87.26  &  0.001  &  88.08 \\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+ 
+Dari \tab~\ref{tbl:sk4-hasil} dapat dilihat parameter terbaik untuk setiap jenis
+dataset terhadap algoritma yang digunakan. Dari setiap kombinasi parameter
+terlihat menghasilkan tingkat akurasi yang berbeda-beda. Ini menunjukkan bahwa
+karakteristik dari data juga akan menentukan parameter terbaik untuk setiap
+algoritma. Sehingga pemilihan suatu jenis dataset diharapkan diikuti
+dengan penyesuaian parameter yang digunakan untuk melakukan proses pembelajaran.
+
+%---------------------------------------- -------------------------------------%
+%\subsection{Ujicoba Skenario 5 : Data outlier}
+%awalnya skenario 6
+%-----------------------------------------------------------------------------%
+
+%---------------------------------------- -------------------------------------%
+\subsection{Ujicoba Skenario 5 : Inisialisasi Bobot Awal}
+%awalnya skenario 2 dan 3
+%-----------------------------------------------------------------------------%
+Ujicoba ini dilakukan untuk mengetahui tingkat sensitifitas inisialisasi bobot
+awal terhadap kinerja dari algoritma, yaitu GLVQ dan FN-GLVQ, dimana akan diukur
+dari tingkat akurasi yang dihasilkan. Tingkat sensitifitas disini tidak
+dimaksudkan bahwa bobot awal diinisialisasi dengan nilai sembarang jauh dari
+distribusi data training nya, melainkan diinisialisasi dengan nilai random
+dengan nilai yang tidak jauh dari distribusi dataset-nya. Pada ujicoba ini,
+masing-masing algoritma akan diinisialisasi berdasarkan;
+\begin{enumerate}
+  \item GLVQ \\
+  \textbf{Random Internal} : bobot awal diinisialisasi dari data training dengan
+  dipilih secara random. \\
+  \textbf{Random External} : bobot awal diinisialisasi dari nilai random
+  interval [0, 1], dengan harapan bahwa jika diinisialisasi dengan cara seperti ini, tingkat
+  akurasi tidak begitu jauh berubah.
+  \item FN-GLVQ \\
+  \textbf{Random Internal} : bobot awal diinisialisasi dari data training dengan
+  menghitung agregasi data statistik (min, mean, max) dari setengah data
+  training yang dipilih secara random. \\ 
+  \textbf{Random External} :  bobot awal diinisialisasi dengan cara memilih nilai
+  pusat fungsi keanggotaan ($w_{mean}$) secara random pada interval distribusi
+  dari data training.
+\end{enumerate}
+
+Dataset yang akan digunakan pada ujicoba ini adalah data 6 kelas dan 12 kelas
+dari fitur 300 (fitur sinyal asli), fitur 86 dan fitur 24. Parameter yang akan 
+digunakan mengacu pada parameter terbaik yang dihasilkan pada skenario
+sebelumnya yang dapat dilihat pada \tab~\ref{tbl:sk4-hasil}.
+
+LVQ1 dan LVQ21 tidak diujicobakan disini karena sudah sangat jelas dari karakteristik
+yang dimiliki dimana inisialisasi bobot awal sangat berpengaruh terhadap level 
+akurasi algoritma. 
+
+Dari Ujicoba yang telah dilakukan didapat hasil seperti yang ditunjukkan pada
+\tab~\ref{tbl:sk6-hasil}.
+
+
+\begin{table}
+\small
+\label{tbl:sk4-hasil}
+\caption{Hasil ujicoba pengaruh inisialisasi data awal terhadap tingkat
+akurasi (acc dalam \%) dengan algoritma GLVQ dan FN-GLVQ}
+\begin{center}
+	\begin{tabular}{cc|cccc}
+	\hline
+	\multirow{2}{*}{Kelas} &  
+	\multirow{2}{*}{Fit}  &  
+	\multicolumn{2}{c}{GLVQ}  &
+	\multicolumn{2}{c}{FN-GLVQ} \\ \cline{3-11}
+    &    &    RandInt  &  RandEks  &  RandInt  &  RandEks \\
+    \hline
+    \multirow{3}{*}{6}  &  300    & 96.62  &  96.03  &  98.10  &  97.61 \\
+  &  86  & 96.02  &  96.72  &  98.06  &  97.05 \\
+  &  24  & 93.18  &  92.74  &  94.41  &  83.70 \\
+    \hline
+    \multirow{3}{*}{12}  &  300  &  93.57  &  93.46  &  96.89  &  95.67 \\
+  &  86  & 94.25  &  94.09  &  95.70  &  93.03 \\
+  &  24  &  89.61  &  89.91  &  90.98  &  75.38 \\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+
+ Untuk lebih memudahkan analisis, berikut pada \pic~\ref{fig:fig:sk6-hasil}
+ dapat dilihat efek inisialisasi data awal terhadap kinerja dari algoritma.
+ 
+ \addFigure{width=1\textwidth}{pics/sk6-hasil.png}{fig:sk6-hasil}{Hasil ujicoba
+ inisialisasi bobot awal terhadap kinerja algoritma}.
+ 
+ Dari \pic~\ref{fig:fig:sk6-hasil} dapat dilihat untuk algoritma GLVQ,
+ inisialisasi random tidak mempengaruhi kinerja algoritma dalam melakukan
+ pengenalan kelainan arrhytmia dimana di setiap model fitur data, tingkat
+ akurasi tidak jauh berbeda (rata-rata error 0.0005). Namun berbeda dengan
+ algoritma FN-GLVQ, untuk data dengan fitur 300 dan 86, tingkat akurasi
+ antara kedua kondisi yang dibuat masih dapat mengimbangi dengan tingkat
+ error rata-rata (0.013475). Namun untuk data fitur 24,  tingkat akurasi
+ turun sangat drastis, sampai lebih dari 10\% (error rata-rata
+ 0.13155). Karena Tidak semua kondisi data dapat dipertahankan tingkat
+ akurasinya, maka hal ini menunjukkan bahwa FN-GLVQ belum bisa
+ menjamin ketidak sensitifan bobot terhadap kinerja algoritma untuk 
+ semua kondisi data, hanya untuk kondisi-kondisi tertentu saja.  
+
+%-----------------------------------------------------------------------------%
+%\subsection{Ujicoba Skenario 7 : Pengenalan Unknown data}
+%-----------------------------------------------------------------------------%
+
+%-----------------------------------------------------------------------------%
+\section{Uji Statistik}
+%-----------------------------------------------------------------------------%
+Untuk menunjukkan apakah modifikasi yang dilakukan dalam mengembangkan
+metode baru FN-GLVQ memiliki kemampuan yang yang lebih baik secara signifikan
+terhadap algoritma GLVQ, maka pada sub-bab ini akan dilakukan pengujian secara
+statistik menggunakan 4 macam uji t-test seperti yang telah diuraikan pada
+sub-bab \ref{sec:ujittest}. Untuk melakukan uji test statistik ini, data yang
+akan digunakan adalah data %dengan fitur 86 untuk 6 kelas dan 12 kelas.  
+6 dan 12 kelas dengan fitur 86. Pada uji test ini, dilakukan dengan menggunakan
+parameter terbaik yang telah didapatkan pada skenario sebelumnya pada 
+\tab~\ref{sk4-hasil}. 
+ 
+\subsection{McNemar Test}
+Pada uji ini, dataset dibagi menjadi dua dengan porsi yang sama untuk
+testing dan training. Sedangkan inisialisasi bobot akan menggunakan cara yang
+sama dengan ujicoba dalam mencari parameter terbaik pada sub-bab
+\ref{ssec:paramterbaik}. Setelah dilakukan ujicoba didapatkan hasil
+seperti yang ditunjukkan pada \tab~\ref{tbl:mcnemar-hasil};
+
+\begin{table}
+\small  
+\label{tbl:mcnemar-hasil}
+\caption{Hasil tabulasi uji test McNemar untuk 6 dan 12 kategori kelas, $D_1=$
+GLVQ, $D_2=$ FN-GLVQ}
+\begin{center}
+	\begin{tabular}{ccccccc} 
+	\cline{1-3} \cline{5-7}
+	\multicolumn{3}{c}{INPUT/OUTPUT MATRIX} & & 
+	\multicolumn{3}{c}{INPUT/OUTPUT MATRIX} \\
+	\multicolumn{3}{c}{6 Kelas} & & 
+	\multicolumn{3}{c}{12 Kelas} \\
+	\cline{1-3} \cline{5-7}
+	   $D_1$  &     $D_2$  &  N  &    &     $D_1$  &     $D_2$  &  N \\
+	   \cline{1-3} \cline{5-7} 
+		0  &  0  &  47  &    &  0  &  0  &  168 \\
+		0  &  1  &  151  &    &  0  &  1  &  199 \\
+		1  &  0  &  63  &    &  1  &  0  &  255 \\
+		1  &  1  &  5306  &    &  1  &  1  &  5376 \\\cline{1-3} \cline{5-7}
+		96.44  &  98.02  &    &    &  93.88  &  92.95  &   \\
+		  &    &    &    &    &    &  \\
+		  \cline{1-3} \cline{5-7}
+		\multicolumn{3}{c}{CONFUSION MATRIX} & & 
+		\multicolumn{3}{c}{CONFUSION MATRIX} \\
+		\multicolumn{3}{c}{6 Kelas} & & 
+		\multicolumn{3}{c}{12 Kelas} \\		
+		\cline{1-3} \cline{5-7}  
+		 &  $D_2$(+)  &  $D_2$(-)  &    &    &  $D_2$(+)  &  $D_2$(-) \\
+		 \cline{1-3} \cline{5-7}       
+		$D_1$(+)  &  5306  &  63  &    &  $D_1$(+)  &  5376  &  255 \\
+		$D_1$(-)  &  151  &  47  &    &   $D_1$(-)  &  199  &  168 \\
+		\cline{1-3} \cline{5-7} 
+		  &    &    &    &    &    &  \\
+		\multicolumn{3}{l}{McNemar Score 6 Kelas} & & 
+		\multicolumn{3}{l}{McNemar Score 12 Kelas} \\  
+		$X_6^2$[$D_1$,$D_2$] = 35.3692  &    &    &    &  $X_{12}^2$[$D_1$,$D_2$] = 
+		6.6630 & & \\
+	\end{tabular}
+\end{center} 
+\end{table}
+
+Dari data McNemar Score pada tabulasi \ref{tbl:mcnemar-hasil}, didapat $X_6^2$
+untuk 6 kelas adlah 35.4692, sedangkan $X_{12}^2$ untuk 12 kelas didapat 
+6.6630. Level Signifikan yang digunakan untuk uji McNemar adalah 0.05 (95\%) 
+dengan satu derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel adalah
+$12.706$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert X_6^2 \rvert >
+12.706$, Namun untuk 12 kelas, nilai $\lvert X_6^2 \rvert < 12.706$, sehingga
+$H_0$ tidak dapat ditolak. 
+
+Dari uji ini, belum bisa ditarik kesimpulan salah satu dari algoritma lebih baik
+dari yang lainnya.
+ 
+\subsection{K-Hold Out paired t-test}
+Pada uji ini, jumlah iterasi dilakukan sebanyak $K=30$ dimana dataset dipartisi
+menjadi dua sama besar (50:50) untuk training dan testing.  Sedangkan
+inisialisasi bobot menggunakan cara random internal dari dataset.  Setelah
+dilakukan ujicoba didapat data tabulasi seperti yang ditunjukkan pada
+\tab~\ref{tbl:khold-hasil};
+
+Dari data KHold Score pada tabulasi \ref{tbl:khold-hasil}, didapat $t_6$
+untuk 6 kelas adlah -76.672141, sedangkan $t_{12}$ untuk 12 kelas didapat 
+-70.245154. 
+
+Level Signifikan yang digunakan untuk uji KHold adalah 0.05 (95\%) 
+dengan 29 ($K-1$) derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
+adalah $2.045$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
+2.045$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.045$, sehingga $H_0$
+juga dapat ditolak. Sehingga ini menunjukan bahwa perbedaan
+akurasi dari kedua algoritma sangat signifikan dan dapat disimpulkan algoritma
+FN-GLVQ memberikan hasil lebih baik dibandingkan dengan GLVQ.
+
+
+\subsection{K-Fold Cross Validation paired t-test}
+Pada uji ini, dataset yang digunakan dipartisi menjadi 10 ($K=10$)
+kemudian dilakukan 10 kali iterasi dengan komposisi data training dan
+testing (90:10). Sedangkan inisialisasi bobot menggunakan cara random internal 
+dari dataset.  Setelah dilakukan ujicoba didapat data tabulasi seperti yang 
+ditunjukkan pada \tab~\ref{tbl:kfold-hasil}.
+
+Dari data KFold Score pada tabulasi \ref{tbl:kfold-hasil}, didapat $t_6$
+untuk 6 kelas adlah -6.664332, sedangkan $t_{12}$ untuk 12 kelas didapat 
+-10.255489. 
+
+
+%============================================================================
+% TABEL K HOLD
+%============================================================================
+\begin{table}
+\small  
+\label{tbl:khold-hasil}
+\caption{Hasil tabulasi uji K-Hold untuk 6 dan 12 kategori kelas, $P_A=$
+GLVQ, $P_B=$ FN-GLVQ, dengan nilai $K=30$}
+\begin{center}
+	\begin{tabular}{ccccccc} 
+	\cline{1-3} \cline{5-7}
+	\multicolumn{3}{c}{Akurasi Data} & & 
+	\multicolumn{3}{c}{Akurasi Data} \\
+	\multicolumn{3}{c}{6 Kelas} & & 
+	\multicolumn{3}{c}{12 Kelas} \\
+	\cline{1-3} \cline{5-7}
+	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  P_B \\
+	   \cline{1-3} \cline{5-7} 
+  K:0  &  97.32  &  98.82  &    &    K:0  &  94.52  &  97.28 \\
+  K:1  &  97.49  &  98.80  &    &    K:1  &  94.30  &  97.33 \\
+  K:2  &  97.43  &  98.76  &    &    K:2  &  94.42  &  97.12 \\
+  K:3  &  97.56  &  98.83  &    &    K:3  &  94.23  &  97.25 \\
+  K:4  &  97.56  &  98.83  &    &    K:4  &  94.60  &  97.10 \\
+  K:5  &  97.50  &  98.78  &    &    K:5  &  94.47  &  97.53 \\
+  K:6  &  97.59  &  98.87  &    &    K:6  &  94.13  &  97.42 \\
+  K:7  &  97.36  &  98.87  &    &    K:7  &  94.30  &  97.47 \\
+  K:8  &  97.50  &  98.83  &    &    K:8  &  94.50  &  97.28 \\
+  K:9  &  97.50  &  98.71  &    &    K:9  &  94.58  &  97.47 \\
+ K:10  &  97.58  &  98.89  &    &   K:10  &  94.15  &  97.43 \\
+ K:11  &  97.50  &  98.92  &    &   K:11  &  94.17  &  97.32 \\
+ K:12  &  97.41  &  98.78  &    &   K:12  &  94.50  &  97.33 \\
+ K:13  &  97.49  &  98.85  &    &   K:13  &  94.52  &  97.25 \\
+ K:14  &  97.54  &  98.78  &    &   K:14  &  94.35  &  97.23 \\
+ K:15  &  97.50  &  98.76  &    &   K:15  &  94.43  &  97.30 \\
+ K:16  &  97.50  &  98.83  &    &   K:16  &  94.68  &  97.07 \\
+ K:17  &  97.47  &  98.83  &    &   K:17  &  94.58  &  97.38 \\
+ K:18  &  97.49  &  98.78  &    &   K:18  &  94.78  &  97.43 \\
+ K:19  &  97.49  &  98.82  &    &   K:19  &  94.48  &  97.18 \\
+ K:20  &  97.56  &  98.85  &    &   K:20  &  94.42  &  97.40 \\
+ K:21  &  97.58  &  98.92  &    &   K:21  &  94.47  &  97.18 \\
+ K:22  &  97.11  &  98.80  &    &   K:22  &  94.20  &  97.27 \\
+ K:23  &  97.56  &  98.90  &    &   K:23  &  94.48  &  97.12 \\
+ K:24  &  97.49  &  98.87  &    &   K:24  &  94.28  &  97.08 \\
+ K:25  &  97.52  &  98.76  &    &   K:25  &  94.15  &  97.30 \\
+ K:26  &  97.52  &  98.87  &    &   K:26  &  94.23  &  97.10 \\
+ K:27  &  97.43  &  98.80  &    &   K:27  &  94.40  &  97.53 \\
+ K:28  &  97.52  &  98.82  &    &   K:28  &  94.23  &  97.37 \\
+ K:29  &  97.58  &  98.82  &    &   K:29  &  94.55  &  97.30 \\
+ \cline{1-3} \cline{5-7} 
+ avg  &  97.49  &  98.83  &    &    &  94.40  &  97.29  \\
+ \cline{1-3} \cline{5-7} 
+  &    &    &    &    &    &   \\
+		\multicolumn{3}{l}{KHold Score 6 Kelas} & & 
+		\multicolumn{3}{l}{KHold Score 12 Kelas} \\ 
+\cline{1-3} \cline{5-7}   
+pBar: -0.013357  &    &    &    &  pBar: -0.028906  &    &  \\
+$t_6$  : -76.672141  &    &    &    &  $t_{12}$   : -70.245154  &    & \\  
+	\end{tabular}
+\end{center} 
+\end{table}
+  
+
+%============================================================================
+% TABEL K FOLD
+%============================================================================
+Level Signifikan yang digunakan untuk uji KFold adalah 0.05 (95\%) 
+dengan 9 ($K-1$) derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
+adalah $2.262$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
+2.262$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.262$, sehingga $H_0$
+juga dapat ditolak. Sehingga ini menunjukan bahwa perbedaan
+akurasi dari kedua algoritma juga sangat signifikan dan dapat disimpulkan
+algoritma FN-GLVQ memberikan hasil lebih baik dibandingkan dengan GLVQ.
+
+\begin{table}
+\small  
+\label{tbl:kfold-hasil}
+\caption{Hasil tabulasi uji K-Fold untuk 6 dan 12 kategori kelas, $P_A=$
+GLVQ, $P_B=$ FN-GLVQ, dengan nilai $K=10$ dan porsi training dan testing
+$90:10$}
+\begin{center}
+	\begin{tabular}{ccccccc} 
+	\cline{1-3} \cline{5-7}
+	\multicolumn{3}{c}{Akurasi Data} & & 
+	\multicolumn{3}{c}{Akurasi Data} \\
+	\multicolumn{3}{c}{6 Kelas} & & 
+	\multicolumn{3}{c}{12 Kelas} \\
+	\cline{1-3} \cline{5-7}
+	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  P_B \\
+	   \cline{1-3} \cline{5-7} 
+  K:0  &  96.77  &  98.47  &    &    K:0  &  93.50  &  96.50 \\
+  K:1  &  95.78  &  98.65  &    &    K:1  &  96.17  &  97.08 \\
+  K:2  &  97.76  &  98.92  &    &    K:2  &  94.33  &  96.42 \\
+  K:3  &  97.76  &  98.56  &    &    K:3  &  93.75  &  96.08 \\
+  K:4  &  97.67  &  98.56  &    &    K:4  &  94.42  &  96.33 \\
+  K:5  &  96.77  &  98.38  &    &    K:5  &  93.42  &  96.25 \\
+  K:6  &  97.04  &  97.85  &    &    K:6  &  94.67  &  96.25 \\
+  K:7  &  97.40  &  99.01  &    &    K:7  &  94.17  &  96.00 \\
+  K:8  &  95.69  &  98.11  &    &    K:8  &  93.33  &  95.75 \\
+  K:9  &  97.67  &  98.65  &    &    K:9  &  93.58  &  96.67 \\
+ \cline{1-3} \cline{5-7}
+  avg  &  97.03  &  98.52  &    &    avg &  94.13  &  96.33 \\
+  \cline{1-3} \cline{5-7}
+  &    &    &    &    &    &  \\  
+		\multicolumn{3}{l}{Kfold Score 6 Kelas} & & 
+		\multicolumn{3}{l}{Kfold Score 12 Kelas} \\ 
+		\cline{1-3} \cline{5-7}     
+pBar: -0.014901  &    &    &    &  pBar: -0.022000  &    & \\  
+$t_6$   : -6.664332  &    &    &    &  $t_{12}$   : -10.255489  &    &   \\
+	\end{tabular}
+\end{center} 
+\end{table}
+
+\subsection{Dietterich’s 5 x 2-Fold Cross-Validation Paired t-Test}
+Pada uji ini, dataset yang digunakan dipartisi menjadi 2-Fold di iterasi
+sebanyak 5 kali seperti yang telah diuraikan pada sub-bab
+\ref{sec:ujittest}. Inisialisasi bobot menggunakan cara random  internal dari
+dataset.  Setelah dilakukan ujicoba didapat data  tabulasi seperti yang
+ditunjukkan pada \tab~\ref{tbl:52fold-hasil}.
+%============================================================================
+% TABEL Dietterich’s
+%============================================================================
+\begin{table}
+\small  
+\label{tbl:52fold-hasil}
+\caption{Hasil tabulasi uji Dietterich’s untuk 6 dan 12 kategori kelas, $P_A=$
+GLVQ, $P_B=$ FN-GLVQ}
+\begin{center}
+	\begin{tabular}{ccccc} 
+	\hline
+	\multicolumn{5}{c}{Tabulasi Data 6Kelas} \\
+	\hline
+     K  &  $P_{A_1}$  &      $P_{B_1}$  &      $P_{A_2}$  &      $P_{B_2}$ \\
+     \hline
+     K:0  &  96.39  &  98.13  &  96.37  &  98.29 \\
+  K:1  &  96.57  &  98.06  &  96.44  &  98.47\\
+  K:2  &  96.73  &  98.17  &  96.35  &  98.40\\
+  K:3  &  96.80  &  98.13  &  96.30  &  98.37\\
+  K:4  &  96.61  &  98.24  &  96.37  &  98.24\\
+  \hline
+  &    &    &    &  \\
+  \multicolumn{3}{l}{Dietterich’s Score 6 Kelas} & &  \\   
+  $t_6$   : -4.846367  &    &    &    &   \\
+  &    &    &    &   \\
+  \hline
+	\multicolumn{5}{c}{Tabulasi Data 12 Kelas} \\
+     K  &  $P_{A_1}$  &      $P_{B_1}$  &      $P_{A_2}$  &      $P_{B_2}$ \\
+     \hline
+  K:0  &  93.08  &  95.73  &  93.45  &  95.22 \\
+  K:1  &  92.88  &  95.90  &  93.56  &  95.52 \\
+  K:2  &  93.00  &  95.72  &  93.51  &  95.43 \\
+  K:3  &  92.81  &  95.70  &  93.43  &  95.28 \\
+  K:4  &  92.83  &  95.62  &  93.40  &  95.20 \\
+  \hline
+  &    &    &    &   \\
+   \multicolumn{3}{l}{Dietterich’s Score 6 Kelas} & &  \\   
+  $t_12$   : -3.910283  &    &    &    & \\  
+	\end{tabular}
+\end{center} 
+\end{table}
+   
+Dari data Dietterich’s Score pada tabulasi \ref{tbl:52fold-hasil}, didapat
+$t_6$ untuk 6 kelas adlah -4.846367, sedangkan $t_{12}$ untuk 12 kelas didapat 
+-3.910283. 
+
+Level Signifikan yang digunakan untuk uji KHold adalah 0.05 (95\%) 
+dengan 5 derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
+adalah $2.571$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
+2.571$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.571$, sehingga $H_0$
+juga dapat ditolak. Sehingga ini menunjukan juga bahwa perbedaan
+akurasi dari kedua algoritma sangat signifikan dan dapat disimpulkan algoritma
+FN-GLVQ memberikan hasil lebih baik dibandingkan dengan GLVQ.
+
+
+Dari empat uji test yang dilakukan terhadap algoritma GLVQ dan FN-GLVQ pada
+data arrhytmia 6 dan 12 Kelas, 86 fitur; 3 uji test menunjukkan bahwa FN-GLVQ
+memberikan hasil yang lebih baik secara signifikan daripada GLVQ, sedangkan 1
+uji test memberikan kesimpulan yang seimbang. Sehingga dapat ditarik kesimpulan
+bahwa FN-GLVQ memberikan hasil yang lebih baik dari pada GLVQ pada pengenalan
+kelainan Arrhytmia.
+% %-----------------------------------------------------------------------------%
+% \section{Analisis Hasil}
+% %-----------------------------------------------------------------------------%
+% 1. Analisis bisa menggunakan T-Test dari 
+% Buku Combining Pattern Classifier
+% Error Calculation (Counting estimator p8)
+% 
+% 2. McNemar Test
+% 	- tentukan bobot terbaik antara LVQ1m LVQ21, GLVQ dan FPGLVQ
+% 	- train dengan data 86 fitur, 6 kelas, simpan bobot nya
+% 	- testing dengan mencatat setiap single data, catat untuk tiap classifier,
+% 	dikenali atau tidak.
+% 
+% 
+% Untuk memberikan ranking terhadap algoritma, bisa menggunakan amalisis ROC 
+% \newpage
+% \section{Revision}
+% \begin{itemize}
+%   \item Why? wavelet
+%   \item Why? daubhechies
+%   \item Why? proses Outlier , baik baseline wander, maupun Outlier removal,
+%   knapa pake interquartile range? bukan mahalanobis?
+%   \item 
+%   \item 
+% \end{itemize}

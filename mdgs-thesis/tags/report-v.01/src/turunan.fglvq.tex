@@ -1,0 +1,268 @@
+\section{Penurunan Rumus Fuzzy GLVQ}
+
+\subsection{Penurunan GLVQ}
+\begin{align}
+\label{eq:}
+	\varphi(x) = \frac{d_1 - d_2}{d_1 + d_2}
+\end{align}
+
+\begin{align}
+\label{eq:}
+	S = \sum_{i=1}^{N} f(\varphi(x)), 
+\end{align}
+
+\begin{align}
+\label{eq:}
+	w_i \leftarrow w_i - \alpha \frac{\delta S}{\delta w_i}, i = 1, 2
+\end{align}
+
+$d_i = \lvert x - w_i\rvert ^2$
+
+\begin{align}
+\label{eq:}
+	\frac{\delta S}{\delta w_1} =  
+	\frac{\delta S}{\delta \varphi} \frac{\delta \varphi}{\delta d_1} \frac{\delta
+	d_1}{\delta w_1} =
+	- \frac{\delta f}{\delta \varphi} \frac{4d_2}{(d_1 + d_2)^2} (x - w_1)
+\end{align}
+
+\begin{align}
+\label{eq:}
+	\frac{\delta S}{\delta w_2} =  
+	\frac{\delta S}{\delta \varphi} \frac{\delta \varphi}{\delta d_2} \frac{\delta
+	d_2}{\delta w_2} =
+	- \frac{\delta f}{\delta \varphi} \frac{4d_1}{(d_1 + d_2)^2} (x - w_2)
+\end{align}
+
+Update rules;
+\begin{align}
+\label{eq:}
+	w_1 \leftarrow w_1 + \alpha   
+	\frac{\delta f}{\delta \varphi} \frac{d_2}{(d_1 + d_2)^2} (x - w_1)
+\end{align}
+
+\begin{align}
+\label{eq:}
+	w_2 \leftarrow w_2 - \alpha   
+	\frac{\delta f}{\delta \varphi} \frac{d_1}{(d_1 + d_2)^2} (x - w_2)
+\end{align}
+
+Fungsi Monoton naik, fungsi sigmoid:
+\begin{align}
+\label{eq:}
+	f(\varphi, \xi) = \frac{1}{1 + e^{-\varphi \xi}}
+\end{align}
+
+\begin{align}
+\label{eq:deltasigmoid}
+	\frac{\delta f}{\delta \varphi} = f(\varphi, \xi) (1 - f(\varphi , 
+	\xi))
+\end{align}
+	
+	
+\subsection{Penurunan FPGLVQ}
+Pada GLVQ, kemiripan dihitung dengan menggunakan metric, yakni jarak euclid,
+sehingga semakin kecil jarak antara input dengan prototipe, maka akan semakin
+mirip. Pada FPGLVQ, tingkat kemiripan antara vektor masukan dengan prototipe
+menggunakan fuzzy similarity , dimana pada perhitungan ini dicari
+derajat keanggotaan setiap fitur ($x_i$) terhadap fungsi keanggotaannya
+($h_{ij}(x)$), $i=$ fitur, $j=$ prototipe.
+\begin{align}
+	\mu_{ij} = h_{ij}(x_i)
+\end{align}
+
+Kemudian nilai derajat keanggotaan dipropagasi ke neuron keluaran dengan
+menggunakan operasi rata-rata (mean). 
+
+\begin{align}
+	\mu_j = \text{mean}_i [\mu_i]
+\end{align}
+
+Untuk menentukan prototipe pemenang, dipilih prototipe dengan nilai kemiripan
+terbesar (max).  
+\begin{align}
+	w_p = \max_j [\mu_j]
+\end{align}
+
+Ketidakjelasan dari prototipe akan disesuaikan selama proses pembelajaran
+tergantung dari vektor masukan-nya.
+Pada fuzzy similarity, semakin besar nilainya , maka kedua vektor akan semakin
+mirip. Untuk dapat menggunakan konsep similarity pada GLVQ, maka dicari
+negasi-nya menjadi \textit{disimilarity} dengan menggunakan persamaan $d = 1 -
+\mu$. Sehingga;
+
+\begin{align}
+\label{eq:}
+	\varphi(x) &= \frac{(1 - \mu_1) - (1 - \mu_2)}{(1 - \mu_1) + (1 -
+	\mu_2)}\nonumber\\
+	&= \frac{\mu_2 - \mu_1}{2 - \mu_1 - \mu_2}
+\end{align}
+
+Untuk dapat mengimplementasikan konsep fuzzy dalam GLVQ, maka akan dilakukan
+penurunan rumus sebagai berikut;
+
+\begin{align}
+\label{eq:}
+	\frac{\delta S}{\delta w} =  
+	\frac{\delta S}{\delta \varphi} . \frac{\delta \varphi}{\delta \mu}.
+	\frac{\delta \mu}{\delta w}
+\end{align}
+
+\begin{align}
+\label{eq:}
+	\Psi(x) &= \frac{f(x)}{g(x)} \nonumber \\
+	\frac{\delta \Psi}{\delta x} &=  
+	\frac{f'(x)g(x) - f(x)g'(g)}{g(x)^2}
+\end{align}
+
+\begin{align}
+\label{eq:}
+	\frac{\delta \varphi}{\delta \mu_1} &=  
+	\frac{-1 . (2 - \mu_1 - \mu_2) - (-1).(\mu_2-\mu_1)}
+	{(2 - \mu_1 - \mu_2)^2} \nonumber \\
+	 &=  
+	-2.\frac{(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}
+\end{align}
+
+\begin{align}
+\label{eq:}
+	\frac{\delta \varphi}{\delta \mu_2} &=  
+	\frac{1 . (2 - \mu_1 - \mu_2) - (-1).(\mu_2-\mu_1)}
+	{(2 - \mu_1 - \mu_2)^2} \nonumber \\
+	 &=  
+	2.\frac{(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}
+\end{align}
+
+Karena dalam menghitung kemiripan kita menggunakan fuzzy similarity, maka harus
+diturunkan juga. Pada saat ini, kita menggunakan fungsi segitiga
+sebagai fungsi keanggotaan fuzzy-nya.
+
+\begin{align}
+\label{eq:}
+	f(x, a, b, c) = \left\{ 
+	\begin{array}{ll}
+	0 & , x \leq a\\
+	\frac{x - a}{b - a} & , a < x \leq b \\
+	\frac{c - x}{c - b} & , b < x < c \\
+	0 & , x \geq c
+	\end{array}
+\end{align}
+
+dimana $a = minimum, b = rata-rata, c = maximum$. Pada algoritma ini,
+vektor dari prototipe bobot akan disusun sbb;
+
+\begin{align}
+\label{eq:}
+	w = (w_{min}, w_{mean}, w_{max})
+\end{align}
+ 
+Sehingga turunan dari fungsi segitiga diatas didapat sebagai berikut;
+\begin{itemize}
+  \item Untuk $w_{min} < x \leq w_{mean}$ :
+  \begin{align}
+	\label{eq:}
+		\mu &= \frac{x - w_{min}}{w_{mean} - w_{min}} \nonumber \\
+			&= (x - w_{min}) . (w_{mean} - w_{min})^{-1} \nonumber \\
+		\frac{\delta \mu}{\delta w_{mean}} &=
+		(x - w_{min}).(-1).(w_{mean} - w_{min})^{-2}.(1) \nonumber \\
+		 &=
+		- \frac{x - w_{min}}{(w_{mean} - w_{min})^2}
+	\end{align}
+
+	\item Untuk $w_{mean} < x < w_{max}$ :
+	\begin{align}
+	\label{eq:}
+		\mu &= \frac{w_{max} - x}{w_{max} - w_{mean}} \nonumber \\
+			&= (w_{max} - x) . (w_{max} - w_{mean})^{-1} \nonumber \\
+		\frac{\delta \mu}{\delta w_{mean}} &=
+		(w_{max} - x).(-1).(w_{max} - w_{mean})^{-2}.(-1) \nonumber \\
+		 &=
+		+ \frac{w_{max} - x}{(w_{max} - w_{mean})^2}
+	\end{align}
+\end{itemize}
+  
+\noindent Sehingga didapat update rule sebagai berikut;
+\begin{itemize}
+  \item Untuk $w_{min} < x \leq w_{mean}$ :
+  	\begin{align}
+	\label{eq:}
+		w_1 \leftarrow & w_1 - \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{x - w_{min}}{(w_{mean} - w_{min})^2}\Bigg) \\
+		w_2 \leftarrow & w_2 + \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{x - w_{min}}{(w_{mean} - w_{min})^2}\Bigg)
+	\end{align}
+  \item Untuk $w_{mean} < x < w_{max}$ :
+	\begin{align}
+	\label{eq:}
+		w_1 \leftarrow & w_1 + \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_2)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{w_{max} - x}{(w_{max} - w_{mean})^2}\Bigg) \\
+		w_2 \leftarrow & w_2 - \alpha .  
+		\frac{\delta f}{\delta \varphi} . \frac{2.(1 - \mu_1)}{(2 - \mu_1 - \mu_2)^2}.
+		\Bigg(\frac{w_{max} - x}{(w_{max} - w_{mean})^2})\Bigg)
+	\end{align}  
+  \item Untuk $x \leq w_{min}$ dan $x \geq w_{max}$ :
+  	\begin{align}
+	\label{eq:}
+		w_1(t+1) \leftarrow & w_1(t)     
+	\end{align}  
+\end{itemize}
+
+Fungsi Monoton naik yang dipakai tetap sama dengan yang dipakai pada GLVQ yang
+awal, yakni menggunakan fungsi sigmoid, seperti yang pada \equ~\ref{eq:deltasigmoid}
+
+Satu langkah tambahan yang diadaptasi dari FNLVQ adalah proses penyesuaian
+lebar interval dari fungsi keanggotaan tiap prototipe. Jika jaringan bisa
+mengenali dengan benar vektor masukan yang diberikan, maka fungsi keanggotaan
+akan diperlebar dengan harapan tingkat pengenalan-nya meningkat. Sebaliknya jika
+jaringan salah mengenali vektor masukan, maka fungsi keanggotaan akan
+dipersempit dengan harapan tingkat pengenalan terhadap vektor masukan menurun.
+Kedua langkah ini hanya akan dilakukan jika nilai $\mu_1 > 0$ atau $\mu_2 > 0$.
+
+Jika  kedua nilai similarity adalah 0, $\mu_1=0$ dan $\mu_2=0$, maka hal ini
+berarti semua prototipe sama sekali tidak mengenali vektor masukan yang
+diberikan. Terdapat 2 kemungkinan; (1) Vektor masukan memang berada diluar
+distribusi dari kategori yang dikenali, (2) interval dari fungsi
+keanggotaan (fuzzy) dari Vektor prototipe terlalu sempit, sehingga tingkat
+pengenalan-nya rendah. Karena ini merupakan proses pelatihan, maka asumsi adalah
+yang ke-2, sehingga untuk membuat jaringan mengenali vektor pewakil, semua
+interval dari fungsi keanggotaan prototipe diperlebar.
+
+\noindent
+Berikut adalah aturan perlebaran/penyempitan fungsi keanggotaan prototipe lebih
+jelas;
+\begin{itemize}
+  \item Jika  $\mu_1 > 0$ atau $\mu_2 > 0$:
+  \begin{itemize}
+    \item Jika pengenalan-nya benar ($\varphi < 0$), diperlebar
+    	\begin{align}
+    	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 + (\beta .
+    	\alpha)) \nonumber \\
+    	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean}) . (1 + (\beta .
+    	\alpha)) 
+    	\end{align}
+    \item Jika pengenalan-nya salah ($\varphi \geq 0$), dipersempit
+    	\begin{align}
+    	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 - (\beta .
+    	\alpha)) \nonumber \\
+    	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean}) . (1 - (\beta .
+    	\alpha)) 
+    	\end{align}
+  \end{itemize}
+  Disini, nilai $\beta$ adalah diantara [0,1]. Pada studi kasus yang dilakukan
+  disini, dipilih nilai $\beta = 0.00005$.
+  
+  \item Jika  $\mu_1=0$ dan $\mu_2=0$, semua fungsi keanggotaan pada prototipe
+  diperlebar dengan aturan sbb:
+  	\begin{align}
+	w_{min} &\leftarrow w_{mean} - (w_{mean} - w_{min}) . (1 - (\alpha .
+	\gamma)) \nonumber \\ 
+	w_{max} &\leftarrow w_{mean} + (w_{max} - w_{mean})
+	. (1 + (\alpha . \gamma)) 
+	\end{align}
+	
+	Disini, nilai $\gamma$ adalah diantara [0,1]. Pada studi kasus yang dilakukan
+	disini, dipilih nilai $\gamma = 0.1$.
+\end{itemize}  

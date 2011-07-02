@@ -1,0 +1,380 @@
+%-----------------------------------------------------------------------------%
+\QEinstein
+\chapter{\babSatu}
+\label{bab:1}
+%-----------------------------------------------------------------------------%
+
+%-----------------------------------------------------------------------------%
+\section{Latar Belakang}
+%-----------------------------------------------------------------------------%
+Kesehatan merupakan salah satu bidang sentral yang menjadi fokus dalam 
+pembangunan. Tingginya angka penyakit menular seperti DHF dan TBC masih 
+menjadi permasalahan, ditambah lagi dengan pergeseran pola hidup yang tidak 
+seimbang yang menyebabkan penyakit degeneratif semakin meningkat.
+
+% Sesuai Survei Kesehatan Rumah Tangga Departemen Kesehatan, 2001 proporsi 
+% kematian akibat Penyakit Tidak Menular  meningkat  dari 25.41\% di tahun 
+% 1990  menjadi 48.53\% di tahun 2001. Sedangkan proporsi kematian karena 
+% Penyakit Jantung dan Pembuluh Darah meningkat dari 9.1\% di tahun 1986 
+% meningkat menjadi 26.3\% di tahun 2001 
+% \footnote{\url{http://id.inaheart.or.id/}}. 
+Berdasarkan laporan dari Badan Kesehatan Dunia - WHO, proporsi  kematian akibat
+dari penyakit jantung pada tahun 2002 mencapai 29\% dan  menjadi penyebab kematian no
+1 di Indonesia, diatas penyakit menular yang menempati  posisi ke-2, seperti
+yang diperlihatkan pada \pic~\ref{fig:cardiodeath}  
+
+\addFigure{width=1\textwidth}{pics/cardiodeath.jpg}{fig:cardiodeath}{Proporsi
+Beberapa penyebab kematian di Indonesia 2002-WHO.}
+
+Perkembangan teknologi kedokteran dan kesehatan yang digunakan dalam tindakan 
+medis saat ini, berkaitan dengan kemajuan ilmu kedokteran itu sendiri yang 
+didukung oleh beberapa ilmu-ilmu lainnya seperti; ilmu pengetahuan alam, ilmu
+rekayasa serta kemajuan teknologi informasi. Pengembangan perangkat teknologi
+informasi, baik perangkat keras maupun perangkat lunak, dapat digunakan untuk
+membantu proses penanganan kesehatan yang dilakukan oleh paramedis dengan lebih
+baik. Contohnya, deteksi penyakit kanker, deteksi penyakit paru, analisa dan
+visualisasi detak jantung dan lain-lain. Dengan pemanfaatan teknologi informasi
+ini, penanganan penyakit dapat dilakukan dengan mudah, cepat dan akurat.
+
+Alat yang umum digunakan oleh para pakar dalam mendiagnosa kinerja jantung
+adalah electrocardiogram (ECG). Alat ini akan merekam aktifitas elektrik dari
+jantung dan merepresentasikannya dalam bentuk gelombang, atau biasa
+diistilahkan gelombang ECG. Tidak sembarang orang dapat menerjemahkan gelombang
+ECG tersebut, bahkan antara pakar sendiri terkadang terjadi perbedaan
+interpretasi. Disamping itu, menurut Perhimpunan Dokter Spesialis
+Kardiovaskular Indonesia (PERKI)\footnote{\url{http://www.inaheart.org}}, jumlah
+ahli jantung di Indonesia sekitar 452 orang. Sangat sedikit sekali jika 
+dibandingkan dengan jumlah penduduk yang berjumlah sekitar 228 juta jiwa, 
+atau setiap dokter menangani 550 ribu jiwa
+(1:550.000), dan itupun tidak menyebar secara merata, masih terfokus di
+kota-kota besar seperti Jakarta. 
+
+Oleh karena itu, sangat dibutuhkan suatu mekanisme untuk membantu proses
+pendeteksian awal penyakit jantung yang mudah dan dapat dilakukan tidak hanya
+oleh pakar, namun oleh siapa saja, bahkan pasien sekalipun. Salah satu
+mekanisme yang dapat dikembangkan adalah suatu sistem cerdas pendeteksi gejala
+penyakit jantung secara otomatis berdasarkan gelombang ECG. Dengan sistem ini,
+gelombang ECG dapat diinterpretasikan oleh suatu perangkat lunak, yang
+sebelumnya sudah dilatih untuk mengenal berbagai macam kemungkinan penyakit
+jantung, sehingga proses interpretasi awal dapat dilakukan lebih mudah, lebih
+cepat dan lebih akurat. 
+
+Terdapat beberapa tipe penyakit jantung, salah satunya adalah Arrhytmia
+atau Cardiac Arrhytmia. Arrhytmia adalah kelainan pada irama jantung atau
+ketidak-beraturan denyut jantung. Pada kelainan jantung ini, denyut jantung
+mungkin terlalu cepat, terlalu lambat atau tidak beraturan. Beberapa pasien
+terkadang tidak menyadari akan kondisi tersebut, dan beberapa pasien lainnya
+merasakan gejala-gejala klinis yang timbul seperti palpitasi, pusing, nyeri
+dada, nafas yang pendek. Di lain pihak, orang normal juga memungkinkan mengalami
+perasaan yang sama seperti palpitasi, tapi hal tersebut bukan Arrhytmia. Oleh
+karena itu, kelaian ini tidak cukup hanya di diagnosa berdasarkan gejala klinis
+saja, dan pemanfaatan ECG akan sangat membantu dalam proses tersebut. 
+
+Berbagai penelitian telah dilakukan dalam kaitan pengenalan berbagai
+penyakit Arrhytmia. Terdapat banyak penelitian dengan mengaplikasikan jaringan
+saraf tiruan (JST) dan berbagai variasinya sebagai metode pendeteksian. Yeap
+\cite{yeap.1} menggunakan backpropagation untuk mendeteksi arrhytmia dengan
+menggunakan AHA database. Ozbay \cite{ozbay.1} memanfaatkan tipe arrhytmia dari
+MIT-BIH sebagai data untuk pelatihan dan menggunakan data dari institusi-nya
+sebagai data testing. Sedangkan Ceylan \cite{Ceylan.1} melakukan studi 
+perbandingan beberapa metode extraksi fitur mulai dari Principal Component
+Analysis(PCA), Wavelet transform (WT) dan Fuzzy C-Mean Clustering (FCM) untuk
+reduksi data dan menggunakan BackPropagation untuk klasifikasi signal. Empat
+struktur dibangun, FCM-NN, PCA-NN, FCM-PCA-NN and WT-NN dan menggunakan data 
+arrhytmia dari MIT-BIH database. Studi perbandingan yang lain dilakukan oleh
+Ghongade et.al \cite{Ghongade.1}. Ghongade melakukan perbandingan beberapa
+metode ekstraksi fitur yakni DFT, PCA, DWT terhadap 180 signal sample dan
+disertai dengan ekstrasi fitur berdasarkan morfologi signal yakni R-peak, QRS
+area serta Q-S distance dengan menggunakan Backpropagation. Data yang digunakan adalah tiga
+tipe arrhytmia dari MIT-BIH database. Guler \cite{guler.1} menggunakan multi
+layer perceptron (MLP) dan combine network model untuk mengklasifikasi signal ECG (beat) 
+dan menggunakan distribusi statistik dari hasil analisis spectral signal ECG
+menggunakan DWT sebagai fitur klasifikasi. Elsayad dalam papernya,
+\cite{Elsayad.1} mengaplikasikan competitive based learning, yakni Learning
+Vector Quantization - LVQ, untuk mengklasifikasi data ECG arrhytmia dari UCI
+database. Data diolah menggunakan PCA dan diaplikasikan pada beberapa
+varian LVQ. Karraz et.al. dalam papernya \cite{Karraz.1} mengembangkan
+klasifikasi denyut jantung otomatis menggunakan jaringan saraf tiruan
+berdasarkan Bayesian Framework. Studi dilakukan terhadap 5 tipe ECG
+arrhytmia dari MIT-BIH database dan fitur yang digunakan adalah ECG morphology
+dan time intervals.
+
+Beberapa penelitian mengaplikasikan teori fuzzy untuk mendeteksi berbagai tipe
+arrhytmia seperti yang dilakukan oleh Anuradha et.al pada
+papernya \cite{Anuradha.1}. Nonlinier dynamic dari ECG signal digunakan sebagai
+karakteristik dari arrhytmia diantaranya Spectral entropy, Poincaré plot
+geometry, Largest Lyapunov exponent and Detrended fluctuation analysis yang
+diekstrak dari heart rate signal. Kemudian linguistik variabel (fuzzy set)
+digunakan untuk merepresentasikan ECG fitur dan fuzzy conditional statement
+digunakan sebagai rule. Exarchos et.al \cite{Exarchos.1} mengembangkan
+metodologi dimana secara otomatis membuat fuzzy expert system dari data training
+dengan menggunakan decision tree dimana digunakan untuk mengklasifikasi
+arrhytmia (MIT-BIH database) dan ischaemic (ST-T database). Yeh et.al
+\cite{Yeh.1} mengembangkan Fuzzy logic method (FLM) untuk mendeteksi lima
+tipe arrhytmia dari signal ECG  melalui fuzzy inference engine dan operasi
+defuzzifikasi dengan menggunakan data dari MIT-BIH arrhytmia database.
+
+Hao et.al \cite{Hao.1} mengembangkan metode klasifikasi arrhytmia menggunakan
+Support Vector Machine (SVM) dengan menggunakan PCA sebagai metode ekstraksi
+fitur dari data MIT-BIH database. Studi dilakukan terhadap empat tipe arrhytmia
+yakni Normal, LBBB, RBBB dan PVC. Nasiri et.al. \cite{Nasiri.1}
+mengembangkan metode klasifikasi arrhytmia dengan mengintegrasikan SVM dan
+Genetic Algorithm dimana GA digunakan untuk meningkatkan kinerja dari SVM dari
+sisi generalisasi-nya. Sedangkan Melgani et.al. \cite{Melgani.1}
+mengintegrasikannya dengan Particle Swarm Optimization (PSO) dengan menggunakan
+data dari MIT-BIH database.
+
+Metode pemrosesan ECG otomatis untuk proses klasifikasi denyut jantung
+dikembangkan oleh Philip et.al.\cite{Philip.1} dimana kategori dari arrhytmia
+yang digunakan adalah lima kategori yang direkomendasikan oleh standar ANSI/AAMI
+EC57:1998 yaitu normal beat, ventricular ectopic beat (VEB), supraventricular
+ectopic beat (SVEB), fusion of a normal and a VEB, dan unknown beat type. Lima
+kategori tersebut merupakan pengelompokkan dari 15 kategori arrhytmia yang
+terdapat pada MIT-BIH database. Fitur yang digunakan adalah berdasarkan pada
+interval denyut jantung, interval RR dan morfologi dari ECG. 
+
+Dari latar belakang tersebut diatas, terlihat belum terlalu banyak peneliti yang
+menggunakan pendekatan Competitive Based Learning seperti LVQ digunakan untuk
+mendeteksi kelainan jantung khusus-nya Arrhytmia. Disamping itu, laboratorium
+dimana \saya melakukan penelitian, sebelumnya telah mengembangkan metode
+pengenalan aroma dengan menggunakan konsep COmpetitive Based Learningm yaitu
+FNLVQ. Oleh sebab itu pada penelitian ini, \saya akan melakukan studi tentang
+klasifikasi signal ECG arrhytmia dengan menggunakan pendekatan competitive based
+learning, yakni Generalized LVQ \cite{Sato:1995}, yang merupakan generalisasi
+dari LVQ2.1 , dimana GLVQ memiliki keunggulan dalam hal menjamin konvergensi
+dalam proses pelatihan yang tidak dimiliki LVQ2.1 serta memiliki karakteristik
+kinerja yang tidak sensitif terhadap inisialisasi bobot awal \cite{Sato:1999}.
+Disamping itu juga, LVQ dan varian-nya merupakan jenis JST yang arsitekturnya
+paling sederhana  sehingga berimplikasi pada kecepatan proses pelatihan. Pada
+tahap berikutnya,  GLVQ yang perhitungan kemiripannya berdasarkan euclidean
+distance dimodifikasi untuk menghasilkan varian baru metode klasifikasi LVQ 
+dengan menggunakan teori fuzzy dimana konsep ini juga diadaptasi dari metode
+FNLVQ yang telah dikembangkan sebelumnya oleh tim peneliti yang lain.
+
+% dengan pengklasifikasian  dengan
+% menggunakan mahalanobis distance karena mahalanobis distance memperhitungkan
+% tingkat distribusi  dari vektor fitur dan berguna  dalam membandingkan vektor
+% fitur dimana tiap  elemen memiliki rentang dan varian yang berbeda-beda.
+
+% Dataset yang akan digunakan pada penelitian ini adalah data yang
+% telah tersedia bebas dari physionet\footnote{http://physionet.net} yakni MIT-BIH
+% arrhytmia database. Dataset akan diolah terlebih dahulu menggunakan pendekatan
+% analisis spectral, Wavelet Transform.
+% 
+% Namun untuk dapat dikenali oleh sistem, data gelombang ECG perlu diolah lebih
+% lanjut sehingga lebih mudah dikenali dan hasil yang diperoleh memiliki tingkat
+% akurasi yang tinggi. Oleh karena itu, dalam studi mandiri ini akan dipelajari
+% metode untuk mengolah data dasar (\textit{raw preprocessing}), menganalisa,
+% memvisualisasikan data gelombang ECG, baik berupa data analog (ECG paper)
+% maupun data digital.
+
+%-----------------------------------------------------------------------------%
+\section{Permasalahan}
+%-----------------------------------------------------------------------------%
+Pada bagian ini akan dijelaskan mengenai definisi permasalahan 
+yang \saya~hadapi dan ingin diselesaikan serta asumsi dan batasan 
+yang digunakan dalam menyelesaikannya. 
+
+%-----------------------------------------------------------------------------%
+\subsection{Definisi Permasalahan}
+%-----------------------------------------------------------------------------%
+% \todo{Tuliskan permasalahan yang ingin diselesaikan. Bisa juga
+% 	berbentuk pertanyaan}
+
+Berdasarkan uraian latar belakang diatas, penelitian ini secara umum
+terbagi menjadi beberapa permasalahan sebagai berikut;
+
+\begin{enumerate}
+  \item Bagaimana pengolahan data awal yang harus dilakukan agar sesuai dengan
+  kebutuhan proses pengenalan Arrhytmia.
+  \item Bagaimana penanganan noise data dapat memperbaiki kinerja dari proses
+  pengenalan Arrhytmia.
+  \item Bagaimana metode pembelajaran berbasis kompetisi dapat digunakan untuk
+  proses pengenalan Arrhytmia.
+  \item Bagaimana teori fuzzy diintegrasikan ke metode Generalized LVQ?
+  \item Bagaimana integrasi teori fuzzy dengan GLVQ dapat digunakan untuk
+  meningkatkan kinerja dari proses pengenalan Arrhytmia.
+%   \item Bagaimana metode perhitungan kemiripan mahalanobis distance dapat
+%   digunakan untuk memperbaiki kinerja dari proses pengenalan Arrhytmia.
+\end{enumerate}
+
+%-----------------------------------------------------------------------------%
+\subsection{Batasan Permasalahan}
+%-----------------------------------------------------------------------------%
+% \todo{Umumnya ada asumsi atau batasan yang digunakan untuk 
+% 	menjawab pertanyaan-pertanyaan penelitian diatas.}
+Ruang lingkup yang digunakan dalam penelitian ini adalah sebagai berikut;
+\begin{enumerate}
+  \item Dataset yang digunakan sebagai data pelatihan dan evaluasi adalah data
+  ECG Arrhytmia yang didapat dari physionet, yakni data MIT-BIH database dimana
+  data tersebut sudah dilengkapi dengan berbagai anotasi dari para ahli jantung
+  secara manual.
+  \item Jumlah kategori arrhytmia yang akan dideteksi dalam penelitian ini
+  adalah sebanyak 12 kategori termasuk didalamnya signal denyut jantung hasil
+  dari penggunaan alat pacu jantung (pacemaker).
+  \item Sinyal ECG yang digunakan pada penelitian ini hanya menggunakan
+  sinyal hasil sandapan MLII.
+  \item Frekuensi cuplik (sampling rate) dari sinyal ECG yang digunakan adalah
+  360Hz.
+  \item Jumlah prototype/vektor pewakil untuk setiap kategori kelas yang
+  akan diujicoba hanya berjumlah satu.
+\end{enumerate} 
+%-----------------------------------------------------------------------------%
+\section{Tujuan}
+%-----------------------------------------------------------------------------%
+Tujuan dari penelitian ini adalah sebagai berikut;
+\begin{enumerate}
+  \item Mencari beberapa kemungkinan pengolahan data ECG agar dapat digunakan
+  dalam proses pelatihan dan pengenalan kelainan irama jantung (Arrhytmia).
+  \item Mengembangkan sistem yang mampu mengenali kelainan irama jantung
+  (arrhytmia) berdasarkan data signal ECG dengan menggunakan pendekatan
+  competitive based learning.
+\end{enumerate}
+
+
+%-----------------------------------------------------------------------------%
+\section{Posisi Penelitian}
+%-----------------------------------------------------------------------------%
+% \todo{Posisi penelitian Anda jika dilihat secara bersamaan dengan 
+% 	peneliti-peneliti lainnya. Akan lebih baik lagi jika ikut menyertakan 
+% 	diagram yang menjelaskan hubungan dan keterkaitan antar 
+% 	penelitian-penelitian sebelumnya}
+Penelitian ini merupakan bagian dari penelitian dan pengembangan alat pendeteksi
+kelainan jantung portable oleh Wisnu J dkk, sehingga disamping hasil yang
+akurat, dibutuhkan juga sistem yang memiliki waktu eksekusi yang cepat. Oleh 
+karena itu, pada penelitian ini dipilih pendekatan competitive based Learning.
+Berikut adalah bagan posisi penelitian ini terhadap penelitian-penelitian
+lainnya sebagai bagian dari pengembangan alat pendeteksi kelaian jantung
+portable.
+
+\addFigure{width=1\textwidth}{pics/baganpospeneliti.png}{fig:bagan}{Diagram
+posisi penelitian dan kontribusi.}
+
+Pada bagan \pic~\ref{fig:bagan} dapat dilihat bahwa penelitian ini berfungsi
+sebagai penelitian awal dalam menginvestigasi berbagai kemungkinan struktur data /
+fitur yang nantinya dapat digunakan sebagai referensi dalam mengembangkan alat
+perekam ECG seperti yang dilakukan oleh Saudara Asep Insani. Berkaitan dengan
+alat perekam ECG yang dikembangkan, hal-hal yang perlu diperhatikan adalah mengenai
+sampling rate yang digunakan dalam merekam denyut jantung. Karena pada
+penelitian ini menggunakan data dari physionet dengan sampling rate tertentu
+sebagai data pelatihan, maka ada baiknya sampling rate yang digunakan
+sama, atau paling tidak dipertimbangkan langkah-langkah penyesuaian
+tertentu. Hal ini dikarenakan data yang dihasilkan dari alat perekam ECG
+yang dikembangkan tidak memiliki label, seperti data MIT-BIH dan juga akan
+mengandung noise yang tinggi. terkecuali nantinya akan ada pakar jantung
+yang akan memberikan label pada data hasil perekaman.  Selain itu penelitian ini
+juga digunakan sebagai referensi oleh tim FPGA dalam mengembangkan embeded
+system pada alat portable.
+
+Secara garis besar, kontribusi \saya pada penelitian ini dapat dilihat
+dari dua aspek diantaranya sebagai berikut;
+\begin{enumerate}
+  \item Internal : kontribusi terhadap penelitian yang dilakukan oleh tim
+  peneliti arrhytmia Fasilkom Universitas Indonesia
+  \begin{itemize}
+    \item Sebagai bagian awal penelitian di bidang arrhytmia, dimana pada
+    penelitian ini dilakukan proses pengolahan data awal dengan melewati
+    beberapa tahap pemrosesan.
+    \item Pengembangan Java Engine metode klasifikasi yang dapat digunakan
+    dengan mudah dan dapat dikembangkan lebih lanjut untuk keperluan yang lebih
+    spesifik.
+  \end{itemize}
+  
+  \item Eksternal : kontribusi terhadap dunia penelitian khususnya dibidang
+  pengenalan arrhytmia.
+  \begin{itemize}
+    \item Pengembangan metode klasifikasi baru yaitu Fuzzy-Neuro Generalized
+    Learning Vector Quantization (FN-GLVQ).
+    \item Penggunaan metode FN-GLVQ dalam pendeteksian pengenalan kelaian
+    arrhytmia melalui sinyal ECG.
+  \end{itemize}
+\end{enumerate} 
+
+%-----------------------------------------------------------------------------%
+\section{Metodologi Penelitian}
+%-----------------------------------------------------------------------------%
+Metode yang digunakan dalam penelitian ini adalah sebagai berikut;
+\begin{enumerate}
+  \item Studi literatur \\
+		Pada tahap ini, \saya melakukan kajian literatur mengenai perkembangan
+		terakhir penelitian di bidang ECG, mempelajari mengenai pendekatan
+		yang dilakukan para peneliti dalam mencari solusi permasalahan, terutama
+		proses pengenalan kelainan jantung seperti Arrhytmia. Literatur ini didapat
+		dari buku, thesis dan paper baik dalam jurnal dalam negeri maupun luar negeri,
+		serta informasi dari berbagai sumber yang berkaitan dengan topik thesis ini. 
+  \item Pengolahan data\\
+		Pada tahap ini, \saya mempersiapkan data yang akan digunakan dalam penelitian
+		ini. Data ECG yang digunakan merupakan data yang diambil dari repository
+		online, physionet.net. Beberapa pengolahan awal diaplikasikan terhadap data
+		tesebut sesuai dengan tujuan yang ingin dicapai.
+  \item Perancangan sistem \\
+		Tahap perancangan sistem meliputi pembuatan rancangan sistem untuk
+		pendeteksian kelainan denyut jantung dengan menggunakan pendekatan competitive
+		base learning.
+  \item Implementasi sistem \\
+		Tahap ini merupakan implementasi dari tahap rancangan sebelumnya. pada tahap
+		ini diimplementasikan beberapa variasi dari supervised competitive based
+		learning mulai dari LVQ (1,21, 3), GLVQ dan Fuzzy Neuro-GLVQ.
+  \item Uji coba dan analisis sistem \\
+		Pada tahap ini dilakukan ujicoba sistem yang telah diimplementasikan terhadap
+		data yang telah diolah pada tahap sebelumnya dengan menggunakan berbagai
+		skenario percobaan. Kemudian dilanjutkan dengan analisis terhadap hasil  yang
+		didapat untuk mengetahui performa dari sistem.
+  \item Penulisan laporan \\
+		Bagian akhir dari metodologi penelitian ini adalah penulisan thesis yang
+		memuat semua hasil penelitian yang telah dilakukan.
+\end{enumerate}
+
+%-----------------------------------------------------------------------------%
+\section{Sistematika Penulisan}
+%-----------------------------------------------------------------------------%
+Sistematika penulisan laporan akhir ini adalah sebagai berikut:
+\begin{itemize}
+	\item Bab 1 \babSatu \\
+		Bab ini berisi latar belakang yang memotivasi penelitian ini,  perumusan
+		masalah, tujuan, ruang lingkup, metodologi penelitian serta sistematika penulisan.
+	\item Bab 2 \babDua \\
+		Bab ini berisi pembahasan mengenai sekilas tentang penyakit jantung, dan
+		khususnya beberapa variasi kelainan irama jantung (Arrhytmia). Juga akan
+		dibahas mengenai pendekatan dalam machine learning khususnya
+		Competitive Base learning mulai dari standard LVQ sampai Generalized LVQ
+		(GLVQ) dan bagaimana metode tersebut diaplikasikan terhadap ECG data.
+	\item Bab 3 \babTiga \\
+		Bab ini berisi pembahasan mengenai pengolahan data MIT-BIH dari physionet.net
+		disesuaikan dengan kebutuhan dalam penelitian ini, mulai dari bagaimana
+		mekanisme pengambilan data fitur (per beat), baseline wander removal (BWR),
+		reduksi fitur dengan menggunakan wavelet serta filtering dataset dari outlier
+		yang dapat mengganggu performa dari sistem nantinya.
+	\item Bab 4 \babEmpat \\
+		Bab ini berisi pembahasan mengenai rancangan dan implementasi dari algoritma
+		yang telah dirumuskan beserta beberapa modifikasi yang dilakukan untuk
+		memperbaiki performa dari algoritma.
+	\item Bab 5 \babLima \\
+		Bab ini berisi pembahasan mengenai ujicoba yang dilakukan beserta
+		skenario yang telah ditentukan dilanjutkan dengan evaluasi unjuk kerja
+		beberapa algoritma yang dibandingkan satu dengan yang lain. Pada bab
+		ini juga dilakukan analisis secara statistik untuk mengetahui efek modifikasi
+		yang telah dilakukan terhadap tingkat unjuk kerja sistem.
+	\item Bab 6 \kesimpulan \\
+		Bab ini berisi kesimpulan yang diperoleh dari hasil ujicoba dan
+		analisis penelitian yang telah dilakukan dan saran bagi pengembangan
+		selanjutnya.
+\end{itemize}
+
+% \newpage
+% \section{Revision}
+% \begin{itemize}
+%   \item Inget, masukkan alasan, Why?, menggunakan data physionet ketimbang UCI,
+%   kaitan dengan fitur yang dikandung. UCI, mengandung data interval, dan tiap
+%   pasien udah ada anotasi menderita penyakit yang mana, tapi susah kalau
+%   disesuaikan dengan keperluan alat. physionet, memberikan data seperti apoa
+%   yang akan dihadapi nantinya. hanya saja cuman memberikan informasi beat
+%   anotasi nya saja.
+%   \item Why? mendeteksi penyakit berdasarkan beat? padahal kan tidak bisa
+%   langsung menilai seseorang menderita penyakit arrhytmia. kaitan dengan
+%   kemunculan kelainan beat, dengan seseorang mengalami kelainan, data physionet
+%   tidak memberikan informasi mengenai seseorang menderita arhytmia, tapi
+%   anotasi, yang dikandung pada ECG seseorang
+%   \item Why? Competitive Learning? kayaknya gak pas cuman alasan, karena jarang
+%   yang make.
+% \end{itemize}

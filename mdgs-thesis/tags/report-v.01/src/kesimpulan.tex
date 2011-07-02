@@ -1,0 +1,52 @@
+%---------------------------------------------------------------
+\chapter{\kesimpulan}
+%---------------------------------------------------------------
+% \todo{Tambahkan kesimpulan dan saran terkait dengan perkerjaan 
+% 	yang dilakukan.}
+Pada bab ini akan dijelaskan mengenai kesimpulan yang dapat diambil dari
+penelitian yang telah dilakukan oleh \saya dan beberapa saran yang dapat
+dipertimbangan dalam penelitian berikutnya.
+
+%---------------------------------------------------------------
+\section{Kesimpulan}
+%---------------------------------------------------------------
+Sebuah metode jaringan saraf tiruan berbasis kompetisi dengan nama
+FN-GLVQ berhasil dikembangkan dan diuji-coba dengan menggunakan data arrhytmia
+dari data MIT-BIH database. Pengujian dilakukan dengan menggunakan beberapa
+skenario dan dilakukan uji statistik untuk menunjukkan keunggulan metode FNLVQ
+terhadap GLVQ khususnya pada data kelainan arrhytmia. Dari hasil pengujian dan
+analisis dapat ditarik kesimpulan sebagai berikut;
+\begin{enumerate}
+  \item Penelitian ini berhasil mengembangkan engine pengenalan arrhytmia
+  dalam bentuk java library.
+  \item Pengolahan data awal menggunakan wavelet daubechies order 8 (db8)
+  memberikan hasil rata-rata terbaik dibandingkan dengan db2, db4 maupun
+  db6, yakni 94.92\%. 
+  \item Penghilangan Noise pada data awal arrhytmia dapat meningkatkan kinerja
+  algoritma dalam proses pengenalan arrhytmia.
+  \item Penggunaan mekanisme pengurutan data training menggunakan metode
+  round-robin dapat meningkatkan level akurasi dengan nilai $i < 30$.
+  \item Penggabungan teori fuzzy yang diadaptasi dari metode FNLVQ dengan
+  GLVQ menjadi FN-GLVQ dapat meningkatkan kinerja dari pengenalan kelainan
+  arrhytmia sampai 98.53\% untuk 6 kelas arrhytmia dan 96.33\% untuk 12 kelas.
+  \item Metode FN-GLVQ masih sensitif terhadap inisialisasi bobot awal
+  dibandingkan dengan metode GLVQ, namun dengan bobot yang tepat, misal bobot
+  diambil dari data training, dapat memberikan hasil yang lebih baik.
+  \item Penggunaan metode LVQ khususnya GLVQ dan FN-GLVQ pada data arrhytmia
+  dapat memberikan tingkat pengenalan rata-rata diatas 97\% untuk 6 kelas dan
+  sampai rata-rata 95\% untuk 12 kelas
+\end{enumerate}
+
+%---------------------------------------------------------------
+\section{Saran}
+%---------------------------------------------------------------
+Pemrosesan data awal yang dilakukan pada penelitian ini masih menyisakan
+beberapa kemungkinan-kemungkinan pelenitian lanjutan diataranya;
+\begin{enumerate}
+  \item Pada penelitian ini fitur diambil berdasarkan beat, kedepan, pengambilan
+  data fitur ECG dapat dilakukan dengan mengambil fitur-fitur time  interval dan
+  morfologi dengan menggunakan transformasi wavelet.
+  \item Metode FN-GLVQ membutuhkan analisis lanjutan untuk mempelajari tingkat
+  sensitifitas inisalisasi bobot awal yang belum bisa dicapai pada penelitian
+  ini.
+\end{enumerate}
