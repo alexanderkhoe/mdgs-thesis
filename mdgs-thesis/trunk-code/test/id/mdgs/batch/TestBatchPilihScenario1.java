@@ -674,7 +674,7 @@ public class TestBatchPilihScenario1 {
 						sb.append("|\t" + sErr.toString());
 //						sb.append("\n");
 					}
-					utils.log(sb.toString());System.exit(0);
+					//utils.log(sb.toString());
 					utils.log(resumeWriter, sb.toString());
 //					resumeWriter.flush();
 //					return;

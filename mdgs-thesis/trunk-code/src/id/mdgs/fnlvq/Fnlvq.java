@@ -285,7 +285,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		codebook.numFeatures = data.getMasterData().numFeatures;
 		
 		MinMax[] dataRange = new MinMax[data.getMasterData().numFeatures];
-		if(MathUtils.equals((max - min) , 0)) {
+		//if(MathUtils.equals((max - min) , 0)) {
 			for(int i=0;i<dataRange.length;i++) 
 				dataRange[i] = new MinMax();
 			
@@ -295,7 +295,7 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 					dataRange[i].setMinMax(e.data[i]);
 				}
 			}
-		}
+		//}
 		
 		for(PEntry pe: profiler){
 			FEntry code = new FEntry(data.getMasterData().numFeatures);
@@ -312,13 +312,19 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 				if(MathUtils.equals((max - min) , 0)) {
 					fz[j][1] = MathUtils.randomDouble(dataRange[j].min, dataRange[j].max);
 				} else {
-					fz[j][1] = MathUtils.randomDouble(min,max);
+					fz[j][1] = MathUtils.randomDouble(dataRange[j].min,dataRange[j].max);
 				}
 				
 				double range = (dataRange[j].max - dataRange[j].min) / 2;
-				fz[j][0] = fz[j][1] - range;
-				fz[j][2] = fz[j][1] + range;
+//				fz[j][0] = fz[j][1] - range;
+//				fz[j][2] = fz[j][1] + range;
+				fz[j][0] = dataRange[j].min;
+				fz[j][2] = dataRange[j].max;
 				
+			}
+			
+			for(int i=0;i < code.size();i++){
+				code.data[i].set(fz[i]);
 			}
 			
 			codebook.add(code);

@@ -79,13 +79,14 @@ public class TestBatch {
 		ConfusionMatrix cm = new ConfusionMatrix(numclass);
 		
 		net.loadCodebook(codebook);
-		Iterator<Entry> it = testset.iterator();
+		Iterator<Entry> it = testset.iterator(); 
+		
+		int i = 0;
 		while(it.hasNext()){
 			Entry sample = it.next(); 
 			
 			int win = net.classify(sample);
 			int target = sample.label;
-			
 			cm.feed(win, target);
 		}		
 		
