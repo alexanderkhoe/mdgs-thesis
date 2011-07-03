@@ -24,7 +24,7 @@ public class TestMcNemar {
 
 	@Test
 	public void test(){
-		int pos = 1 * 4;
+		int pos = 4 * 4;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[pos + 1]);
 		
@@ -34,13 +34,18 @@ public class TestMcNemar {
 		FoldedDataset<Dataset, Entry> trset = new FoldedDataset<Dataset, Entry>(trainset, true);
 		FoldedDataset<Dataset, Entry> teset = new FoldedDataset<Dataset, Entry>(testset, true);
 		
-		McNemarTest mntest = new McNemarTest(utils.getDefaultPath() + "/resources/McNemar");
+		McNemarTest mntest = new McNemarTest(utils.getDefaultPath() + "/resources/mcnemar/12");
 		
 		//register trainer
+		//6 kelas 
 		ITrain train1 = new TrainLvq1(trset, 0.05); train1.setMaxEpoch(150);
 		ITrain train2 = new TrainLvq21(trset, 0.05, 0.005); train2.setMaxEpoch(150);
-		ITrain train3 = new TrainGlvq(trset, 0.05); train3.setMaxEpoch(150);
-		ITrain train4 = new TrainFpglvq(trset, 0.05); train4.setMaxEpoch(150);
+//		ITrain train3 = new TrainGlvq(trset, 0.05); train3.setMaxEpoch(150);
+//		ITrain train4 = new TrainFpglvq(trset, 0.05); train4.setMaxEpoch(150);
+		
+		//12 kelas
+		ITrain train3 = new TrainGlvq(trset, 0.075); train3.setMaxEpoch(150);
+		ITrain train4 = new TrainFpglvq(trset, 0.01); train4.setMaxEpoch(150);
 		
 		mntest.registerTrainer(TrainLvq1.class.getSimpleName(), train1);
 		mntest.registerTrainer(TrainLvq21.class.getSimpleName(), train2);
@@ -52,8 +57,8 @@ public class TestMcNemar {
 		Glvq c3 = new Glvq();		c3.initCodes(trainset, 1, 5);
 		Fpglvq c4 = new Fpglvq();	c4.initCodes(trainset, 1d, false);
 		
-		mntest.registerClassifier(TrainLvq1.class.getSimpleName(), c1);
-		mntest.registerClassifier(TrainLvq21.class.getSimpleName(), c2);
+//		mntest.registerClassifier(TrainLvq1.class.getSimpleName(), c1);
+//		mntest.registerClassifier(TrainLvq21.class.getSimpleName(), c2);
 		mntest.registerClassifier(TrainGlvq.class.getSimpleName(), c3);
 		mntest.registerClassifier(TrainFpglvq.class.getSimpleName(), c4);
 		

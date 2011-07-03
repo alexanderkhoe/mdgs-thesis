@@ -18,7 +18,7 @@ import org.junit.Test;
 public class TestKFoldCrossValidation {
 	@Test
 	public void test(){
-		int id = 0;
+		int id = 4;
 		int pos = id * 4;
 		int nclass = 12;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
@@ -30,7 +30,7 @@ public class TestKFoldCrossValidation {
 		trainset.join(testset);
 
 		int k = 10; double porsi = 0.9;
-		String fname = String.format("%d.%.1f-fold.%d-class.%d-fitures", k, porsi, nclass, trainset.numFeatures); 
+		String fname = String.format("%d.%.1f-fold.%d-class.dataid-%d.%d-fitures", k, porsi, nclass, id, trainset.numFeatures); 
 		KFoldCrossValidation kfold = new KFoldCrossValidation(trainset, k, porsi, true, utils.getDefaultPath() + "/resources/evaluation/" + fname + ".log");
 
 		//optimal parameter - base on train

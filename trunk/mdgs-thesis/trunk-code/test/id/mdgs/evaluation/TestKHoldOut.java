@@ -20,7 +20,7 @@ import org.junit.Test;
 public class TestKHoldOut {
 	@Test
 	public void test(){
-		int id = 1;
+		int id = 4;
 		int pos = id * 4;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[pos + 1]);
@@ -29,22 +29,28 @@ public class TestKHoldOut {
 		testset.load();
 		
 		trainset.join(testset);
+		int K = 30; double porsi = 0.5;
+		String fname = String.format("%d.%.1f-fold.dataid-%d.%d-fitures", K, porsi, id, trainset.numFeatures); 		
+		KHoldOutTest kholdtest = new KHoldOutTest(trainset, K, porsi, true, utils.getDefaultPath() + "/resources/evaluation/"+fname+".log");
 		
-		KHoldOutTest kholdtest = new KHoldOutTest(trainset, 30, 0.6, true, utils.getDefaultPath() + "/resources/evaluation/khold.log");
-		
-		//optimal parameter di 86
-		double[][] optimal = {
-				{0.05, 0.075, 0.075, 0.05}, //300-6class
-				{0.075, 0.075, 0.05, 0.05}, //86 -6class
+		double[][] optimal = { //LVQ1, LVQ21, GLVQ, FPGLVQ
+				{0.05, 0.075, 0.05, 0.005}, //300-6class
+				{0.05, 0.075, 0.05, 0.05}, //86 -6class
 				{0.075, 0.05, 0.1, 0.001},  //24 -6class
+				{0.05, 0.1, 0.075, 0.01}, //300-6class
+				{0.001, 0.075, 0.05, 0.01}, //86 -6class
+				{0.1, 0.075, 0.1, 0.001},  //24 -6class		
 		};
-		
+				//base on data train
 		int[][] optiter = {
 				{20, 100, 100, 150},
 				{20, 150, 100, 150},
-				{20, 150, 150, 150},
+				{20, 150, 100, 150},
+				{50, 100, 100, 150},
+				{20, 150, 100, 150},
+				{50, 150, 100, 150},
 		};
-		
+	
 		//register trainer
 		ITrain train1 = new TrainLvq1(null, optimal[id][0]); 			train1.setMaxEpoch(optiter[id][0]);
 		ITrain train2 = new TrainLvq21(null, optimal[id][1], 0.005); 	train2.setMaxEpoch(optiter[id][1]);

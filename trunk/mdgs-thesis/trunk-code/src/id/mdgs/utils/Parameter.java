@@ -168,5 +168,43 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_nonoutliers.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_nonoutliers.bwr_300_gabung.test.txt",
 	};
+	
+	
+	public static String DATA_DAUBECHIES[] = {
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L1/db2.6.151f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L1/db4.6.153f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L1/db6.6.155f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L1/db8.6.157f_2000_nonoutliers.bwr_300_gabung.txt",
+
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L2/db2.6.77f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L2/db4.6.80f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L2/db6.6.83f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L2/db8.6.86f_2000_nonoutliers.bwr_300_gabung.txt",
+
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L3/db2.6.40f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L3/db4.6.43f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L3/db6.6.47f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L3/db8.6.50f_2000_nonoutliers.bwr_300_gabung.txt",
+
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L4/db2.6.21f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L4/db4.6.25f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L4/db6.6.29f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L4/db8.6.32f_2000_nonoutliers.bwr_300_gabung.txt",
+
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L5/db2.6.12f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L5/db4.6.16f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L5/db6.6.20f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L5/db8.6.23f_2000_nonoutliers.bwr_300_gabung.txt",
+	};
+	
+	public static String DATA_DB8[] = {
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L0/6.300f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L1/db8.6.157f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L2/db8.6.86f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L3/db8.6.50f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L4/db8.6.32f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/L5/db8.6.23f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/daubechies/STAT/6.24f_2000_nonoutliers.bwr_300_gabung.txt",
+	};
 }
 

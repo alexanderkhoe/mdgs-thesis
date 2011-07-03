@@ -18,7 +18,7 @@ import org.junit.Test;
 public class TestDietterich5x2 {
 	@Test
 	public void test(){
-		int id = 1;
+		int id = 4;
 		int pos = id * 4;
 		Dataset trainset  = new Dataset(Parameter.DATA[pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[pos + 1]);
