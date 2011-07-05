@@ -184,7 +184,7 @@ public class LvqUtils {
 	 * @param knn		number of k in knn
 	 * @return
 	 */
-	public static List<Entry> pickInsideCodes(HitList classes, Dataset data, int knn){
+	public static <T extends Iterable<Entry>> List<Entry> pickInsideCodes(HitList classes, T data, int knn){
 		List<Entry> codebook = null;
 		int total = 0;
 		
@@ -218,7 +218,7 @@ public class LvqUtils {
 		return codebook;
 	}
 	
-	protected static boolean correctByKnn(Dataset data, Entry code, int knn){
+	protected static <T extends Iterable<Entry>> boolean correctByKnn(T data, Entry code, int knn){
 		WinnerInfo[] winner;
 		HitList hits;
 		
@@ -267,7 +267,7 @@ public class LvqUtils {
 	 * @param knn
 	 * @return
 	 */
-	public static WinnerInfo[] findWinner(Dataset codes, Entry sample, int knn){
+	public static <T extends Iterable<Entry>> WinnerInfo[] findWinner(T codes, Entry sample, int knn){
 		WinnerInfo[] winner;
 		int i;
 		
@@ -281,16 +281,6 @@ public class LvqUtils {
 			double difference = 0;
 			Entry code = eIt.next();
 			
-//			for(i=0;i < codes.numFeatures; i++){
-//				double diff = sample.data[i] - code.data[i];
-//				difference += diff * diff;
-//				
-////				if(difference > winner[knn-1].coef)
-////					break;
-//			}
-//			
-//			difference = Math.sqrt(difference);
-//			difference = MathUtils.euclideDistance(sample.data, code.data);
 			difference = MathUtils.squaredEuclideDistance(sample.data, code.data);
 			
 			

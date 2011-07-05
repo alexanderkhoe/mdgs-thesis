@@ -40,12 +40,12 @@ public class TestGlvq {
 //		norm.normalize(trainset);
 //		norm.normalize(testset);
 		
-		Lvq net = new Lvq();
-		net.initCodes(trainset, 1, 5);
-//		net.initCodes(trainset);
+		Glvq net = new Glvq();
+//		net.initCodes(trainset, 1, 5);
+		net.initCodes(trainset);
 		
 		ITrain train = new TrainGlvq(net, trainset, 0.05);
-		train.setMaxEpoch(100);
+		train.setMaxEpoch(200);
 //		((TrainGlvq)train).getTraining().makeRoundRobin(1);
 		
 		/*monitor*/
