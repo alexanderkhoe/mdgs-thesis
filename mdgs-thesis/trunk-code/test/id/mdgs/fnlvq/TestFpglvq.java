@@ -25,7 +25,7 @@ public class TestFpglvq {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int Pos = 0 * 4;
+		int Pos = 4 * 4;
 		int nclass = 12;
 		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
@@ -35,8 +35,8 @@ public class TestFpglvq {
 		
 		//use unknown beat
 //		Dataset unknownset   = new Dataset(Parameter.DATA_EXT[0]);
-		Dataset unknownset   = new Dataset(Parameter.DATA[(4*4) + 1]);
-		unknownset.load();
+//		Dataset unknownset   = new Dataset(Parameter.DATA[(4*4) + 1]);
+//		unknownset.load();
 		
 //		Dataset trainset = new Dataset(Parameter.DATA_UCI[Pos + 2]);
 //		Dataset testset  = new Dataset(Parameter.DATA_UCI[Pos + 3]);
@@ -60,10 +60,10 @@ public class TestFpglvq {
 		
 		Fpglvq net = new Fpglvq();
 //		net.initCodes(trainset, 5, false);
-		net.initCodes(trainset, 1d, false);
+		net.initCodes(trainset, 0.5d, true);
 		
-		ITrain train = new TrainFpglvq(net, trainset, 0.005);
-		train.setMaxEpoch(150);
+		ITrain train = new TrainFpglvq(net, trainset, 0.05);
+		train.setMaxEpoch(200);
 		
 		/*view monitor*/
 		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + "Codebook Monitor", net.codebook, train);

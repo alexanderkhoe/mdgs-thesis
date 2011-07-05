@@ -24,12 +24,12 @@ import org.junit.Test;
 public class TestBackProp {
 	@Test
 	public void testBP(){
-		int Pos = 3 * 4;
-		int nclass = 15;
-//		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
-//		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
-		Dataset trainset = new Dataset(Parameter.ECG300C15N100_TRAIN);
-		Dataset testset  = new Dataset(Parameter.ECG300C15N100_TEST);
+		int Pos = 4 * 4;
+		int nclass = 12;
+		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
+		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
+//		Dataset trainset = new Dataset(Parameter.ECG300C15N100_TRAIN);
+//		Dataset testset  = new Dataset(Parameter.ECG300C15N100_TEST);
 		
 		trainset.load();
 		testset.load();
@@ -54,7 +54,7 @@ public class TestBackProp {
 			System.out.println("Epoch #" + epoch + " Error:" + train.getError());
 			epoch++;
 //		} while(train.getError() > 0.01);
-		} while (epoch < 1000);
+		} while (epoch < 5000);
 		
 		utils.log("Test Result");
 		Iterator<NeuralDataPair> it = enTestset.iterator();

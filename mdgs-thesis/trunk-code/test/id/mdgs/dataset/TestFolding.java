@@ -110,6 +110,7 @@ public class TestFolding {
 		
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testKFoldedDataset2() {
 		Dataset trainset = new Dataset(Parameter.DATA_IRIS[0]);
@@ -117,29 +118,45 @@ public class TestFolding {
 		trainset.load();
 		tmp.load();
 		
-//		trainset.join(tmp);
+		trainset.join(tmp);
 		int K = 2;
-		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.5d, false);
+		KFoldedDataset<Dataset, Entry> kfold = new KFoldedDataset<Dataset, Entry>(trainset, K, 0.5d, true);
 
-		KFoldedIterator kfit = kfold.iterator();
-		int iteration = 0;
-		while(kfit.hasNext()){
-			FoldedDataset<Dataset, Entry> train = kfit.nextTrain();
-			FoldedDataset<Dataset, Entry> test  = kfit.nextTest();
-			kfit.next();
-			
-			System.out.println("Iteration " + (iteration + 1));
-			System.out.println("Train " + (iteration + 1));
-			for(int j=0;j < train.size();j++)
-				System.out.println(train.folded.get(j) + "," + train.get(j));
-			
-			System.out.println();
-			System.out.println("TEST " + (iteration + 1));
-			for(int j=0;j < test.size();j++)
-				System.out.println(test.folded.get(j) + "," + test.get(j));
-			
-			iteration++;
+		FoldedDataset<Dataset, Entry> train = kfold.getKFoldedForTrain(0);
+		FoldedDataset<Dataset, Entry> test = kfold.getKFoldedForTest(0);
+		
+		int iter = 0;
+		for(Entry e: train){
+			System.out.print(train.folded.get(iter) + "\t");
+			System.out.println(e.toString());
+			iter++;
 		}
+		System.out.println("Test");
+		iter = 0;
+		for(Entry e: test){
+			System.out.print(test.folded.get(iter) + "\t");
+			System.out.println(e.toString());
+			iter++;
+		}
+//		KFoldedIterator kfit = kfold.iterator();
+//		int iteration = 0;
+//		while(kfit.hasNext()){
+//			FoldedDataset<Dataset, Entry> train = kfit.nextTrain();
+//			FoldedDataset<Dataset, Entry> test  = kfit.nextTest();
+//			kfit.next();
+//			
+//			System.out.println("Iteration " + (iteration + 1));
+//			System.out.println("Train " + (iteration + 1));
+//			for(int j=0;j < train.size();j++)
+//				System.out.println(train.folded.get(j) + "," + train.get(j));
+//			
+//			System.out.println();
+//			System.out.println("TEST " + (iteration + 1));
+//			for(int j=0;j < test.size();j++)
+//				System.out.println(test.folded.get(j) + "," + test.get(j));
+//			
+//			iteration++;
+//		}
 		
 		System.out.println();
 	}

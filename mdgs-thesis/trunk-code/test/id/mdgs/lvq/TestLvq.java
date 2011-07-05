@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.Dataset.Entry;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.master.ITrain;
 import id.mdgs.utils.Parameter;
@@ -24,8 +25,9 @@ public class TestLvq {
 		trainset.load();
 		testset.load();
 		
+		FoldedDataset<Dataset, Entry> fdset = new FoldedDataset<Dataset, Dataset.Entry>(trainset, true);
 		Lvq net = new Lvq();
-		net.initCodes(trainset, 1, 5);
+		net.initCodes(fdset, 1, 5);
 //		net.initCodes(trainset);
 //		net.initCodes(trainset, 0d, 1d);
 		System.out.println(net.codebook.toString());

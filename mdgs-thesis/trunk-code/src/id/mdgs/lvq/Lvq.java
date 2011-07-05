@@ -123,7 +123,8 @@ public class Lvq implements IClassify<Dataset, Entry> {
 	 * @param num
 	 * @param knn
 	 */
-	public void initCodes(Dataset data, int num, int knn){
+	@SuppressWarnings("unchecked")
+	public <T extends Iterable<Entry>> void initCodes(T data, int num, int knn){
 		
 		//pick from dataset
 		HitList classes = new HitList();
@@ -154,8 +155,10 @@ public class Lvq implements IClassify<Dataset, Entry> {
 		}
 		
 		codebook.reset();
-		//copy labels table and dimension
-		codebook.copyInfo(data);
+		if(data.getClass().getSimpleName().equals("Dataset"))
+			codebook.copyInfo((Dataset)data);
+		else
+			codebook.numFeatures = ((FoldedDataset<Dataset, Entry>)data).getMasterData().numFeatures;
 		
 		if(le1 != null)
 			codebook.addAll(le1);
