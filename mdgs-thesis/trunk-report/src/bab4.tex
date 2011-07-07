@@ -1,88 +1,9 @@
 %-----------------------------------------------------------------------------%
 \chapter{\babEmpat}
 %-----------------------------------------------------------------------------%
-Pada bab ini akan diuraikan mengenai sekilas metode pelatihan LVQ, metode
-klasifikasi yang dikembangkan, modifikasi yang dilakukan serta perancangan dan
-implementasi dari metode tersebut.
-
-%-----------------------------------------------------------------------------%
-\section{Metode Pelatihan LVQ}
-%-----------------------------------------------------------------------------%
-\subsection{Sistem Epoch}
-Dalam penelitian ini, studi dilakukan terhadap algoritma LVQ yang dikembangkan
-oleh Kohonen dkk \cite{Kohonen92lvqpak}. Dari hasil analisis terhadap
-implementasi algoritma tersebut, yakni LVQ PAK package, \saya menyadari bahwa
-mekanisme iterasi (epoch) yang penulis pahami dan kebanyakan digunakan
-dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
-\begin{enumerate}
-  \item Iterasi pada LVQ PAK, iterasi yang dilakukan untuk sekali proses
-  pembelajaran (satu kali proses update bobot) dengan menggunakan satu data
-  sampel. Hal ini akan berelasi dengan jumlah maksimal iterasi yang ditentukan
-  sebagai parameter pembelajaran. Artinya jika jumlah data sampel yang digunakan
-  sebanyak 100, sedangkan maksimal iterasi ditentukan sebanyak 50 kali, maka
-  hanya 50 data sampel saja yang akan digunakan untuk proses pelatihan, dengan
-  pemilihan data yang random maupun sequensial dan hanya akan terjadi 50 kali
-  proses update bobot.
-  \item Iterasi pada sistem epoch, makna dari satu iterasi adalah
-  proses pelatihan dilakukan untuk semua data sampel yang diberikan. Jika data
-  sampel yang diberikan sebanyak 100, maka jaringan saraf akan dilatih sebanyak
-  100 kali untuk satu iterasi. Jika maksimum iterasi ditentukan sebanyak 50
-  kali, maka akan setara dengan 1500 iterasi pada metode sebelumnya, atau 1500
-  kali proses update bobot.
-\end{enumerate}
-
-Selain sensitif terhadap inisial bobot awal, LVQ standar tersebut juga sangat
-sensitif terhadap jumlah iterasi yang dilakukan dalam proses pembelajaran. Jika
-terlalu banyak iterasi pelatihan dilakukan, maka kecenderungannya adalah bobot
-yang dihasilkan menjauhi bobot optimal (divergen)\cite{Sato:1995}.
-
-\noindent Dalam penelitian ini, sistem iterasi yang akan digunakan adalah
-mengikuti cara yang kedua diatas.
-% 
-% 
-\subsection{Iterasi dengan data Round Robin}
-\label{ssec:round-robin}
-Melihat karakteristik dari proses pembelajaran LVQ dimana aturan update pada
-proses pembelajaran dilakukan secara sequensial, maka perilaku proses
-pembelajaran akan dimodifikasi dari sisi urutan data training. Pada iterasi metode sebelumnya,
-proses iterasi pembelajaran dalam satu epoch dilakukan sesuai  dengan urutan
-data masukan yang diberikan, bisa berupa urutan sejumlah N sampel data kategori
-1 diikuti dengan  M sampel data kategori 2 dan seterusnya, atau bisa juga berupa
-urutan data yang diambil secara random terhadap kategori data. Pada penelitian ini, \saya
-mencoba untuk menerapkan mekanisme round-robin dalam iterasi proses pembelajaran
-LVQ dimana dalam mekanisme ini, urutan data sampel yang diberikan pada proses
-pembelajaran jaringan saraf dipastikan selang seling untuk setiap kategori data
-sejumlah $k$ kategori. Jadi urutan data sampel akan menjadi; $X_{1,c_1},
-X_{1,c_2}, \dots, X_{1,c_k}, X_{2,c_1}, X_{2,c_2}, \dots, X_{2,c_k},
-X_{n_1,c_1},X_{n_2,c_2}, \dots,X_{n_3,c_k}$ dimana $n_i$ adalah jumlah data
-untuk kelas ke-$i$.
-
-Dengan menggunakan mekanisme round-robin diharapkan dapat memperbaiki proses
-pembelajaran secara keseluruhan.
-
-
-% . Berikut pada algoritma \ref{alg:opsi3} dapat dilihat pseudocode dari
-% mekanisme iterasi round-robin ini.
-% 
-% % \begin{algorithm}
-% % \scriptsize
-% % \caption{Mekanisme iterasi secara round robin}
-% % \label{alg:opsi3}
-% % \begin{algorithmic}                    % enter the algorithmic environment
-% % 	\STATE \ldots
-% % 	\STATE $max\_N \leftarrow findMaxNumOfDataInCategory()$
-% % 	\FOR {$i=1 \to max\_N$}
-% % 		\FORALL {$C$ in $Category$}
-% % 			\IF {$i > nC$} continue \ENDIF
-% % 
-% % 			\STATE $sample \leftarrow X_{c,i}$
-% % 			\STATE $train(codebook, sample)$
-% % 			\STATE \ldots
-% % 		\ENDFOR
-% % 	\ENDFOR
-% % 	\STATE \ldots
-% % \end{algorithmic}
-% % \end{algorithm}
+Pada bab ini akan diuraikan mengenai  metode klasifikasi yang dikembangkan,
+modifikasi yang dilakukan serta perancangan dan implementasi dari metode
+tersebut.
 
 %-----------------------------------------------------------------------------%
 \section{Metode Fuzzy Neuro GLVQ}
@@ -118,7 +39,7 @@ pada model vektor pewakil dengan menggunakan fuzzy, dimana jika nilai
 similarity antara vektor masukan dengan vektor pewakil adalah 0 (nol), maka
 vektor masukkan tersebut polanya belum pernah diketahui oleh jaringan saraf
 (\emph{unknown}).
-
+ 
 \addFigure{width=0.6\textwidth}{pics/plotoverlap.png}{fig:overlap}{Ilustrasi
 data arrhytmia yang tumpang tindih (\emph{overlap}) antar kategori.}
 
@@ -154,10 +75,11 @@ diilustrasikan pada \pic~\ref{fig:fmtrim}
 
 Kemudian nilai derajat keanggotaan ($\mu_{j}$) vektor pewakil
 (\emph{cluster}) dipropagasi ke neuron keluaran dengan menggunakan operasi
-rata-rata (\emph{mean}).
+rata-rata (\emph{average}).
 
 \begin{align}
-	\mu_j = \text{mean}_{\substack{j}} [\mu_{ij}]
+% 	\mu_j = \text{avg}_{\substack{j}} [\mu_{ij}]
+	\mu_j = \frac{1}{k} \sum_{i=1}^k \mu_{ij} 
 \end{align}
 
 Untuk menentukan pemenang (\emph{winner-take-all}), dipilih vektor
@@ -183,7 +105,7 @@ $d$ adalah nilai jarak (\emph{disimilarity}). Kemudian disubstitusikan ke
 \equ~\ref{eq:mce} didapat;
 
 \begin{align}
-\label{eq:}
+\label{eq:mcesim}
 	\varphi(x) &= \frac{(1 - \mu_1) - (1 - \mu_2)}{(1 - \mu_1) + (1 -
 	\mu_2)}\nonumber\\
 	&= \frac{\mu_2 - \mu_1}{2 - \mu_1 - \mu_2}
@@ -264,8 +186,8 @@ digunakan $w_{min}, w_{mean}, w_{max}$ untuk mewakili notasi diatas.
 	\mu = h(x, w_{min}, w_{mean}, w_{max}) = \left\{ 
 	\begin{array}{ll}
 	0 & , x \leq w_{min}\\
-	\frac{x - w_{min}}{w_{mean} - w_{min}} & , w_{min} < x \leq w_{mean} \\
-	\frac{w_{max} - x}{w_{max} - w_{mean}} & , w_{mean} < x < w_{max} \\
+	\frac{x - w_{min}}{w_{mean} - w_{min}} & , w_{min} \leq x \leq w_{mean} \\
+	\frac{w_{max} - x}{w_{max} - w_{mean}} & , w_{mean} \leq x \leq w_{max} \\
 	0 & , x \geq w_{max}
 	\end{array}
 \end{align}
@@ -466,7 +388,7 @@ pseudocode;
 			\STATE $\mu_2 \leftarrow $ findSimilarity2($x, W$) where $\mu_j = \max_{j
 			\wedge j \neq i}(\mu_j) \wedge (C_x \neq C_{w_j})$
 			\IF {$\mu_1 > 0$ OR $\mu_2 > 0$}
-				\STATE $mce \leftarrow $ equation \ref{eq:mce}
+				\STATE $mce \leftarrow $ equation \ref{eq:mcesim}
 				\STATE $factor1 \leftarrow $ equation \ref{eq:turunanmce1}
 				\STATE $factor2 \leftarrow $ equation \ref{eq:turunanmce2}
 				\STATE
@@ -511,6 +433,86 @@ pseudocode;
 \end{algorithm}  
 
 \clearpage
+
+%-----------------------------------------------------------------------------%
+\section{Metode Pelatihan LVQ}
+%-----------------------------------------------------------------------------%
+\subsection{Sistem Epoch}
+Dalam penelitian ini, studi dilakukan terhadap algoritma LVQ yang dikembangkan
+oleh Kohonen dkk \cite{Kohonen92lvqpak}. Dari hasil analisis terhadap
+implementasi algoritma tersebut, yakni LVQ PAK package, \saya menyadari bahwa
+mekanisme iterasi (epoch) yang penulis pahami dan kebanyakan digunakan
+dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
+\begin{enumerate}
+  \item Iterasi pada LVQ PAK, iterasi yang dilakukan untuk sekali proses
+  pembelajaran (satu kali proses update bobot) dengan menggunakan satu data
+  sampel. Hal ini akan berelasi dengan jumlah maksimal iterasi yang ditentukan
+  sebagai parameter pembelajaran. Artinya jika jumlah data sampel yang digunakan
+  sebanyak 100, sedangkan maksimal iterasi ditentukan sebanyak 50 kali, maka
+  hanya 50 data sampel saja yang akan digunakan untuk proses pelatihan, dengan
+  pemilihan data yang random maupun sequensial dan hanya akan terjadi 50 kali
+  proses update bobot.
+  \item Iterasi pada sistem epoch, makna dari satu iterasi adalah
+  proses pelatihan dilakukan untuk semua data sampel yang diberikan. Jika data
+  sampel yang diberikan sebanyak 100, maka jaringan saraf akan dilatih sebanyak
+  100 kali untuk satu iterasi. Jika maksimum iterasi ditentukan sebanyak 50
+  kali, maka akan setara dengan 1500 iterasi pada metode sebelumnya, atau 1500
+  kali proses update bobot.
+\end{enumerate}
+
+Selain sensitif terhadap inisial bobot awal, LVQ standar tersebut juga sangat
+sensitif terhadap jumlah iterasi yang dilakukan dalam proses pembelajaran. Jika
+terlalu banyak iterasi pelatihan dilakukan, maka kecenderungannya adalah bobot
+yang dihasilkan menjauhi bobot optimal (divergen)\cite{Sato:1995}.
+
+\noindent Dalam penelitian ini, sistem iterasi yang akan digunakan adalah
+mengikuti cara yang kedua diatas.
+% 
+% 
+\subsection{Iterasi dengan data Round Robin}
+\label{ssec:round-robin}
+Melihat karakteristik dari proses pembelajaran LVQ dimana aturan update pada
+proses pembelajaran dilakukan secara sequensial, maka perilaku proses
+pembelajaran akan dimodifikasi dari sisi urutan data training. Pada iterasi metode sebelumnya,
+proses iterasi pembelajaran dalam satu epoch dilakukan sesuai  dengan urutan
+data masukan yang diberikan, bisa berupa urutan sejumlah N sampel data kategori
+1 diikuti dengan  M sampel data kategori 2 dan seterusnya, atau bisa juga berupa
+urutan data yang diambil secara random terhadap kategori data. Pada penelitian ini, \saya
+mencoba untuk menerapkan mekanisme round-robin dalam iterasi proses pembelajaran
+LVQ dimana dalam mekanisme ini, urutan data sampel yang diberikan pada proses
+pembelajaran jaringan saraf dipastikan selang seling untuk setiap kategori data
+sejumlah $k$ kategori. Jadi urutan data sampel akan menjadi; $X_{1,c_1},
+X_{1,c_2}, \dots, X_{1,c_k}, X_{2,c_1}, X_{2,c_2}, \dots, X_{2,c_k},
+X_{n_1,c_1},X_{n_2,c_2}, \dots,X_{n_3,c_k}$ dimana $n_i$ adalah jumlah data
+untuk kelas ke-$i$.
+
+Dengan menggunakan mekanisme round-robin diharapkan dapat memperbaiki proses
+pembelajaran secara keseluruhan.
+
+
+% . Berikut pada algoritma \ref{alg:opsi3} dapat dilihat pseudocode dari
+% mekanisme iterasi round-robin ini.
+% 
+% % \begin{algorithm}
+% % \scriptsize
+% % \caption{Mekanisme iterasi secara round robin}
+% % \label{alg:opsi3}
+% % \begin{algorithmic}                    % enter the algorithmic environment
+% % 	\STATE \ldots
+% % 	\STATE $max\_N \leftarrow findMaxNumOfDataInCategory()$
+% % 	\FOR {$i=1 \to max\_N$}
+% % 		\FORALL {$C$ in $Category$}
+% % 			\IF {$i > nC$} continue \ENDIF
+% % 
+% % 			\STATE $sample \leftarrow X_{c,i}$
+% % 			\STATE $train(codebook, sample)$
+% % 			\STATE \ldots
+% % 		\ENDFOR
+% % 	\ENDFOR
+% % 	\STATE \ldots
+% % \end{algorithmic}
+% % \end{algorithm}
+
 %-----------------------------------------------------------------------------%
 \section{Implementasi Sistem}
 %-----------------------------------------------------------------------------%
