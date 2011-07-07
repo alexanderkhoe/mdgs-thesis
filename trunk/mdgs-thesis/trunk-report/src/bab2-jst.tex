@@ -303,10 +303,12 @@ sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
 	\STATE $d_2 \leftarrow distance(x, w_2)$
 	
 	\IF {$C_{w_1} \neq C_{w_2}$}
-		\IF {$\min \left(\frac{d_1}{d_2},\frac{d_2}{d_1}\right) > 
-			 \frac{(1 - \omega)}{(1 + \omega)}$}
-			\STATE $w_{1,t+1} \leftarrow w_{1,t} + \alpha_t . (x - w_{1,t})$
-			\STATE $w_{2,t+1} \leftarrow w_{2,t} - \alpha_t . (x - w_{2,t})$
+		\IF {$C_x = C_{w_1}$ or $C_x = C_{w_2}$}
+			\IF {$\min \left(\frac{d_1}{d_2},\frac{d_2}{d_1}\right) > 
+				 \frac{(1 - \omega)}{(1 + \omega)}$}
+				\STATE $w_{1,t+1} \leftarrow w_{1,t} + \alpha_t . (x - w_{1,t})$
+				\STATE $w_{2,t+1} \leftarrow w_{2,t} - \alpha_t . (x - w_{2,t})$
+			\ENDIF
 		\ENDIF
 	\ENDIF
 	\STATE $\alpha \leftarrow $ getNextLearningRate()
@@ -462,7 +464,39 @@ Pada \gls{glvq}, fungsi monoton naik yang digunakan adalah fungsi sigmoid;
 \noindent dimana $\frac{\delta f}{\delta \varphi}$ memiliki puncak yang
 tunggal pada $\varphi=0$, semakin bertambah nilai $t$ maka lebar dari puncak
 semakin mengecil dan vektor masukan yang mempengaruhi proses pembelajaran secara
-gradual dibatasi pada decision boundaries tersebut.
+gradual dibatasi pada decision boundaries tersebut. Pada Algoritma
+\ref{alg:glvq} dapat dilihat algoritma GLVQ dengan pseudocode.
+
+\begin{algorithm}  
+\scriptsize 
+\caption{Algoritma GLVQ}          
+\label{alg:glvq}                           
+\begin{algorithmic}                    % enter the algorithmic environment
+	\REQUIRE $X$ in round-robin mode
+	\STATE Initialize weight vector $W$
+	\STATE Initialize learning rate $\alpha_0$
+	\STATE Initialize maximum iteration $t_{max}$
+	\STATE $t \leftarrow 0$
+	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
+		\FOR{$x_i \in X$}
+			\STATE $d_1 \leftarrow $ closestDistance1($x, W$) where $C_x = C_{w_i}$
+			\STATE $d_2 \leftarrow $ closestDistance2($x, W$) where $d_j = \max_{j
+			\wedge j \neq i}(d_j) \wedge (C_x \neq C_{w_j})$
+			
+			\STATE $mce \leftarrow $ equation \ref{eq:mce}
+			\STATE $factor1 \leftarrow \frac{4d_2}{(d_1 + d_2)^2}$ 
+			\STATE $factor2 \leftarrow \frac{4d_1}{(d_1 + d_2)^2}$ 
+			\STATE
+			\STATE \COMMENT{adjust prototype 1}
+			\STATE $w_{1} \leftarrow $ equation \ref{eq:glvq-rulea}
+			\STATE
+			\STATE \COMMENT{adjust prototype 2}
+			\STATE $w_{2} \leftarrow $ equation \ref{eq:glvq-ruleb}
+		\ENDFOR
+	\ENDWHILE
+	\STATE $\alpha_{t+1} \leftarrow \alpha \times (1 - \frac{t}{t_{max}})$ 
+\end{algorithmic}
+\end{algorithm}  
  
 Seperti yang telah disebutkan diatas, keunggulan dari \gls{glvq} adalah menjamin
 konvergensi dari prototipe akan mendekati distribusi dari kategori kelas selama

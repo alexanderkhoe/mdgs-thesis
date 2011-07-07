@@ -1,1 +1,80 @@
-%\section{Teori Fuzzy}
+\section{Himpunan Fuzzy}
+
+Himpunan Fuzzy adalah suatu himpunan dimana elemennya memiliki derajat
+keanggotaan. Himpunan Fuzzy merupakan generalisasi dari teori himpunan 
+klasik. Secara formal, definisi dari himpunan fuzzy adalah sebagai berikut;
+
+\begin{quotation}
+	Suatu himpunan fuzzy $A$ pada semesta $X$ dengan $A \subset X$ dikarakterik
+	oleh suatu fungsi keanggotaan (\emph{membership function}) $f_A(x)$  dimana
+	setiap titik di $X$ dipetakan ke suatu bilangan real $[0,1]$, dengan nilai
+	$f_A(x)$ menunjukkan derajat keanggotaan dari $x$ pada himpunan $A$. Sehingga
+	semakin dekat nilai $f_A(x)$ dengan pusat (\emph{unity}), semakin tinggi
+	derajatnya.
+	\cite{Zadeh:1965}
+\end{quotation}
+  
+Suatu himpunan fuzzy adalah kosong (\emph{empty}) jika dan hanya jika nilai
+fungsi keanggotaannya adalah 0 pada $X$. Dua himpunan fuzzy $A$ dan $B$ adalah
+sama, $A = B$ jika dan hanya jika $f_A(x) = f_B(x)$ untuk semua $x \in X$.
+Sedangkan komplemen dari suatu himpunan fuzzy $A$ dinotasikan dengan $A'$
+didefinisikan sebagai $f_{A'} = 1 - f_A$.
+
+Seperti yang diuraikan diatas, suatu himpunan fuzzy dikarakterisasi dengan suatu
+fungsi keanggotaan. Terdapat beberapa fungsi keanggotaan yang sering digunakan
+dalam berbagai aplikasi sebagai berikut;
+
+\begin{enumerate}
+  \item Fungsi Keanggotaan segitiga.\\
+  Fungsi keanggotaan segituga sangat umum dan banyak digunakan dalam pembuatan
+  suatu sistem, karena kesederhanaannya dan untuk menyusunnya hanya membutuhkan
+  3parameter semisal nilai minimum, rata-rata dan maksimum. Definisi dari fungsi
+  keanggotaan segitiga adalah sebagai berikut;
+  \begin{align}
+	\label{eq:mftrim}
+	f(x, a, b, c) = \left\{ 
+	\begin{array}{ll}
+	0 & , x \leq a\\
+	\frac{x - a}{b - a} & , a < x \leq b \\
+	\frac{c - x}{c - b} & , b < x < c \\
+	0 & , x \geq c
+	\end{array}
+  \end{align}
+   
+   Bentuk fungsi keanggotaan segitiga dapat dilihat pada \pic~\ref{fig:mftrim}.
+   \addFigure{width=0.6\textwidth}{pics/mftrim.png}{fig:mftrim}{Bentuk fungsi
+   keanggotaan segitiga}
+   
+   \item Fungsi Keanggotaan Trapesium.\\
+   Fungsi keanggotaan trapesium didefinisikan sebagai berikut;
+   \begin{align}
+	\label{eq:mftrap}
+	f(x, a, b, c, d) = \left\{ 
+	\begin{array}{ll}
+	0 & , x \leq a\\
+	\frac{x - a}{b - a} & , a < x \leq b \\
+	1 & , b < x \leq c \\
+	\frac{d - x}{d - c} & , c < x < d \\
+	0 & , x \geq c
+	\end{array}
+  \end{align}
+  
+  Bentuk fungsi keangotaan segitiga dapat dilihat pada \pic~\ref{fig:mftrap}.
+  \addFigure{width=0.6\textwidth}{pics/mftrap.png}{fig:mftrap}{Bentuk fungsi
+   keanggotaan trapesium}
+   
+   \item Fungsi keanggotaan Gaussian.\\
+   Fungsi keanggotaan Gaussian didefinisikan sebagai berikut;
+	\begin{align}
+	\label{eq:mfgaus}
+		f(x, m, \sigma) = \exp\left(\frac{(x-x)^2}{2\sigma^2}\right)
+	\end{align}
+
+	dimana parameter $m$ dan $\sigma$ adalah pusat dan lebar dari fungsi
+	keanggotaan. Bentuk dari fungsi keanggotaan Gaussian dapat dilihat pada
+	\pic~\ref{fig:mfgaus}.
+	\addFigure{width=0.6\textwidth}{pics/mfgaus.png}{fig:mfgaus}{Bentuk fungsi
+	keanggotaan Gaussian}
+	    
+\end{enumerate}
+	
