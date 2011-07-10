@@ -5,14 +5,13 @@ import java.util.Iterator;
 import id.mdgs.dataset.FCodeBook;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.FCodeBook.FEntry;
-import id.mdgs.dataset.FCodeBook.FWinnerInfo;
 import id.mdgs.fnlvqold.Fnlvq;
+import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.utils.MathUtils;
 
 public class Fwlvq extends Fnlvq {
 
 	public Fwlvq() {
-		super();
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class Fwlvq extends Fnlvq {
 				sim.data[j] = code.data[j].getMaxIntersection(input.data[j]);
 			}
 			
-			score = MathUtils.min(sim.data);
+			score = MathUtils.mean(sim.data);
 			score = wavelet(score);
 			
 			/*sort asc*/

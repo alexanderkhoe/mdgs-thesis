@@ -185,6 +185,7 @@ public class KFoldedDataset<T, E> implements Iterable<FoldedDataset<T, E>> {
 			int i = 0;
 			while( i < (max * K) ){
 				for(int j=0;j < K;j++,i++){
+					if(i >= pe.size() && pe.size() > this.K) continue; //mencoba untuk tidak diduplikasi
 					int pos = i % pe.size();
 					foldeds.get(j).folded.add(pe.get(rpos[pos]));
 				}

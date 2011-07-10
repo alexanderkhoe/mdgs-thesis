@@ -33,11 +33,13 @@ public class TrainFpglvq implements ITrain {
 	protected double alphaStart;
 	protected double xi;
 	protected double xiStart;
-//	protected Dataset training;
 	protected DatasetProfiler profiler;
 	protected double error;
 	public int maxEpoch;
 	protected int currEpoch;
+	
+	
+	protected double beta, gamma, delta;
 	
 	public FBest bestCodebook;
 	protected FoldedDataset<Dataset, Entry> foldedDs;
@@ -48,23 +50,39 @@ public class TrainFpglvq implements ITrain {
 		this(network, new FoldedDataset<Dataset, Entry>(training), learningRate);
 	}
 	
-	public TrainFpglvq(Fpglvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate) {
+	public TrainFpglvq(Fpglvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		this(network, foldedDs, learningRate, 0.00005d, 0.00005d, 0.1d);
+	}
+	
+	public TrainFpglvq(Fpglvq network, FoldedDataset<Dataset, Entry> foldedDs, double learningRate, 
+			double beta, double gamma, double delta) {
 		this.alpha		= learningRate;
 		this.alphaStart	= learningRate;
 		this.xi			= 1d;
 		this.foldedDs	= foldedDs;
 		
+		this.setBeta(beta);
+		this.setGamma(gamma);
+		this.setDelta(delta);
+		
 		setNetwork(network);
-//		this.network 	= network;
-//		this.bestCodebook = new Best.FBest(network.codebook);
 	}
 	
 	public TrainFpglvq(FoldedDataset<Dataset, Entry> foldedDs, double learningRate){
+		this(foldedDs, learningRate, 0.00005d, 0.00005d, 0.1d);
+	}
+	
+	public TrainFpglvq(FoldedDataset<Dataset, Entry> foldedDs, double learningRate,
+			double beta, double gamma, double delta){
 		this.alpha		= learningRate;
 		this.alphaStart	= learningRate;
 		this.xi			= 1d;
 		this.xiStart	= this.xi;
 		this.foldedDs	= foldedDs;
+		
+		this.setBeta(beta);
+		this.setGamma(gamma);
+		this.setDelta(delta);
 	}
 
 	@Override
@@ -78,6 +96,30 @@ public class TrainFpglvq implements ITrain {
 		this.foldedDs 	= (FoldedDataset<Dataset, Entry>) foldedDs;
 	}
 	
+	public double getBeta() {
+		return beta;
+	}
+
+	public void setBeta(double beta) {
+		this.beta = beta;
+	}
+
+	public double getGamma() {
+		return gamma;
+	}
+
+	public void setGamma(double gamma) {
+		this.gamma = gamma;
+	}
+
+	public double getDelta() {
+		return delta;
+	}
+
+	public void setDelta(double delta) {
+		this.delta = delta;
+	}
+
 	@Override
 	public void updateLearningRate() {
 		this.alpha *= (1 - (currEpoch/maxEpoch));
@@ -196,8 +238,8 @@ public class TrainFpglvq implements ITrain {
 					double lRange = (cbe.data[j].mean - cbe.data[j].min);
 					double rRange = (cbe.data[j].max - cbe.data[j].mean);
 					
-					cbe.data[j].min = cbe.data[j].mean - lRange * (1 - 0.00005 * alpha);//((1 - cbe.miu[j]));
-					cbe.data[j].max = cbe.data[j].mean + rRange * (1 - 0.00005 * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].min = cbe.data[j].mean - lRange * (1 - this.beta * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].max = cbe.data[j].mean + rRange * (1 - this.beta * alpha);//((1 - cbe.miu[j]));
 				}
 			} else {
 				//dilebarin
@@ -207,8 +249,8 @@ public class TrainFpglvq implements ITrain {
 					double lRange = (cbe.data[j].mean - cbe.data[j].min);
 					double rRange = (cbe.data[j].max - cbe.data[j].mean);
 					
-					cbe.data[j].min = cbe.data[j].mean - lRange * (1 + 0.00005 * alpha);//((1 - cbe.miu[j]));
-					cbe.data[j].max = cbe.data[j].mean + rRange * (1 + 0.00005 * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].min = cbe.data[j].mean - lRange * (1 + this.gamma * alpha);//((1 - cbe.miu[j]));
+					cbe.data[j].max = cbe.data[j].mean + rRange * (1 + this.gamma * alpha);//((1 - cbe.miu[j]));
 				}
 			}
 		}
@@ -216,7 +258,7 @@ public class TrainFpglvq implements ITrain {
 		//else jika nilai coefisien = 0
 		else {
 			//lebarin sgitiga fuzzy semua codebook entry
-			double DELTA = 0.1d;
+//			double DELTA = 0.1d;
 			for(int i=0; i < codebook.size();i++){
 				FEntry cbe = codebook.get(i);
 				for(int j=0;j < cbe.size();j++){
@@ -225,8 +267,8 @@ public class TrainFpglvq implements ITrain {
 					
 //					cbe.data[j].min = cbe.data[j].mean - lRange * (1 + this.alpha * DELTA);//- lRange * this.alpha * DELTA;
 //					cbe.data[j].max = cbe.data[j].mean + rRange * (1 + this.alpha * DELTA);//+ rRange * this.alpha * DELTA;
-					cbe.data[j].min = cbe.data[j].mean - lRange - lRange * this.alpha * DELTA;
-					cbe.data[j].max = cbe.data[j].mean + rRange + rRange * this.alpha * DELTA;
+					cbe.data[j].min = cbe.data[j].mean - lRange - lRange * this.alpha * this.delta;
+					cbe.data[j].max = cbe.data[j].mean + rRange + rRange * this.alpha * this.delta;
 				}
 			}
 			

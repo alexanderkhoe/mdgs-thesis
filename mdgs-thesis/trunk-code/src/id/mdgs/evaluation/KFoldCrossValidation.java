@@ -106,6 +106,10 @@ public class KFoldCrossValidation {
 		this.random	= random;
 	}
 	
+	public void setLogName(String fname){
+		this.logFName = fname;
+	}
+	
 	public void reset(){
 		this.pairs.clear();
 	}
@@ -151,7 +155,7 @@ public class KFoldCrossValidation {
 			for(int i=0;i < pairs.size();i++){
 				IClassify<?, Entry> net = pairs.get(i).net;
 				ITrain trainer = pairs.get(i).trainer;
-				//net.loadCodebook(pairs.get(i).tag);
+//				net.loadCodebook(pairs.get(i).tag);
 				
 				if(net instanceof Lvq) ((Lvq) net).initCodes(train, 1);
 				else if(net instanceof Fnlvq) ((Fnlvq) net).initCodes(train, 0.5d, true);

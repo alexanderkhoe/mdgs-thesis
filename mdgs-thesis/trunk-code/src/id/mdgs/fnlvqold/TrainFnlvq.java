@@ -17,7 +17,7 @@ import id.mdgs.dataset.FuzzyNode;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.dataset.FCodeBook.FEntry;
-import id.mdgs.dataset.FCodeBook.FWinnerInfo;
+import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.matrices.WeightMatrix;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
