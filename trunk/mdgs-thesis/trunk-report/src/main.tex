@@ -9,13 +9,16 @@
 % membuat laporan skripsi. Konfigurasi yang lama telah disesuaikan dengan 
 % aturan penulisan thesis yang dikeluarkan UI pada tahun 2008.
 %
-        
+          
 % Tipe dokumen adalah report dengan satu kolom. 
 %   
 \documentclass[12pt, a4paper, onecolumn, oneside, final]{report}
    
 % Load konfigurasi LaTeX untuk tipe laporan thesis
 \usepackage{uithesis}
+
+% Load patch tambahan 
+\usepackage{patch_madeagus}
  
 \input{listofglossaries.tex}
 \input{listofacronyms.tex}
@@ -37,8 +40,6 @@
 
 \pagestyle{empty}
 
-%\input{turunan.fglvq.tex}
-%
 % Sampul Laporan
 \include{sampul}
 

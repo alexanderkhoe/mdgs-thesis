@@ -38,18 +38,18 @@ signifikan.
 Validasi silang (\emph{cross-validation}) merupakan metode statistik yang
 digunakan untuk uji coba dengan memperhitungkan tingkat variasi dari data
 set. Variasi tersebut dilakukan dengan membagi data menjadi beberapa sub bagian
-dan menggunakannya baik sebagai data training maupun testing berdasarkan porsi
+dan digunakan baik sebagai data pelatihan maupun pengujian berdasarkan porsi
 tertentu. Terdapat beberapa variasi \emph{cross validation} yang dapat dilakukan
 diataranya;
 
 \subsubsection*{K-Hold Out paired t-test}
 Uji K-Hold out sangat umum digunakan untuk membandingkan algoritma dalam machine
 learning. Ujicoba dilakukan dengan menggunakan data set $Z$ dimana data tersebut
-akan dipartisi menjadi training dan testing set dengan porsi biasanya
-$\frac{2}{3}$ training dana $\frac{1}{3}$ untuk testing (\emph{hold-out
-method}), atau mungkin juga dengan mebagi data sama rata $\frac{1}{2}$ untuk
-training dan testing. Kemudian algoritma diujicobakan dengan kedua data
-tersebut, pelatihan dengan training set, dan di uji dengan testing set. 
+akan dipartisi menjadi data latih dan data uji dengan porsi biasanya
+$\frac{2}{3}$ data latih dan $\frac{1}{3}$ untuk data uji (\emph{hold-out
+method}), atau mungkin juga dengan membagi data sama rata $\frac{1}{2}$ untuk
+pelatihan dan pengujian. Kemudian algoritma diujicobakan dengan kedua data
+tersebut, pelatihan dengan data latih, dan di uji dengan data uji. 
 
 Proses ujicoba akan dilakukan berulang sebanyak $K$ kali dimana umumnya nilai
  $K=30$.Jika akurasi dari hasil eksperimen dinotasikan $P_A$ untuk algoritma $A$
@@ -91,7 +91,7 @@ Pada metode ini, prosedur ujicoba dilakukan dengan mengulang \emph{2-fold cross
 validation} sebanyak 5 kali, dimana disetiap eksekusi validasi silang, data
 sampel dipartisi menjadi dua sama banyak. Algoritma $A$ dan $B$ dilatih
 menggunakan setengah data \#1 dan diuji dengan setengah data \#2, kemudian
-dihitung akurasi $P_A^1$ dan $P_B^1$. kemudian data training dan testing di
+dihitung akurasi $P_A^1$ dan $P_B^1$. kemudian data latih dan data uji di
 silang, dan dihitung $P_A^2$ dan $P_B^2$. Perbedaannya kemudian dihitung sebagai
 berikut;
 \begin{align}

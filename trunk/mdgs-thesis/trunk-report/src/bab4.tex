@@ -1,22 +1,22 @@
 %-----------------------------------------------------------------------------%
 \chapter{\babEmpat}
 %-----------------------------------------------------------------------------%
-Pada bab ini akan diuraikan mengenai  metode klasifikasi yang dikembangkan,
+Pada bab ini akan diuraikan mengenai metode klasifikasi yang dikembangkan,
 modifikasi yang dilakukan serta perancangan dan implementasi dari metode
 tersebut.
 
 %-----------------------------------------------------------------------------%
 \section{Metode Fuzzy Neuro GLVQ}
 %-----------------------------------------------------------------------------%
-Metode Fuzzy-Neuro GLVQ yang dikembangkan merupakan metode yang
-mengadaptasi mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode
-Generalized LVQ, dengan harapan dapat meningkatkan tingkat akurasi pengenalan
-kelainan arrhytmia dimana sebaran dari tiap kelas kategori arrhytmia overlapping
-satu sama lain. Berikut akan diuraikan mengenai metode FNGLVQ.
+Metode Fuzzy-Neuro GLVQ yang dikembangkan merupakan metode yang mengadaptasi
+mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode Generalized LVQ, dengan
+harapan dapat meningkatkan tingkat akurasi pengenalan kelainan aritmia dimana
+sebaran dari tiap kategori kelas aritmia tumpang tindih satu sama lain. Berikut
+akan diuraikan mengenai metode FNGLVQ.
 
 % dimana hal ini  dimotivasi oleh Kelemahan dari FNLVQ yang
 % sensitif terhadap inisialisasi  bobot awal dan keunggulan dari GLVQ yang
-% menjamin konvergensi dari prototipe  selama proses pelatihan, dan juga tidak
+% menjamin konvergensi dari vektor pewakil  selama proses pelatihan, dan juga tidak
 % sensitif terhadap inisialisasi bobot awal. Sedangkan keunggulan dari FNLVQ
 % adalah memiliki kemampuan untuk mengenali data \emph{unknown}.  Dengan
 % penggabungan 2 konsep ini diharapkan dihasilkan metode yang tidak sensitif
@@ -24,13 +24,13 @@ satu sama lain. Berikut akan diuraikan mengenai metode FNGLVQ.
 % \emph{unknown} data. 
 
 \subsection{Konsep dasar}
-Perbedaan yang mendasar dari karakteristik pengenalan arrhytmia berdasarkan beat
+Perbedaan yang mendasar dari karakteristik pengenalan aritmia berdasarkan beat
 dengan pengenalan aroma adalah dari sisi data yang akan menjadi masukan
 jaringan LVQ. Pada pengenalan aroma, data masukan merupakan data himpunan
 fuzzy, dimana merupakan representasi dari ketidakpastian (\emph{fuzziness})
 sensor dalam membaca informasi aroma, dimana hal ini berimplikasi pada model
 dari vektor pewakil yang diimplementasikan juga dengan himpunan fuzzy. Sedangkan
-pada pengenalan arrhytmia, distribusi data masing-masing kategori saling tumpang
+pada pengenalan aritmia, distribusi data masing-masing kategori saling tumpang
 tindih (\emph{overlaping}) satu sama lain, seperti yang dapat ditunjukkan pada
 \pic~\ref{fig:overlap} sehingga diharapkan dengan menggunakan vektor pewakil
 fuzzy, maka ketidakpastian pola suatu kelas dapat diturunkan. Selain itu, kunci
@@ -41,25 +41,41 @@ vektor masukkan tersebut polanya belum pernah diketahui oleh jaringan saraf
 (\emph{unknown}).
  
 \addFigure{width=0.6\textwidth}{pics/plotoverlap.png}{fig:overlap}{Ilustrasi
-data arrhytmia yang tumpang tindih (\emph{overlap}) antar kategori.}
+data aritmia yang tumpang tindih (\emph{overlap}) antar kategori.}
 
-Pada pengenalan arrhytmia yang dilakukan pada penelitian ini, yang dikenali
+Pada pengenalan aritmia yang dilakukan pada penelitian ini, yang dikenali
 adalah beat dalam ECG, dimana kemunculan suatu kelainan beat ditandai dengan
 morfologinya. Menurut dr. Jolanda Jonas, tidak semua kemunculan kelainan beat
-menandakan seorang pasien menderita arrhytmia. Terdapat kelainan beat yang hanya muncul
+menandakan seorang pasien menderita aritmia. Terdapat kelainan beat yang hanya muncul
 sekali dalam data ECG dimana hal ini sering digunakan sebagai indikasi untuk
 pemeriksaan lanjutan, seperti pemasangan alat observasi ECG 24 jam
 (\emph{Holter ECG}). Sehingga himpunan fuzzy sebagai masukan
 sistem, seperti pada sistem pengenalan aroma, tidak cocok untuk digunakan. Oleh
-karena itu pada pengenalan arrhytmia ini, digunakan masukan berupa data
-\emph{crisp}.
+karena itu pada pengenalan aritmia ini, digunakan masukan berupa data
+\emph{crisp}.  Ilustrasi pendekatan dengan menggunakan algoritma FNLVQ pada
+sinyal ECG dapat dilihat pada \pic~\ref{fig:fnlvq-flow}. 
  
-Seperti yang sudah diuraikan pada sub-bab \ref{ssec:glvq}, fungsi
-diskriminan yang digunakan \gls{glvq} adalah menggunakan \emph{\gls{metric}}, 
-yakni jarak euclidean, sehingga semakin kecil jarak antara input dengan vektor
+\addFigure{width=1\textwidth}{pics/fnlvq-flow.png}{fig:fnlvq-flow}{Ilustrasi
+algoritma FNLVQ pada sinyal ECG}.
+
+Seperti terlihat pada \pic~\ref{fig:fnlvq-flow}, beberapa data beat ECG ($c$)
+di-fuzzifikasi terlebih dahulu membentuk fungsi keanggotaan untuk
+merepresentasikan data masukkan. Berbeda dengan pendekatan yang dilakukan pada
+algoritma yang diusulkan, seperti terlihat pada \pic~\ref{fig:fnglvq-flow}. Data
+sinyal beat ECG langsung dimasukkan ke jaringan saraf tanpa melalui proses
+fuzzifikasi terlebih dahulu, oleh karena itu data masukan pada
+algoritma yang diusulkan berbentuk (\emph{crisp}).
+
+\addFigure{width=1\textwidth}{pics/fnglvq-flow.png}{fig:fnglvq-flow}{Ilustrasi
+algoritma FNGLVQ pada sinyal ECG}.
+ 
+Seperti yang sudah diuraikan pada sub-bab \ref{ssec:glvq}, fungsi diskriminan
+yang digunakan \gls{glvq} adalah menggunakan \emph{distance \gls{metric}}, yakni
+jarak euclidean, sehingga semakin kecil jarak antara input dengan vektor
 pewakil, maka kedua vektor akan semakin mirip. Pada metode yang dikembangkan,
-fungsi diskriminan yang digunakan adalah dengan menggunakan \emph{fuzzy similarity},
-seperti yang digunakan \gls{fnlvq} dalam aplikasi pengenalan aroma.
+fungsi diskriminan yang digunakan adalah dengan menggunakan
+pendekatan fuzzy, seperti yang digunakan \gls{fnlvq} dalam aplikasi pengenalan
+aroma.
 
 \addFigure{width=0.6\textwidth}{pics/fmtrim.png}{fig:fmtrim}{Ilustrasi
 Perhitungan similarity crisp data dengan menggunakan fungsi keanggotaan
@@ -91,18 +107,24 @@ pewakil dengan nilai similarity ($\mu_j$) terbesar (\emph{max}).
 dimana vektor pewakil pemenang akan di-update selama proses pembelajaran 
 tergantung dari vektor masukan yang diberikan. Namun pada metode ini, vektor
 pewakil yang akan di-update tidak hanya berdasarkan vektor pemenang saja,
-melainkan ditentukan oleh \emph{missclassification error} dengan menghitung
+melainkan ditentukan oleh \emph{miss classification error} dengan menghitung
 jarak relatif antara jarak vektor masukkan($x$) dengan vektor pewakil dari
 kelas yang sama ($C_x = C_w$) dan jarak terbesar vektor masukan dengan vektor
 pewakil yang tidak berasal dari kelas yang sama ($C_x \neq C_{\max_{j}(w_j)}$).
 Lebih jelas dapat dilihat kembali pada sub-bab \ref{ssec:glvq}.
 
-\subsection{Metode FN-GLVQ}
-Pada fuzzy similarity, semakin besar nilainya, maka kedua vektor akan semakin
-mirip. Untuk dapat menggunakan konsep similarity pada \gls{glvq}, maka dicari
-nilai \emph{disimilarity}  dengan menggunakan persamaan $d = 1 - \mu$, dimana
-$d$ adalah nilai jarak (\emph{disimilarity}). Kemudian disubstitusikan ke
-\equ~\ref{eq:mce} didapat;
+Secara garis besar, taksonomi dari algoritma yang dikembangkan ini (FNGLVQ)
+dapat dilihat pada \pic~\ref{fig:taksonomi}.
+ 
+\addFigure{width=0.9\textwidth}{pics/taksonomi.png}{fig:taksonomi}{Bagan
+taksonomi algoritma yang dikembangkan (FNGLVQ).}
+
+\subsection{Metode FNGLVQ}
+Pada konsep similarity, semakin besar nilainya, maka tingkat kemiripan kedua
+vektor akan semakin tinggi. Untuk dapat menggunakan pendekatan similarity dengan
+fuzzy pada \gls{glvq},  maka nilai derajat keanggotaan di-komplemen menjadi $d =
+1 - \mu$, dimana $d$ adalah nilai jarak (\emph{disimilarity}). Kemudian persamaan
+tersebut disubstitusikan ke \equ~\ref{eq:mce} sehingga didapat;
 
 \begin{align}
 \label{eq:mcesim}
@@ -135,7 +157,7 @@ terhadap bobot $w$ sebagai berikut; (dengan mengacu pada cost function
 % \end{align}
 
 \noindent Berikut adalah turunan dari masing-masing bagian turunan berantai pada
-\equ~\ref{eq:turunancostS} adalah sebagai berikut; 
+\equ~\ref{eq:turunancostS}; 
 \begin{align}
 \label{eq:turunanmce1}
 	\frac{\delta \varphi}{\delta \mu_1} &= 
@@ -382,7 +404,7 @@ pseudocode;
 	\STATE Initialize maximum iteration $t_{max}$
 	\STATE $t \leftarrow 0$
 	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
-		\FOR{$x_i \in X$}
+		\FOR{$x \in X$}
 % 			\STATE $x \leftarrow $ getNextSampleData()
 			\STATE $\mu_1 \leftarrow $ findSimilarity1($x, W$) where $C_x = C_{w_i}$
 			\STATE $\mu_2 \leftarrow $ findSimilarity2($x, W$) where $\mu_j = \max_{j
@@ -393,22 +415,25 @@ pseudocode;
 				\STATE $factor2 \leftarrow $ equation \ref{eq:turunanmce2}
 				\STATE
 				\STATE \COMMENT{adjust prototype 1}
-				\IF {$ w_{1, min} < x \leq w_{1,mean}$}
-					\STATE $w_{1,mean} \leftarrow $ equation \ref{eq:uprule11}
-				\ELSIF {$ w_{1, mean} < x \leq w_{1,max}$}
-					\STATE $w_{1,mean} \leftarrow $ equation \ref{eq:uprule21}
-				\ENDIF
-	
+				\FOR{$w_{1,i} \in w_1$}
+					\IF {$ w_{1, i, min} < x_i \leq w_{1, i,mean}$}
+						\STATE $w_{1, i,mean} \leftarrow $ equation \ref{eq:uprule11}
+					\ELSIF {$ w_{1, i, mean} < x_i \leq w_{1, i,max}$}
+						\STATE $w_{1, i,mean} \leftarrow $ equation \ref{eq:uprule21}
+					\ENDIF
+				\ENDFOR
 				\STATE $w_{1,min} \leftarrow $ equation \ref{eq:upruleminmax}
 				\STATE $w_{1,max} \leftarrow $ equation \ref{eq:upruleminmax}
+				
 				\STATE
 				\STATE \COMMENT{adjust prototype 2}
-				\IF {$ w_{2, min} < x \leq w_{2,mean}$}
-					\STATE $w_{2,mean} \leftarrow $ equation \ref{eq:uprule12}
-				\ELSIF {$ w_{2, mean} < x \leq w_{2,max}$}
-					\STATE $w_{2,mean} \leftarrow $ equation \ref{eq:uprule22}
-				\ENDIF
-	
+				\FOR{$w_{2,i} \in w_2$}
+					\IF {$ w_{2, i, min} < x_i \leq w_{2, i, mean}$}
+						\STATE $w_{2,mean} \leftarrow $ equation \ref{eq:uprule12}
+					\ELSIF {$ w_{2, i, mean} < x_i \leq w_{2, i, max}$}
+						\STATE $w_{2, i, mean} \leftarrow $ equation \ref{eq:uprule22}
+					\ENDIF
+				\ENDFOR	
 				\STATE $w_{2,min} \leftarrow $ equation \ref{eq:upruleminmax}
 				\STATE $w_{2,max} \leftarrow $ equation \ref{eq:upruleminmax}
 	
@@ -432,17 +457,16 @@ pseudocode;
 \end{algorithmic}
 \end{algorithm}  
 
-\clearpage
-
 %-----------------------------------------------------------------------------%
 \section{Metode Pelatihan LVQ}
 %-----------------------------------------------------------------------------%
 \subsection{Sistem Epoch}
-Dalam penelitian ini, studi dilakukan terhadap algoritma LVQ yang dikembangkan
-oleh Kohonen dkk \cite{Kohonen92lvqpak}. Dari hasil analisis terhadap
-implementasi algoritma tersebut, yakni LVQ PAK package, \saya menyadari bahwa
-mekanisme iterasi (epoch) yang penulis pahami dan kebanyakan digunakan
-dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
+Pada penelitian ini juga dilakukan studi terhadap algoritma LVQ yang
+dikembangkan oleh Kohonen dkk. \cite{Kohonen92lvqpak}. Dari hasil analisis
+terhadap implementasi algoritma tersebut, yakni LVQ PAK package, penulis
+menyadari bahwa mekanisme iterasi (\emph{epoch}) yang penulis pahami dan
+kebanyakan digunakan dalam JST dengan yang ada pada paket program  tersebut
+sedikit berbeda.
 \begin{enumerate}
   \item Iterasi pada LVQ PAK, iterasi yang dilakukan untuk sekali proses
   pembelajaran (satu kali proses update bobot) dengan menggunakan satu data
@@ -463,32 +487,34 @@ dalam JST dengan yang ada pada paket program tersebut sedikit berbeda.
 Selain sensitif terhadap inisial bobot awal, LVQ standar tersebut juga sangat
 sensitif terhadap jumlah iterasi yang dilakukan dalam proses pembelajaran. Jika
 terlalu banyak iterasi pelatihan dilakukan, maka kecenderungannya adalah bobot
-yang dihasilkan menjauhi bobot optimal (divergen)\cite{Sato:1995}.
-
-\noindent Dalam penelitian ini, sistem iterasi yang akan digunakan adalah
-mengikuti cara yang kedua diatas.
+yang dihasilkan menjauhi bobot optimal (divergen)\cite{Sato:1995}.  Pada
+penelitian ini, sistem iterasi yang akan digunakan adalah iterasi seperti cara
+kedua lakukan.
 % 
 % 
 \subsection{Iterasi dengan data Round Robin}
 \label{ssec:round-robin}
 Melihat karakteristik dari proses pembelajaran LVQ dimana aturan update pada
 proses pembelajaran dilakukan secara sequensial, maka perilaku proses
-pembelajaran akan dimodifikasi dari sisi urutan data training. Pada iterasi metode sebelumnya,
-proses iterasi pembelajaran dalam satu epoch dilakukan sesuai  dengan urutan
+pembelajaran akan dimodifikasi dari sisi urutan data pelatihan. Pada iterasi
+metode sebelumnya, proses iterasi pembelajaran dalam satu epoch dilakukan sesuai  dengan urutan
 data masukan yang diberikan, bisa berupa urutan sejumlah N sampel data kategori
 1 diikuti dengan  M sampel data kategori 2 dan seterusnya, atau bisa juga berupa
 urutan data yang diambil secara random terhadap kategori data. Pada penelitian ini, \saya
 mencoba untuk menerapkan mekanisme round-robin dalam iterasi proses pembelajaran
 LVQ dimana dalam mekanisme ini, urutan data sampel yang diberikan pada proses
 pembelajaran jaringan saraf dipastikan selang seling untuk setiap kategori data
-sejumlah $k$ kategori. Jadi urutan data sampel akan menjadi; $X_{1,c_1},
-X_{1,c_2}, \dots, X_{1,c_k}, X_{2,c_1}, X_{2,c_2}, \dots, X_{2,c_k},
-X_{n_1,c_1},X_{n_2,c_2}, \dots,X_{n_3,c_k}$ dimana $n_i$ adalah jumlah data
-untuk kelas ke-$i$.
+sejumlah $k$ kategori. Sehingga urutan data sampel akan menjadi; $X_{1}^{c_1},
+X_{2}^{c_1}, \dots, X_{i}^{c_1}, X_{1}^{c_2}, X_{2}^{c_2}, \dots, X_{i}^{c_2},
+X_{ni}^{c_1},X_{ni}^{c_2}, \dots,X_{ni}^{c_k}$ dimana $i$ adalah jumlah data
+untuk kelas ke-$k$ untuk tiap cycle. Ilustrasi dapat dilihat pada
+\pic~\ref{fig:roundrobin}.
+
+\addFigure{width=0.7\textwidth}{pics/round-robin.png}{fig:roundrobin}{Ilustrasi
+urutan data round robin pada tahap pelatihan.} 
 
 Dengan menggunakan mekanisme round-robin diharapkan dapat memperbaiki proses
 pembelajaran secara keseluruhan.
-
 
 % . Berikut pada algoritma \ref{alg:opsi3} dapat dilihat pseudocode dari
 % mekanisme iterasi round-robin ini.
@@ -516,11 +542,11 @@ pembelajaran secara keseluruhan.
 %-----------------------------------------------------------------------------%
 \section{Implementasi Sistem}
 %-----------------------------------------------------------------------------%
-Secara garis besar, sistem pengenalan arrhytmia yang dibangun dapat dilihat
+Secara garis besar, sistem pengenalan aritmia yang dibangun dapat dilihat
 melalui diagram pada \pic~\ref{fig:diagramAll}. 
 
 \addFigure{width=1\textwidth}{pics/block-diagram.png}{fig:diagramAll}{Blok
-diagram sistem pengenal arrhytmia yang dikembangkan.}
+diagram sistem pengenal aritmia yang dikembangkan.}
 
 Seperti yang ditunjukkan pada \pic~\ref{fig:diagramAll}, pengembangan sistem
 terdiri dari empat tahap diantaranya;
@@ -528,14 +554,14 @@ terdiri dari empat tahap diantaranya;
   \item \emph{Data acquisition} : yaitu tahap perekaman data ECG. Pada tahap
   ini untuk sementara menggunakan data digital yang disediakan secara bebas di
   physionet.net khususnya data MIT-BIH arrhytmia database. Kedepannya, tahap ini dapat
-  disubstitusi dengan penelitian yang telah dilakukan oleh peneliti lain dalam tim Arrhytmia.
+  disubstitusi dengan penelitian yang telah dilakukan oleh peneliti lain dalam tim aritmia.
   \item \emph{Data preprocessing} : yaitu tahap pengolahan data awal. Pada tahap
   ini, data dasar diolah sedemikian rupa sehingga dapat merepresentasikan data
   ECG dengan baik agar dapat meningkatkan kinerja proses pengenalan. Untuk
   sementara proses pengolahan masih menggunakan paket aplikasi MATLAB v2009a.
   Kedepannya, proses pengolahan agar dapat diimplementasikan di lingkungan java.
   \item \emph{Pattern Classification} : yaitu tahap pengembangan metode
-  pengenalan. Pada tahap ini, dikembangkan metode baru FN-GLVQ seperti yang
+  pengenalan. Pada tahap ini, dikembangkan metode baru FNGLVQ seperti yang
   telah diuraikan pada bagian awal bab ini. Semua Metode yang dikembangkan telah
   di implementasikan di lingkungan java dan siap untuk digunakan dan
   dikembangkan lebih lanjut.
@@ -554,16 +580,16 @@ dikembangkan.
 \subsection{Lingkungan pengembangan}
 Seperti yang telah diuraikan sebelumnya, penelitian ini difokuskan untuk
 menggali representasi data ECG yang memadai serta mengembangkan metode
-pengenalan ECG arrhytmia (\emph{Data preprocessing} dan \emph{Pattern
+pengenalan aritmia (\emph{Data preprocessing} dan \emph{Pattern
 Classification}). 
 \begin{enumerate}
   \item Untuk tahap pengolahan data, dilakukan dengan menggunakan aplikasi
   Matlab v2009a. Beberapa tahap pengolahan menggunakan kode yang
   dikembangkan sendiri seperti Beat Extraction, Outlier Removal dan
   Feature Extraction. Sedangkan untuk tahap baseline wander removal (BWR)
-  menggunakan kode yang disediakan oleh Gari Clifford \cite{clifford-2005} yang
+  menggunakan kode yang disediakan oleh Gari Clifford \cite{Clifford:2005} yang
   bersifat open source.
-  \item Untuk tahap pengembangan sistem pengenal arrhytmia, difokuskan pada
+  \item Untuk tahap pengembangan sistem pengenal aritmia, difokuskan pada
   pengembangan engine tahap awal dimana tujuannya adalah agar lebih mudah untuk
   digunakan dan dikembangkan lebih lanjut (\emph{Usability} dan
   \emph{Modifiability}). Pengembangan engine dilakukan di lingkungan :
@@ -599,7 +625,7 @@ berikut adalah uraian dari masing-masing package
   \item \textbf{master} : merupakan package untuk \texttt{interface} class
   dimana dapat digunakan untuk mengembangkan metode klasifikasi yang lain.
   \item \textbf{dataset} : merupakan package untuk menangani data yang akan
-  digunakan untuk proses training maupun testing. Disini ada dua jenis
+  digunakan untuk proses pelatihan maupun pengujian. Disini ada dua jenis
   \texttt{class} yang diimplementasikan untuk mengakomodasi jenis data Crisp
   (\texttt{Dataset}) dan data Fuzzy (\texttt{FCodeBook}), khususnya Fuzzy dengan
   membership function segitiga. \\ 
@@ -615,6 +641,10 @@ berikut adalah uraian dari masing-masing package
   yaitu fn-glvq.
   \item \textbf{evaluation} : yaitu package yang digunakan untuk melakukan uji
   test statistik yang umum dilakukan dalam pengembangan suatu metode klasifikasi.
+  
+  \addFigure{width=1\textwidth}{pics/class-diagram.png}{fig:classdiag}{Class
+	diagram dari engine yang dikembangkan.}
+
   \item \textbf{gui} : merupakan package yang digunakan untuk memonitor proses
   pelatihan yang dilakukan dimana dapat menampilkan perkembangan vektor pewakil
   tiap iterasi dan tingkat error yang dihasilkan.
@@ -624,11 +654,6 @@ berikut adalah uraian dari masing-masing package
 
 Untuk lebih jelasnya, pada \pic~\ref{fig:classdiag} ditunjukkan class diagam
 dari engine yang dikembangkan.
-
-\clearpage
-
-\addFigure{width=1\textwidth}{pics/class-diagram.png}{fig:classdiag}{Class
-diagram dari engine yang dikembangkan.}
 
 
 Berikut ditunjukkan antarmuka sistem yang dapat digunakan untuk menunjukkan
