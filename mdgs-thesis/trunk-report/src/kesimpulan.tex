@@ -11,34 +11,34 @@ dipertimbangan dalam penelitian berikutnya.
 \section{Kesimpulan}
 %---------------------------------------------------------------
 Sebuah metode jaringan saraf tiruan berbasis kompetisi dengan nama
-FN-GLVQ berhasil dikembangkan dan diuji-coba dengan menggunakan data arrhytmia
+FNGLVQ berhasil dikembangkan dan diuji-coba dengan menggunakan data aritmia
 dari data MIT-BIH database. Pengujian dilakukan dengan menggunakan beberapa
 skenario dan dilakukan uji statistik untuk menunjukkan keunggulan metode FNLVQ
-terhadap GLVQ khususnya pada data kelainan arrhytmia. Dari hasil pengujian dan
+terhadap GLVQ khususnya pada data kelainan aritmia. Dari hasil pengujian dan
 analisis dapat ditarik kesimpulan sebagai berikut;
 \begin{enumerate}
   \item Penelitian ini berhasil mengembangkan suatu metode pengenalan baru,
-  FN-GLVQ yang diimplementasikan dengan menggunakan java.
+  FNGLVQ yang diimplementasikan dengan menggunakan java.
   \item Pengolahan data awal menggunakan wavelet daubechies order 8 (db8)
   memberikan hasil rata-rata terbaik dibandingkan dengan db2, db4 maupun
   db6, yakni 94.92\%. 
 
-%   \item Penghilangan Noise pada data awal arrhytmia dapat meningkatkan kinerja
-%   algoritma dalam proses pengenalan arrhytmia.
+%   \item Penghilangan Noise pada data awal aritmia dapat meningkatkan kinerja
+%   algoritma dalam proses pengenalan aritmia.
 
-  \item Penggunaan mekanisme pengurutan data training menggunakan metode
-  round-robin dapat meningkatkan level akurasi dengan nilai $i < 30$.
+  \item Penggunaan mekanisme pengurutan data latih menggunakan metode
+  \emph{round-robin} dapat meningkatkan level akurasi dengan nilai $i < 30$.
   \item Penggabungan teori fuzzy yang diadaptasi dari metode FNLVQ dengan
   GLVQ menjadi FN-GLVQ dapat meningkatkan kinerja dari pengenalan kelainan
-  arrhytmia sampai 98.53\% untuk 6 kelas arrhytmia dan 96.33\% untuk 12 kelas.
-  \item Metode FN-GLVQ masih sensitif terhadap inisialisasi bobot awal
+  aritmia sampai 98.53\% untuk 6 kelas aritmia dan 96.33\% untuk 12 kelas.
+  \item Metode FNGLVQ masih sensitif terhadap inisialisasi bobot awal
   dibandingkan dengan metode GLVQ, namun dengan bobot yang tepat, misal bobot
-  diambil dari data training, dapat memberikan hasil yang lebih baik.
-  \item Penggunaan metode LVQ khususnya GLVQ dan FN-GLVQ pada data arrhytmia
+  diambil dari data latih, dapat memberikan hasil yang lebih baik.
+  \item Penggunaan metode LVQ khususnya GLVQ dan FNGLVQ pada data aritmia
   dapat memberikan tingkat pengenalan rata-rata diatas 97\% untuk 6 kelas dan
   sampai rata-rata 95\% untuk 12 kelas
   \item Data dengan sebaran yang tidak seimbang antar kelas dapat ditangani
-  lebih baik dengan menggunakan FN-GLVQ dibandingkan dengan metode LVQ1, LVQ21,
+  lebih baik dengan menggunakan FNGLVQ dibandingkan dengan metode LVQ1, LVQ21,
   GLVQ dan Backpropagation.
 \end{enumerate}
 
@@ -49,14 +49,14 @@ Pemrosesan data awal yang dilakukan pada penelitian ini masih menyisakan
 beberapa kemungkinan-kemungkinan pelenitian lanjutan diataranya;
 \begin{enumerate}
   \item Pada penelitian ini pendekatan analisis ECG yang digunakan adalah
-  pendekatan pengenalan arrhytmia berdasarkan beat dimana fitur
+  pendekatan pengenalan aritmia berdasarkan beat dimana fitur
   diekstraksi menjadi kumpulan beat tunggal. Penelitian lanjutan yang dapat
   dilakukan adalah menggunakan pendekatan fitur time interval dan
   morfologi yang bisa didapat dengan menggunakan transformasi
   wavelet.
   \item Metode penghilangan pencilan (outlier) dapat dilakukan dengan
   menggunakan Mahalanobis distance.
-  \item Metode FN-GLVQ membutuhkan analisis lanjutan untuk mempelajari tingkat
+  \item Metode FNGLVQ membutuhkan analisis lanjutan untuk mempelajari tingkat
   sensitifitas inisalisasi bobot awal yang belum bisa dicapai pada penelitian
   ini.
 \end{enumerate}

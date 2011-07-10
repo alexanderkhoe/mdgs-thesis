@@ -13,9 +13,9 @@ database yang digunakan sebagai sumber data dari keseluruhan penelitian ini.
 Pada penelitian ini, data yang digunakan bersumber dari data yang tersedia
 dengan bebas di physionet, yakni data MIT-BIH arrhytmia database. Data ini telah
 banyak digunakan oleh para peneliti dalam melakukan investigasi mengenai kelaian
-arrhytmia seperti yang telah diuraikan sebagian pada Bab~\ref{bab:1}. Database
+aritmia seperti yang telah diuraikan sebagian pada Bab~\ref{bab:pendahuluan}. Database
 ini terdiri dari 48 data record yang didapat dari 47 subjek yang diteliti oleh
-BIH Arrhytmia Laboratory yang dilakukan antara tahun 1975 sampai 1979. 
+BIH arrhytmia Laboratory yang dilakukan antara tahun 1975 sampai 1979. 
 
 \addFigure{width=0.6\textwidth}{pics/ecgsignalphysionet100.jpg}{fig:ecgphy}{Contoh
 representasi Signal ECG.}
@@ -60,8 +60,8 @@ penerjemahannya sangat tergantung pada garis isoelektrik.
 
 Terdapat beberapa teknik yang digunakan untuk mereduksi noise frekuensi rendah
 (baseline wander) mulai dari linear filtering seperti yang dikembangkan oleh
-J.A. {Alst\'{e}} van \cite{alst-1986} maupun polynomial fitting atau cubic
-spline filtering seperti yang dikembangkan oleh Meyer et.al. \cite{meyer-1977}.
+J.A. {Alst\'{e}} van \cite{Alst:1986} maupun polynomial fitting atau cubic
+spline filtering seperti yang dikembangkan oleh Meyer dkk. \cite{Meyer:1977}.
 Penggunaan linear filter mengakibatkan terjadinya distorsi gelombang ECG,
 terutama dibagian antara PQ interval dan ST segment. Dengan menggunakan
 nonlinear cubic spline interpolation, digabungkan dengan teknik pengurangan
@@ -121,7 +121,7 @@ elektrik sinyal ECG dengan menentukan pivot isoelektrik untuk digunakan sebagai
 pengurang sinyal ECG. 
 
 Pada penelitian ini, proses BWR dilakukan menggunakan matlab package yang
-dikembangkan oleh Gari Clifford \cite{clifford-2005} yang bersifat open source.
+dikembangkan oleh Gari Clifford \cite{Clifford:2005} yang bersifat open source.
 Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
 \pic~\ref{fig:bwrsample}.
 
@@ -129,28 +129,34 @@ Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
 \section{Ekstraksi Beat}
 \label{sec:ekstractbeat}
 %-----------------------------------------------------------------------------%
-Untuk melakukan pengenalan kelaianan arrhytmia, ada 2 cara yang dapat dilakukan.
-Cara (1) adalah dengan mendeteksi karakteristik time interval dari sinyal ECG
-seperti PR interval, PR segment, QRS interval, ST segment, ST interval, QT
-interval dan karakteristik morfologi lainnya. Cara (2) adalah dengan mendeteksi
-kelainan berdasarkan informasi sinyal \emph{beat-by-beat}, dimana pada metode
-ini, rangkaian sinyal ECG di segmentasi menjadi sekumpulan beat seperti yang
-dilakukan pada \cite{Ghongade.1}, \cite{zhao-2005}.
+Untuk melakukan pengenalan kelaianan aritmia, terdapat beberapa pendekatan yang
+umum dilakukan oleh para peneliti dimana dapat dikelompokkan menjadi dua sebagai
+berikut;
+\begin{enumerate}
+  \item Pendekatan beat : dimana pada metode ini rangkaian sinyal ECG 
+  disegmentasi menjadi sekumpulan beat tunggal seperti yang dilakukan pada
+  \cite{Zhao:2005, Ghongade:2007}. 
+  \item Pendekatan interval waktu : pengenalan dilakukan dengan mendeteksi
+  karakteristik interval waktu dari sinyal ECG seperti yang umum
+  dilakukan oleh dokter seperti RR interval, PR interval, PR segment, QRS
+  interval, ST segment, ST interval, QT interval.
+\end{enumerate}
 
 \addFigure{width=0.6\textwidth}{pics/ecgcutoff.png}{fig:ecgcutoff}{Ilustrasi
 teknik segmentasi beat.}
 
-Pada penelitian ini, segmentasi beat dipilih karena dataset sudah menyediakan 
-anotasi tambahan mengenai posisi puncak gelompang R (R-peak). Dengan informasi
-anotasi tersebut, asumsi terhadap lebar setiap beat dibuat dengan pendekatan
-sekitar 300 sampel data dan ekstraksi beat dilakukan dengan memposisikan puncak
-R sebagai pivot untuk setiap beat. Untuk setiap puncak R, sinyal awal dipotong
-dimulai dari posisi $R-150$ sampai $R+149$, sehingga didapat beat dengan lebar
-300 sampel data. Ilustrasi dapat dilihat pada \pic~\ref{fig:ecgcutoff}. Hasil 
-dari proses segmentasi tersebut dapat dilihat pada \pic~\ref{fig:ecgplot}.
+Pada penelitian ini, pendekatan beat dengan segmentasi sinyal ECG dipilih karena
+dataset sudah menyediakan anotasi tambahan mengenai posisi puncak gelompang R
+(R-peak). Dengan informasi anotasi tersebut, asumsi terhadap lebar setiap beat
+dibuat dengan pendekatan sekitar 300 sampel data dan ekstraksi beat dilakukan
+dengan memposisikan puncak R sebagai pivot untuk setiap beat. Untuk setiap
+puncak R, sinyal awal dipotong dimulai dari posisi $R-150$ sampai $R+149$,
+sehingga didapat beat dengan lebar 300 sampel data. Ilustrasi dapat dilihat pada
+\pic~\ref{fig:ecgcutoff}. Hasil dari proses segmentasi tersebut dapat dilihat
+pada \pic~\ref{fig:ecgplot}.
 
 \addFigure{width=0.6\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh  beat dari
-5 jenis arrhytmia dan 1 beat normal.}
+5 jenis aritmia dan 1 beat normal.}
 
 Dari proses segmentasi yang telah dilakukan didapat sejumlah beat yang
 dilengkapi dengan label anotasi nya seperti yang ditunjukkan pada
@@ -160,45 +166,48 @@ Dari \tab~\ref{tbl:beatstat} dapat dilihat jumlah beat untuk tiap label anotasi
 tidak berimbang dan bahkan ada yang berjumlah sangat kecil, yaitu 2 beat untuk
 jenis Supraventrikular premature beat. 
 
-\addTableFromFigures{width=0.7\textwidth}{pics/beatstat.png}{tbl:beatstat}{Jumlah
-Beat untuk setiap jenis anotasi pada MIT-BIH database}
+
 
 Sesuai dengan standar AAMI, seperti yang terlihat pada \tab~\ref{tbl:aami}, maka
 jenis beat yang akan digunakan adalah 15 beat pertama yang ditunjukkan dengan
-kotak hitam pada \tab~\ref{tbl:beatstat}. Karena jumlah 3 beat terakhir sangat
-kecil, maka untuk saat ini hanya 12 kelas saja yang nantinya akan digunakan
+kotak hitam pada \tab~\ref{tbl:beatstat}. Karena jumlah tiga beat terakhir
+sangat kecil, maka untuk saat ini hanya 12 kelas saja yang nantinya akan digunakan
 dalam proses pengenalan. 
+
+\addTableFromFigures{width=0.7\textwidth}{pics/beatstat.png}{tbl:beatstat}{Jumlah
+Beat untuk setiap jenis anotasi pada MIT-BIH database}
 
 \addTableFromFigures{width=1\textwidth}{pics/tblaami.png}{tbl:aami}{Pemetaan
 jenis beat pada MIT-BIH Arrhytmia database dengan kelas beat pada
-AAMI\cite{Philip.1}}
+AAMI\cite{Philip:2004}}
 
 %-----------------------------------------------------------------------------%
 \section{Noise/Outlier Removal}
 %-----------------------------------------------------------------------------%
 Untuk menganalisis hasil ekstraksi beat yang dilakukan pada tahap sebelumnya
 (sub-bab \ref{sec:ekstractbeat}), beat yang dihasilkan kemudian dikelompokkan
-berdasarkan tipe masing-masing arrhytmia dan diplot menggunakan aplikasi matlab.
-Empat jenis arrhytmia diplot seperti yang diilustrasikan pada
+berdasarkan tipe masing-masing aritmia dan diplot menggunakan aplikasi matlab.
+Empat jenis aritmia diplot seperti yang diilustrasikan pada
 \pic~\ref{fig:plotecgoutlier}.
 
 \addFigure{width=1\textwidth}{pics/plotecgoutlier.jpg}{fig:plotecgoutlier}{Plot
-Empat tipe arrhytmia hasil proses ekstraksi fitur}
+Empat tipe aritmia hasil proses ekstraksi fitur}
 
 Dari hasil pengamatan terlihat bahwa terdapat beat ECG pada tiap-tiap tipe
-arrhytmia yang berada diluar distribusi masing-masing tipe, dimana dalam
-hal ini diistilahkan dengan outlier. Outlier ini jika digunakan untuk melatih
-jaringan saraf yang dibangun dapat menyebabkan ketidak-akuratan data karena 
-model akan mencoba mengakomodasi outlier tersebut, namun akan berimbas pada 
-kinerja dari jaringan saraf karena akan menurunkan tingkat pengenalan terhadap
-beat tersebut. Oleh karena itu, beat yang terindikasi menjadi outlier harus dihilangkan.
+aritmia yang berada diluar distribusi masing-masing kategori kelas, dimana
+dalam hal ini diistilahkan dengan outlier. Outlier ini jika digunakan untuk
+melatih jaringan saraf yang dibangun dapat menyebabkan ketidak-akuratan data
+karena model akan mencoba mengakomodasi outlier tersebut, namun akan berimbas
+pada kinerja dari jaringan saraf karena akan menurunkan tingkat pengenalan
+terhadap beat tersebut. Oleh karena itu, beat yang terindikasi menjadi outlier
+harus dihilangkan.
 
 \begin{algorithm}
 \scriptsize 
 \caption{Mencari dan menghilangkan outlier beat}          
 \label{alg:outlier}                           
 \begin{algorithmic}                    % enter the algorithmic environment
-	\FORALL {$Data_c$ in $C_{arrhytmia}$}
+	\FORALL {$Data_c$ in $C_{aritmia}$}
 		\FOR{$k = 1 \to d$}
 			\STATE $Q_1 = lower\ quartile $ \COMMENT{percentile ke-25} 
 			\STATE $Q_3 = upper\ quartile $ \COMMENT{percentile ke-75}
@@ -229,7 +238,7 @@ dilakukan salah satunya adalah teknik Inter-Quartile Range (IQR). Pada umumnya
 IQR digunakan untuk univariate data, tapi pada penelitian ini, teknik IQR
 digunakan untuk multivariate data dengan asumsi penerapannya dilakukan tanpa
 memperhitungkan korelasi antar fitur yang biasanya didapat dengan covariance
-matrix. Algoritma untuk menghilangkan outlier dapat dilihat pada 
+matrix. Algoritma untuk menghilangkan outlier dapat dilihat pada
 algoritma~\ref{alg:outlier}.
 
 \addFigure{width=0.7\textwidth}{pics/detectoutlier.png}{fig:detectoutlier}{Ilustrasi
@@ -254,14 +263,12 @@ arrhymia setelah dilakukan proses penghilangan outlier.}
 Dari \pic~\ref{fig:hasilremove} dapat dilihat beat outlier yang terdapat pada
 sinyal ECG di-kecualikan/dihapus dan menghasilkan kumpulan beat dengan sebaran
 sesuai dengan rentang quartil yang ditentukan. Pada
-Tabel~\ref{tbl:beatstat-nonoutlier} dapat dilihat data statistik jumlah beat
-yang dihasilkan untuk setiap tipe arrhytmia setelah dilakukan penghilangan outlier
+\tab~\ref{tbl:beatstat-nonoutlier} dapat dilihat data statistik jumlah beat yang
+dihasilkan untuk setiap tipe aritmia setelah dilakukan penghilangan outlier
 pada data. Seperti yang telah disebutkan sebelumnya, karena jumlah beat yang
 sedikit, untuk saat ini, proses pengenalan akan dilakukan hanya pada 12 kategori
 pertama yang terdapat pada tabel tersebut (dapat dilihat pada bagian yang
 didalam kotak hitam).
-
-
 
 %-----------------------------------------------------------------------------%
 \section{Ekstraksi dan Reduksi Fitur}
@@ -273,7 +280,7 @@ yang dikembangkan. Terdapat berbagai cara yang bisa digunakan untuk melakukan
 ekstraksi fitur, salah satunya adalah dengan menggunakan \emph{Discrete Wavelet
 Trasform} (DWT). 
 
-Seperti yang telah diuraikan pada tinjauan pustaka \ref{sec:wt}, disebutkan
+Seperti yang telah diuraikan pada sub-bab \ref{sec:wt}, disebutkan
 bahwa kegunaan dari wavelet itu adalah (1) Untuk mengkstraksi informasi dari
 suatu data sinyal, (2) Untuk melakukan kompresi data, (3) Untuk
 memfilter/membersihkan data sinyal. Yang pertama dilakukan untuk mendapat
@@ -288,25 +295,20 @@ direkonstruksi kembali, sehingga akan menghasilkan sinyal dengan mereduksi
 kandungan frekuensi tinggi. Jadi disini terdapat langkah
 dekomposisi-rekonstruksi.
 
-\addFigure{height=0.7\textheight}{pics/norm-wavelet.png}{fig:norm-wavelet}{Contoh
-sinyal Normal ECG hasil dekomposisi (aproksimasi) tiap level dengan menggunakan
-wavelet daubechies8} 
+\addFigure{width=0.5\textwidth}{pics/db8.png}{fig:db8}{Ilustrasi dekomposisi 5
+level dengan menggunakan \emph{db8}.}
 
 Di bidang biomedical, transformasi wavelet dapat digunakan untuk mengekstraksi
 dan mendeteksi kemunculan gelombang P, Q, R, S, T maupun time interval antar
 gelombang seperti yang dilakukan Zheng dkk\cite{Zheng:1995} dan Haque dkk
-\cite{haque:2002}. Namun, pada penelitian ini transformasi wavelet diskrit 
+\cite{Haque:2002}. Namun, pada penelitian ini transformasi wavelet diskrit 
 akan digunakan untuk mengekstraksi dan mereduksi fitur dari data dasar
 yang dihasilkan dari ekstraksi beat pada tahap sebelumnya, dimana tujuannya
 adalah untuk mencari fitur yang dapat merepresentasikan pola dengan baik.
 \emph{Mother wavelet} yang akan digunakan adalah wavelet daubechies dimana Guler
-dkk.\cite{guler:2005} telah menunjukkan bahwa proses ekstraksi fitur menggunakan
+dkk.\cite{Guler:2005} telah menunjukkan bahwa proses ekstraksi fitur menggunakan
 wavelet daubechies memberikan hasil yang lebih baik dibandingkan dengan wavelet
 orthogonal yang lain.
-
-\addFigure{height=0.7\textheight}{pics/norm-wavelet-det.png}{fig:norm-wavelet-det}{
-Contoh sinyal Normal ECG hasil dekomposisi (detail) tiap level dengan
-menggunakan  wavelet daubechies8}
 
 Pada proses ekstraksi fitur ini, ECG beat akan didekomposisi secara bertahap
 dari level 1 sampai dengan level 5, yang artinya proses dekomposisi akan
@@ -314,18 +316,20 @@ menghasilkan lima komponen detail $d_1,\dots, d_5$ dan salah satu dari
 aproksimasi $a_1, \dots, a_5$, tergantung dari level dekomposisi yang akan
 dipakai. Jika kita memilih dekomposisi level 5, maka akan didapat $a_5,
 d_1,\dots,d_5$, dan kemudian dipilih koefisien yang tepat untuk
-merepresentasikan sinyal dengan baik. Pada dasarnya, koefisien wavelet ini
+merepresentasikan sinyal dengan baik dimana pada dasarnya koefisien wavelet ini
 merupakan representasi distribusi energi dari sinyal dalam dimensi waktu dan
-frekuensi. Pada \pic~\ref{fig:norm-wavelet} ditunjukkan komponen aproksimasi tiap
-level dari hasil dekomposisi dengan menggunakan wavelet daubechies8 sebanyak 5
-level. Setiap level proses dekomposisi menghasilkan jumlah koefisien $a_1,
-\dots, a_5$ secara berurutan 157, 86, 50,32 dan 23 koefisien wavelet. 
+frekuensi. Ilustrasi proses dekomposisi dengan jumlah koefisien yang dihasilkan
+dengan menggunakan wavelet daubechies \emph{db8} dapat dilihat pada
+\pic~\ref{fig:db8}.
 
-Pada \pic~\ref{fig:norm-wavelet-det} ditunjukkan komponen detail dari proses
-dekomposisi sebanyak 5 level dimana jumlah koefisien untuk masing-masing
-komponen $d_1,\dots, d_5$ secara berurutan adalah 157, 86, 50,32 dan 23
-koefisien wavelet.  
+Pada \pic~\ref{fig:norm-wavelet} dapat dilihat komponen aproksimasi tiap
+level dari hasil dekomposisi sinyal ECG dengan menggunakan wavelet daubechies
+\emph{db8} sebanyak 5 level. Sedangkan pada \pic~\ref{fig:norm-wavelet-det}
+adalah komponen detail dari proses dekomposisi tersebut.
 
+\addFigure{width=0.5\textwidth}{pics/db8-stat.png}{fig:db8-stat}{Ilustrasi
+  penentuan fitur dengan pendekatan statistik.}
+  
 Pada penelitian ini, ekstraksi fitur menggunakan dua pendekatan yang nantinya
 akan diujicobakan pada tahap selanjutnya, diantaranya adalah;
 \begin{enumerate}
@@ -346,10 +350,23 @@ akan diujicobakan pada tahap selanjutnya, diantaranya adalah;
   jumlah fitur, dicari fitur statistik untuk setiap komponen,  yakni \emph{min},
   \emph{mean}, \emph{max} dan \emph{standard deviasion}. Karena  ada enam
   komponen wavelet, satu aproksimasi dan lima detail, maka akan  didapat Fit6
-  dengan jumlah 24 fitur data.
+  dengan jumlah 24 fitur data. Ilustrasi lebih jelas dapat dilihat pada
+  \pic~\ref{fig:db8-stat}.
 \end{enumerate} 
 
+\clearpage
 
+\addFigure{height=0.7\textheight}{pics/norm-wavelet.png}{fig:norm-wavelet}{Contoh
+sinyal Normal ECG hasil dekomposisi (aproksimasi) tiap level dengan menggunakan
+wavelet daubechies8} 
+
+\clearpage
+
+\addFigure{height=0.7\textheight}{pics/norm-wavelet-det.png}{fig:norm-wavelet-det}{
+Contoh sinyal Normal ECG hasil dekomposisi (detail) tiap level dengan
+menggunakan  wavelet daubechies8}
+
+\clearpage
 
 % Input selection has two
 % meanings: (1) which components of a pattern, or (2) which

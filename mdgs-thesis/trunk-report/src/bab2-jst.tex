@@ -9,7 +9,7 @@ digital. JSt merupakan sistem adaptif yang dapat mengubah strukturnya
 untuk memecahkan masalah berdasarkan informasi eksternal maupun internal
 yang mengalir melalui jaringan tersebut. 
 
-Menurut S. Haykin \cite{haykin-1994}, sebuah jaringan saraf adalah sebuah
+Menurut S. Haykin \cite{Haykin:1994}, sebuah jaringan saraf adalah sebuah
 prosesor yang terdistribusi paralel dan mempuyai kecenderungan untuk menyimpan
 pengetahuan yang didapatkannya dari pengalaman dan membuatnya tetap tersedia
 untuk digunakan. Hal ini menyerupai kerja otak dalam dua hal yaitu: (1)
@@ -28,7 +28,7 @@ Keuntungan dari penggunaan JST adalah kemampuannya dalam beradaptasi melalui
 proses pembelajaran dan kemampuan generalisasi, dalam artian jaringan saraf
 mampu memberikan hasil dari input yang tidak diketahui sebelumnya. Berikut
 adalah beberapa kemampuan yang dapat diberikan melalui penggunaan JST menurut S.
-Haykin \cite{haykin-1994}:
+Haykin \cite{Haykin:1994}:
 \begin{enumerate}
   \item Non Linier : jaringan saraf dapat menangani permasalahan baik linier
   maupun non linier.
@@ -57,7 +57,7 @@ seperti yang terlihat pada \pic~\ref{fig:neuron} yaitu
 \end{itemize}
 
 \addFigure{width=0.5\textwidth}{pics/neuron.png}{fig:neuron}{Model neuron non
-linier \cite[p.~33]{haykin-1994}}
+linier \cite[p.~33]{Haykin:1994}}
 
 Paradigma pembelajaran JST secara umum dibagi menjadi dua kelompok utama yaitu
 pembelajaran dengan pengarahan (supervised) dan pembelajaran tidak dengan
@@ -138,8 +138,8 @@ Secara umum, algoritma LVQ dapat ditunjukkan pada algoritma \ref{alg:lvq}.
 	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
 		\STATE $x \leftarrow $ getNextSample()
 		\STATE $train(W, x) \Downarrow$
-		\STATE $\qquad \leadsto w \leftarrow $ getClosestPrototipe()
-		\STATE $\qquad \leadsto $updatePrototipe($w$)
+		\STATE $\qquad \leadsto w \leftarrow $ getClosestVRef()
+		\STATE $\qquad \leadsto $updateVRef($w$)
 		\STATE $t \leftarrow t + 1$
 	\ENDWHILE
 \end{algorithmic}
@@ -147,25 +147,25 @@ Secara umum, algoritma LVQ dapat ditunjukkan pada algoritma \ref{alg:lvq}.
  
 Terdapat beberapa versi dari \gls{lvq} dimana setiap versi merupakan
 penyempurnaan dari versi sebelumnya, baik dari sisi konvergensi 
-maupun inisialisasi awal prototipe. Berikut akan diuraikan beberapa versi
+maupun inisialisasi awal vektor pewakil. Berikut akan diuraikan beberapa versi
 dari \gls{lvq};
 
 \subsubsection*{LVQ1}
 Pada \gls{lvq} versi pertama, setiap pemberian satu sampel data akan
-mengakibatkan proses update terhadap satu prototipe. Pada setiap iterasi dari
-proses pelatihan, prototipe dengan jarak minimal terhadap input
-akan disesuaikan. Proses penyesuaian prototipe tergantung dari hasil proses
-klasifikasi. Jika prototipe pemenang adalah sama dengan kategori input, maka
-prototipe akan disesuaikan mendekati sampel data. Jika tidak, maka prototipe
-pemenang akan disesuaikan menjauhi sampel data. Tahap pembelajaran yang
-dilakukan pada LVQ1 dapat diuraikan sebagai berikut;
+mengakibatkan proses update terhadap satu vektor pewakil. Pada setiap iterasi
+dari proses pelatihan, vektor pewakil dengan jarak minimal terhadap input akan
+disesuaikan. Proses penyesuaian vektor pewakil tergantung dari hasil proses
+klasifikasi. Jika vektor pewakil pemenang adalah sama dengan kategori input,
+maka vektor pewakil akan disesuaikan mendekati sampel data. Jika tidak, maka
+vektor pewakil pemenang akan disesuaikan menjauhi sampel data. Tahap
+pembelajaran yang dilakukan pada LVQ1 dapat diuraikan sebagai berikut;
 \begin{enumerate}
   \setlength{\itemsep}{1pt}
   \setlength{\parskip}{0pt}
   \setlength{\parsep}{0pt}
   \item Pilih sampel data $x$,
-  \item Tentukan prototipe pemenang $w_p$ seperti pada \ref{eq:lvqwin}.
-  \item Sesuaikan prototipe $w_p$ berdasarkan aturan berikut;
+  \item Tentukan vektor pewakil pemenang $w_p$ seperti pada \ref{eq:lvqwin}.
+  \item Sesuaikan vektor pewakil $w_p$ berdasarkan aturan berikut;
   \begin{align}
   \label{eq:lvq1}
   \begin{array}{ll}
@@ -202,10 +202,10 @@ yang terlihat pada algoritma \ref{alg:lvq1}
 
 \subsubsection*{LVQ2}
 Pada algoritma LVQ1, proses penyesuaian bobot hanya ditentukan berdasarkan
-prototipe pemenang saja. Namun, pada algoritma LVQ2, proses pembelajaran
-memperhitungkan prototipe tentangga dimana proses pembelajaran ditentukan
+vektor pewakil pemenang saja. Namun, pada algoritma LVQ2, proses pembelajaran
+memperhitungkan vektor pewakil tentangga dimana proses pembelajaran ditentukan
 berdasarkan ide dimana jika vektor masukan ($x$) memiliki jarak yang hampir sama
-antara pemenang ($w_p$) dan runner-up($w_r$), maka kedua prototipe seharusnyadi-update secara simultan jika $x$ berada pada bagian jendela yang salah.
+antara pemenang ($w_p$) dan runner-up($w_r$), maka kedua vektor pewakil seharusnyadi-update secara simultan jika $x$ berada pada bagian jendela yang salah.
 
 \noindent
 Tahap pembelajaran yang dilakukan pada LVQ2 dapat diuraikan sebagai berikut;
@@ -214,14 +214,14 @@ Tahap pembelajaran yang dilakukan pada LVQ2 dapat diuraikan sebagai berikut;
   \setlength{\parskip}{0pt}
   \setlength{\parsep}{0pt}
   \item Pilih sampel data $x$
-  \item Tentukan prototipe pemenang $w_p$ dan pemenang kedua (\textit{runner
+  \item Tentukan vektor pewakil pemenang $w_p$ dan pemenang kedua (\textit{runner
   up}) $w_r$
   \item Lakukan pengecekan terhadap $w_p$ dan $w_r$;
   \begin{enumerate}
     \item $w_p$ dan $w_r$ harus berasal dari kategori yang berbeda, $C_{w_p}
     \neq C_{w_r}$
     \item Kategori dari vektor masukan ($C_x$) berasal dari kategori yang sama
-    dengan prototipe pemenang kedua, $C_x = C_{w_r}$
+    dengan vektor pewakil pemenang kedua, $C_x = C_{w_r}$
     \item Jarak antara vektor masukan ke vektor pemenang ($d(x, w_p)$) dan
     ke vektor runner-up ($d(x, w_r)$) hampir sama. 
     Untuk menentukan seberapa dekat/sama antara $d_p$ dan $d_r$, disini
@@ -243,7 +243,7 @@ Tahap pembelajaran yang dilakukan pada LVQ2 dapat diuraikan sebagai berikut;
     {Ilustrasi sistem jendela pada LVQ2}   \end{enumerate}
     
   \item Jika ketiga kondisi pada langkah (3) terpenuhi, maka lakukan proses
-  penyesuaian prototipe sebagai berikut;
+  penyesuaian vektor pewakil sebagai berikut;
   \begin{align}
   w_p \leftarrow w_p - \alpha . (x - w_p) \nonumber \\
   w_r \leftarrow w_r + \alpha . (x - w_r)
@@ -283,14 +283,13 @@ yang terlihat pada algoritma \ref{alg:lvq2}
 
 \subsubsection*{LVQ2.1}
 Algoritma LVQ2.1 merupakan penyempurnaan dari LVQ2 dimana algoritma ini
-mengabaikan aturan (2) dari kondisi update prototipe LVQ2. Pada algoritma
+mengabaikan aturan (2) dari kondisi update vektor pewakil LVQ2. Pada algoritma
 LVQ2.1, kategori dari sampel data ($C_x$) \underline{tidak harus sama} dengan
-prototipe pemenang kedua ($C_{w_r}$). Persyaratannya adalah minimal salah
-satu dari prototipe ($w_p, w_r$) berasal dari kategori yang sama dengan kategori
-input ($C_x$). Sedangkan aturan update yang lain masih tetap sama dengan
-sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
-\ref{alg:lvq21}, dimana diasumsikan $C_{w_1} = C_x$.
-
+vektor pewakil pemenang kedua ($C_{w_r}$). Persyaratannya adalah minimal salah
+satu dari vektor pewakil ($w_p, w_r$) berasal dari kategori yang sama dengan
+kategori input ($C_x$). Sedangkan aturan update yang lain masih tetap sama
+dengan sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
+\ref{alg:lvq21}, dimana diasumsikan $C_{w_1} = C_x$.
 \begin{algorithm}  
 \scriptsize 
 \caption{Aturan pembelajaran LVQ2.1 $train(W, x)$}          
@@ -316,13 +315,13 @@ sebelumnya. Secara lebih detail dapat ditunjukkan pada algoritma
 \end{algorithm}
 
 \subsubsection*{LVQ3}
-Algoritma LVQ2.1 memiliki kelemahan dimana prototipe kemungkinan mengalami
+Algoritma LVQ2.1 memiliki kelemahan dimana vektor pewakil kemungkinan mengalami
 divergensi selama proses pembelajaran dilakukan\cite{Sato:1998}. Pada algoritma
-LVQ3, koreksi dilakukan terhadap LVQ2.1 dimana untuk memastikan prototipe agar
-selalu mendekati distribusi dari kelas. Aturan update prototipe sama dengan
-LVQ2.1, hanya saja terdapat aturan tambahan dimana jika kedua prototipe ($w_1,
-w_2$) \underline{berasal dari kelas yang sama}, maka update prototipe nya adalah
-sebagai berikut;\begin{align}
+LVQ3, koreksi dilakukan terhadap LVQ2.1 dimana untuk memastikan vektor pewakil
+agar selalu mendekati distribusi dari kelas. Aturan update vektor pewakil sama
+dengan LVQ2.1, hanya saja terdapat aturan tambahan dimana jika kedua vektor
+pewakil ($w_1, w_2$) \underline{berasal dari kelas yang sama}, maka update
+vektor pewakil nya adalah sebagai berikut;\begin{align}
 w_i \leftarrow w_i + \epsilon . \alpha . (x - w_i), \quad \epsilon > 0
 \end{align}
 
@@ -356,11 +355,10 @@ Berikut pada algoritma \ref{alg:lvq3} untuk metode pembelajaran LVQ3
 \end{algorithm}  
 
 Yang perlu diperhatikan pada algoritma ini adalah jika masing-masing kategori
-hanya direpresentasikan dengan \underline{hanya satu} prototipe, maka algoritma
-LVQ3 akan sama dengan algoritma LVQ2.1. Algoritma LVQ3 hanya akan berguna, jika
-kategori kelas direpresentasikan dengan lebih dari satu prototipe. 
-
-
+hanya direpresentasikan dengan \underline{hanya satu} vektor pewakil, maka
+algoritma LVQ3 akan sama dengan algoritma LVQ2.1. Algoritma LVQ3 hanya akan
+berguna, jika kategori kelas direpresentasikan dengan lebih dari satu vektor
+pewakil.
 \subsection{Generalized Learning Vector Quantization (GLVQ)}
 \label{ssec:glvq}
 \glsreset{glvq}
@@ -368,19 +366,17 @@ kategori kelas direpresentasikan dengan lebih dari satu prototipe.
 \Gls{glvq} merupakan algoritma yang dikembangkan oleh A. Sato dan Yamada pada
 tahun 1995 \cite{Sato:1995}. Algoritma ini merupakan variasi dari algoritma LVQ
 khususnya LVQ2.1 dimana merupakan penurunan dari \textit{cost function} yang
-eksplisit, tidak seperti pada algoritma LVQ. Disamping itu algoritma LVQ2.1
-juga tidak menjamin konvergensi dari prototipe ke distribusi dari kelas selama
-proses pelatihan (\cite{Sato:1995},\cite{Sato:1998}).Metode pembelajaran yang 
+eksplisit, tidak seperti pada algoritma LVQ. Disamping itu algoritma LVQ2.1 juga
+tidak menjamin konvergensi dari vektor pewakil ke distribusi dari kelas selama
+proses pelatihan (\cite{Sato:1995, Sato:1998}).Metode pembelajaran yang
 digunakan disini berdasarkan atas proses minimisasi dari cost function,
 \emph{miss-classification error}, dengan menggunakan metode optimasi gradient
-descent.
-
-Diberikan $w_1$ adalah prototipe terdekat berasal dari kategori
-yang sama dengan kategori vektor masukan (($C_{w_1} = C_x$)), dan $w_2$ adalah
-prototipe terdekat yang bukan berasal dari kategori vektor masukan ($C_{w_2} \neq
+descent.
+Diberikan $w_1$ adalah vektor pewakil terdekat berasal dari kategori yang sama
+dengan kategori vektor masukan (($C_{w_1} = C_x$)), dan $w_2$ adalah vektor
+pewakil terdekat yang bukan berasal dari kategori vektor masukan ($C_{w_2} \neq
 C_x$). \emph{miss-classification error} $\varphi(x)$ dapat dihitung dengan
-menggunakan persamaan \ref{eq:mce};
- 
+menggunakan persamaan \ref{eq:mce}; 
 \begin{align}
 \label{eq:mce}
 	\varphi(x) = \frac{d_1 - d_2}{d_1 + d_2}
@@ -398,7 +394,7 @@ meminimisasi cost function $S$ sebagai berikut;
 	S = \sum_{i=1}^{N} f(\varphi(x)), 
 \end{align}
 
-\noindent dimana $N$ adalah jumlah dari vektor masukan untuk training, dan
+\noindent dimana $N$ adalah jumlah dari vektor masukan untuk pelatihan, dan
 $f(\varphi(x))$ adalah fungsi monoton naik. untuk meminimalkan $S$, $w_1$ dan
 $w_2$ diupdate berdasarkan metode steepest descent dengan nilai laju
 pembelajaran $\alpha$ sebagai berikut;
@@ -445,9 +441,9 @@ sebagai berikut;
 \end{align}
 
 $\frac{\delta f}{\delta \varphi}$ dapat dilihat sebagai \emph{gain factor} untuk
-proses update prototipe dan nilai-nya tergantunf pada $x$. Ini artinya, 
+proses update vektor pewakil dan nilai-nya tergantunf pada $x$. Ini artinya, 
 $\frac{\delta f}{\delta \varphi}$ merupakan bobot untuk setiap $x$. Untuk
-menurunkan error rate, maka akan efektif jika proses update prototipe
+menurunkan error rate, maka akan efektif jika proses update vektor pewakil
 menggunakan vektor input yang berada di class boundaries, sehingga decision
 boundaries akan digeser menuju batas bayes. Dengan demikian, $f(\varphi)$ harus
 merupakan fungsi monoton naik yang non-linear, dan dianggap bahwa kemampuan
@@ -499,7 +495,7 @@ gradual dibatasi pada decision boundaries tersebut. Pada Algoritma
 \end{algorithm}  
  
 Seperti yang telah disebutkan diatas, keunggulan dari \gls{glvq} adalah menjamin
-konvergensi dari prototipe akan mendekati distribusi dari kategori kelas selama
+konvergensi dari vektor pewakil akan mendekati distribusi dari kategori kelas selama
 pelatihan. Keungulan yang lain adalah bahwa \gls{glvq} tidak sensitif terhadap
 inisialisasi bobot awal yang umumnya dialami oleh LVQ standar \cite{Sato:1999}. 
 
@@ -508,23 +504,22 @@ inisialisasi bobot awal yang umumnya dialami oleh LVQ standar \cite{Sato:1999}.
 
 \Gls{fnlvq} merupakan algoritma pembelajaran yang berbasis kompetisi yang
 dikembangkan oleh Kusumoputro dan Wisnu J \cite{Kusumoputro:2002} dimana
-algoritma ini diaplikasikan pada sistem pengenalan aroma.  Algoritma ini dikembangkan
-berdasarkan algoritma LVQ dengan menggunakan teori fuzzy dimana aktifasi
-dari neuron ditunjukkan dalam bentuk nilai fuzzy karena dimotivasi
-oleh ketidakjelasan (\emph{fuzzines}) dari data yang dihasilkan akibat dari
-kesalahan pengukuran oleh alat. Proses fuzzifikasi dari semua komponen prototipe
-dan vektor masukan dikalkulasi melalui proses normalisasi dengan menggunakan
-fungsi keanggotaan segitiga, dengan nilai derajat keanggotaan maksimal adalah 1.
-Fungsi keanggotaan segitiga sangat umum digunakan karena sifatnya yang sangat
-sederhana dan mudah untuk diimplementasikan. Distribusi data direpresentasikan
-pada prototipe dengan nilai min, mean dan max, yaitu $F = (f_l, f, f_r)$. $f$
-adalah pusat (\emph{center}) dari distribusi sampel data, sedangkan $f_l$ dan
-$f_r$ secara berurutan adalah nilai minimum dan maksimum sampel data. 
-
+algoritma ini diaplikasikan pada sistem pengenalan aroma.  Algoritma ini
+dikembangkan berdasarkan algoritma LVQ dengan menggunakan teori fuzzy dimana
+aktifasi dari neuron ditunjukkan dalam bentuk nilai fuzzy karena dimotivasi oleh
+ketidakjelasan (\emph{fuzzines}) dari data yang dihasilkan akibat dari kesalahan
+pengukuran oleh alat. Proses fuzzifikasi dari semua komponen vektor pewakil dan
+vektor masukan dikalkulasi melalui proses normalisasi dengan menggunakan fungsi
+keanggotaan segitiga, dengan nilai derajat keanggotaan maksimal adalah 1. Fungsi
+keanggotaan segitiga sangat umum digunakan karena sifatnya yang sangat sederhana
+dan mudah untuk diimplementasikan. Distribusi data direpresentasikan pada vektor
+pewakil dengan nilai min, mean dan max, yaitu $F = (f_l, f, f_r)$. $f$ adalah
+pusat (\emph{center}) dari distribusi sampel data, sedangkan $f_l$ dan $f_r$
+secara berurutan adalah nilai minimum dan maksimum sampel data.
 Karena neuron pada \gls{fnlvq} menggunakan fuzzy number, maka konsep jarak
 euclid yang digunakan pada standar \gls{lvq} dimodifikasi menggunakan fuzzy
 similarity dimana dihitung dengan menggunakan operasi MAX-MIN antara vektor
-input dengan prototipe. Dengan model seperti ini, arsitektur dari jaringan
+input dengan vektor pewakil. Dengan model seperti ini, arsitektur dari jaringan
 disesuaikan untuk mengakomodasi operasi MAX-MIN dari dua vektor. Arsitektur
 \gls{fnlvq} dapat dilihat pada \pic~\ref{fig:fnlvqarch}, dimana jaringan terdiri
 dari lapisan input , satu lapisan tersembunyi (\emph{hidden layer}) dan lapisan
@@ -567,21 +562,21 @@ masukan dan vektor referen tidak mirip sama sekali.
 Aturan pembelajaran dari algoritma \gls{fnlvq} terdiri dari tiga kondisi yang
 mungkin terjadi diantaranya; (1) Jika jaringan dapat mengenali masukan dengan
 benar, (2) Jika jaringan salah mengenali vektor masukan, dan (3) Jika tidak
-terdapat interseksi fuzzy set antara vektor masukan dan prototipe. Berikut
+terdapat interseksi fuzzy set antara vektor masukan dan vektor pewakil. Berikut
 adalah aturan pembelajaran untuk setiap kondisi;
 \begin{enumerate}
   \setlength{\itemsep}{1pt}
   \setlength{\parskip}{0pt}
   \setlength{\parsep}{0pt}
   \item Jika jaringan mengenali vektor masukan dengan benar, $C_x = C_{w_p}$
-  maka prototipe dari cluster pemenang diupdate sesuai dengan;
+  maka vektor pewakil dari cluster pemenang diupdate sesuai dengan;
   \begin{enumerate}
-  	\item Posisi pusat dari prototipe digeser mendekati vektor masukan
+  	\item Posisi pusat dari vektor pewakil digeser mendekati vektor masukan
   	\begin{align}
   	w_i(t+1) = w_i(t) + \alpha(t) \left((1-\mu(t))\times(x(t) - w_i(t))  \right)
   	\end{align}
-  	\item Tingkatkan kemampuan pengenalan prototipe  dengan memperlebar fungsi
-  	keanggotaan dari prototipe dengan aturan sebagai berikut;
+  	\item Tingkatkan kemampuan pengenalan vektor pewakil  dengan memperlebar fungsi
+  	keanggotaan dari vektor pewakil dengan aturan sebagai berikut;
   	\begin{enumerate}
   	  \item Modifikasi dengan faktor konstan
   	  \begin{align}
@@ -600,14 +595,14 @@ adalah aturan pembelajaran untuk setiap kondisi;
   \end{enumerate}
   
   \item Jika jaringan salah mengenali vektor masukan, $C_x \neq C_{w_p}$ maka
-  prototipe dari cluster pemenang diupdate sesuai aturan;
+  vektor pewakil dari cluster pemenang diupdate sesuai aturan;
   \begin{enumerate}
-    \item Posisi pusat dari prototipe digeser menjauhi vektor masukan
+    \item Posisi pusat dari vektor pewakil digeser menjauhi vektor masukan
   	\begin{align}
   	w_i(t+1) = w_i(t) - \alpha(t) \left((1-\mu(t))\times(x(t) - w_i(t))  \right)
   	\end{align}
-  	\item Turunkan kemampuan pengenalan prototipe dengan mempersempit fungsi
-  	keanggotaan dari prototipe dengan aturan sebagai berikut;
+  	\item Turunkan kemampuan pengenalan vektor pewakil dengan mempersempit fungsi
+  	keanggotaan dari vektor pewakil dengan aturan sebagai berikut;
   	\begin{enumerate}
   	  \item Modifikasi dengan faktor konstan
   	  \begin{align}
@@ -625,8 +620,8 @@ adalah aturan pembelajaran untuk setiap kondisi;
   	\end{enumerate}
   \end{enumerate}
   
-  \item Jika fungsi keanggotaan prototipe tidak memiliki interseksi dengan
-  vektor masukan, maka fungsi keanggotaan prototipe diupdate berdasarkan aturan
+  \item Jika fungsi keanggotaan vektor pewakil tidak memiliki interseksi dengan
+  vektor masukan, maka fungsi keanggotaan vektor pewakil diupdate berdasarkan aturan
   sebagai berikut;
   \begin{align}
   w_i(t+1) = \xi(t).w_i(t)
@@ -636,8 +631,8 @@ adalah aturan pembelajaran untuk setiap kondisi;
 \noindent dimana nomenklatur yang digunakan adalah sebagai berikut;
 
 \begin{tabular}{llp{0.8\textwidth}}
-$w_{i}(t+1)$ &=& prototipe pemenang setelah di-update  \\
-$w_{i}(t)$ 	 &=& prototipe pemenang sebelum di-update \\
+$w_{i}(t+1)$ &=& vektor pewakil pemenang setelah di-update  \\
+$w_{i}(t)$ 	 &=& vektor pewakil pemenang sebelum di-update \\
 $\alpha(t)$  &=& laju pembelajaran, nilai monoton turun $(0 < \alpha \le 1))$,
  yang didefinisikan sebagai berikut;
 \end{tabular}
@@ -666,9 +661,9 @@ dan penyempitan fungsi keanggotaan dengan definisi;
 \noindent dimana nilai $\xi$ adalah konstan dengan = $\xi=1.1$.
 
 Terdapat beberapa penelitian yang dilakukan untuk meningkatkan
-kinerja dari algoritma FNLVQ. Kusumoputro et.al. \cite{Kusumoputro:2002b} 
+kinerja dari algoritma FNLVQ. Kusumoputro dkk. \cite{Kusumoputro:2002b} 
 menggunakan Matrix Similarity Analysis (MSA) menangani kelemahan dari FNLVQ
-standar dimana sensitif terhadap pemilihan prototipe awal. Untuk
+standar dimana sensitif terhadap pemilihan vektor pewakil awal. Untuk
 menanggulanginya, dalam proses pelatihan akan dipilih bobot terbaik untuk
 setiap iterasi dengan menggunakan matrix similarity sebagai  \emph{fitness
 function} nya, sehingga selain menggunakan maksimal epoch, lama proses
@@ -677,7 +672,7 @@ yang digunakan sebagai nilai threshold. Matrix ideal yang diharapkan untuk
 mendapatkan kinerja terbaik adalah jika menghasilkan matrik identitas.
 
 Selain itu, pendekatan lain yang dilakukan untuk menangani
-sensitifitas pemilihan prototipe awal adalah penelitian yang dilakukan oleh
+sensitifitas pemilihan vektor pewakil awal adalah penelitian yang dilakukan oleh
 Rohmatullah dalam tesis-nya \cite{Rochmatullah:2009}, dimana pendekatan yang
 dilakukan menggunakan konsep Particle Swarm Optimization (PSO) digabungkan
 dengan FNLVQ-MSA. Tujuan dari PSO ini adalah untuk menentukan inisialisasi

@@ -16,18 +16,17 @@ terintegrasi untuk analisis serta ekstraksi informasi suatu data dan juga
 sebagai basis penyajian/karakteristik dari suatu data. Kelebihan dari analisis
 sinyal menggunakan wavelet adalah terletak dari sifat terpenting wavelet yaitu
 lokalisasi waktu-frekuensi (\emph{time-frequency localization}) yang
-diistilahkan dengan \emph{compact support} \cite{guler:2005}. Dengan menggunakan
-wavelet dapat dipelajari karakteristik sinyal secara lokal dan detil sesuai dengan skala-nya,
-dimana hal ini menunjukkan kegunaan dari analisis pada sinyal non-stasioner,
-karakteristik berbeda pada skala yang berbeda. Pada dasarnya, cara kerja dari
-wavelet dalam mengekstraksi data adalah dengan menggunakan proses penguraian
-(\emph{decomposition}) atau ekspansi deret, yaitu dengan cara ekspansi tak
-berhingga dari wavelet yang diulur atau \emph{dilated} dan digeser atau
-\emph{translated}.
-
+diistilahkan dengan \emph{compact support} \cite{Guler:2005}. Dengan menggunakan
+wavelet dapat dipelajari karakteristik sinyal secara lokal dan detil sesuai
+dengan skala-nya, dimana hal ini menunjukkan kegunaan dari analisis pada sinyal
+non-stasioner, karakteristik berbeda pada skala yang berbeda. Pada dasarnya,
+cara kerja dari wavelet dalam mengekstraksi data adalah dengan menggunakan
+proses penguraian (\emph{decomposition}) atau ekspansi deret, yaitu dengan cara
+ekspansi tak berhingga dari wavelet yang diulur atau \emph{dilated} dan digeser
+atau \emph{translated}.
 Transformasi wavelet dikembangkan sebagi suatu alternatif pendekatan pada
-Transformasi Fourier Waktu Pendek (Short Time Fourier Transform = STFT) dalam
-mengatasi masalah resolusi. Pada STFT, skala dari jendela yang
+Transformasi Fourier Waktu Pendek (\emph{Short Time Fourier Transform = STFT})
+dalam mengatasi masalah resolusi. Pada STFT, skala dari jendela yang
 digunakan bersifat konstan, sedangkan pada Transformasi wavelet, lebar dari
 jendela akan berubah-ubah selama proses transformasi dilakukan dalam menghitung
 masing-masing komponen spektrum. Dimana hal ini merupakan ciri khas dari
@@ -37,9 +36,9 @@ Persamaan transformasi wavelet (WT) kontinu pada signal $f(x)$ dapat
 didefinisikan sebagai berikut;
 \begin{align}
 \label{eq:wavelet_transform}
-	W_{s}f(x) &= f(x) * \Psi_{s}(x) = \frac{1}{s}\int^{+\infty}_{-\infty}f(t)\Psi(\cfrac{x - t}{s})dt
-\end{align}
-
+	W_{s}f(x) &= f(x) * \Psi_{s}(x) = \frac{1}{s}\int^{+\infty}_{-\infty}f(t)
+	\Psi(\cfrac{x - t}{s})dt
+\end{align}
 \noindent dimana $s$ adalah faktor skala,  $\Psi_{s}(x) =
 \cfrac{1}{s}\Psi(\cfrac{x}{s})$ adalah dilatasi dari fungsi jendela, yang
 kemudian dikenal dengan wavelet penganalisis $\Psi(x)$, $t$ adalah  faktor
