@@ -8,8 +8,6 @@ import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.dataset.KFoldedDataset;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.KFoldedDataset.KFoldedIterator;
-import id.mdgs.evaluation.KFoldCrossValidation.KStatistic;
-import id.mdgs.evaluation.KFoldCrossValidation.Pair;
 import id.mdgs.fnlvq.Fnlvq;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.master.IClassify;

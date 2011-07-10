@@ -40,25 +40,46 @@ public class ErrorMonitor implements Interface.IErrorMonitor {
 	}
 	
 	public ErrorMonitor(int maxEpoch){
+		this(maxEpoch, 1);
+	}
+	
+	public ErrorMonitor(int maxEpoch, int numSeries){
 		this.maxEpoch = maxEpoch; 
-		dataset = createDataset();
+		dataset = createDataset(numSeries);
 		chart = createChart(dataset);
 		chartPanel = createChartPanel(chart);
 		
 		/*set color*/
-		ChartUtils.setSeriesColor(chart, 0, Color.BLUE);
+		Color[] colorTable = {Color.BLUE, Color.RED, Color.CYAN, Color.YELLOW, Color.GREEN };
+		for(int i=0;i < numSeries;i++){
+			ChartUtils.setSeriesColor(chart, i, colorTable[i % colorTable.length]);
+		}
 	}
 	
 	
-	private XYSeriesCollection createDataset() {
-		XYSeries series = new XYSeries("series1");
-		series.setMaximumItemCount(this.maxEpoch);
-		
+	private XYSeriesCollection createDataset(int num) {
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
+		
+		for(int i=0;i < num;i++){
+			XYSeries series = new XYSeries("series" + i);
+			series.setMaximumItemCount(this.maxEpoch);
+
+			dataset.addSeries(series);
+		}
+		
 		return dataset;
 	}
 	
+	public void updateError(int epoch, double[] error) {
+		
+		for(int i=0;i < dataset.getSeriesCount();i++){
+			XYSeries series = dataset.getSeries(i);
+			series.add(epoch, error[i]);
+		}
+		
+		((TextTitle)chart.getSubtitle(0)).setText(String.format("Epoch: #%d, Error: %7.4f", epoch, error[0]));
+	}
+
 	public void updateError(int epoch, double error) {
 		XYSeries series = dataset.getSeries(0);
 		series.add(epoch, error);

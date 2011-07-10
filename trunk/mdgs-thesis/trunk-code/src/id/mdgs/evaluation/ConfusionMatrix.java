@@ -3,7 +3,7 @@
  */
 package id.mdgs.evaluation;
 
-import org.encog.engine.util.EngineArray;
+import id.mdgs.utils.MathUtils;
 
 /**
  * Row is True Class
@@ -126,8 +126,10 @@ public class ConfusionMatrix {
 			}
 		}
 		
-		output.append(String.format("TOT%sACC\n",sep,sep));
+		output.append(String.format("TOT%sTPR%s\n",sep,sep));
+		
 		int total;
+		
 		for(int r = 0;r < this.matrix.length;r++){
 			if(r == this.nclass){
 				output.append(String.format("%-5s%s", "C#N/A",sep));
@@ -143,16 +145,87 @@ public class ConfusionMatrix {
 				total += this.matrix[r][c];
 			}
 			
+//			double porsi  = 1.0/this.nclass;//(double)total/this.total;
+			double tprate = getPerformance(r).getTPRate()*100;
+//			double gtprate= porsi * tprate;
+//			
+//			if( r < this.nclass && !Double.isNaN(gtprate))
+//				avgTPRate += gtprate;
+			
 			/*total data per kelas*/
 			output.append(String.format("%5d%s", total, sep));
 			
+			/*porsi data tiap kelas per overall data*/
+//			output.append(String.format("%5.4f%s", porsi, sep));
+			
 			/*accuracy per class*/
-			output.append(String.format("%6.2f%%%s", getPerformance(r).getTPRate()*100, sep));
+			output.append(String.format("%6.2f%%%s", tprate, sep));
+			
+//			output.append(String.format("%6.2f%%%s", gtprate, sep));
 			output.append("\n");
+		}
+		
+		
+		int MAX = 7;
+		StringBuilder[] sb = new StringBuilder[MAX];
+		for(int i=0;i < MAX;i++) sb[i] = new StringBuilder(); 
+		
+		sb[0].append(String.format("TOT%s", sep));
+		sb[1].append(String.format("Rec%s", sep));
+		sb[2].append(String.format("Pre%s", sep));
+		sb[3].append(String.format("FMe%s", sep));
+		sb[4].append(String.format("Sen%s", sep));
+		sb[5].append(String.format("Spe%s", sep));
+		sb[6].append(String.format("Gme%s", sep));
+		
+		total = 0;
+		double[] avg = new double[MAX];
+		MathUtils.fills(avg, 0);
+		
+		for(int c = 0;c < this.matrix[0].length;c++){
+			if(c >= this.nclass) continue;
+			
+			PerformanceMeasure pm = getPerformance(c); 
+			double[] avgc = new double[MAX];
+			MathUtils.fills(avgc, 0);
+			
+			avgc[0] = (pm.tp + pm.fp); 
+			avgc[1] = pm.getRecall();
+			avgc[2] = pm.getPrecision();
+			avgc[3] = pm.getFMeasure();
+			avgc[4] = pm.getRecall();
+			avgc[5] = 1 - (pm.fp / (pm.fp + pm.tn));
+			avgc[6] = Math.sqrt(avgc[4] * avgc[5]);
+			
+			for(int i=0;i < MAX;i++) if(Double.isNaN(avgc[i])) avgc[i] = 0;
+			for(int i=0;i < MAX;i++) avg[i] += avgc[i];
+			
+			sb[0].append(String.format("%5d%s", (int)avgc[0], sep));
+			sb[1].append(String.format("%5.4f%s",avgc[1], sep));
+			sb[2].append(String.format("%5.4f%s",avgc[2], sep));
+			sb[3].append(String.format("%5.4f%s",avgc[3], sep));
+			sb[4].append(String.format("%5.4f%s",avgc[4], sep));
+			sb[5].append(String.format("%5.4f%s",avgc[5], sep));
+			sb[6].append(String.format("%5.4f%s",avgc[6], sep));
+			
+		}
+		output.append(sb[0].toString() + "\n\n");
+		
+		for(int i=1;i < MAX;i++) avg[i] /= this.nclass;
+		
+		
+		String[] label = {"", "Recall,TPRate", "Precision", "FMeasure", 
+				"Sensitifity,Recall,TPRate", "Specificity,(1 - FPRate)", "G-Means"};
+		
+		for(int i=1;i < MAX;i++){
+			sb[i].append(String.format("|\t%5.4f\t<-%s %s\n", avg[i], "Average", label[i]));
+			output.append(sb[i].toString());
 		}
 		
 		output.append(String.format("\nTotal True: %d\n", getTruePrediction()));
 		output.append(String.format("Total Data: %d\n", getTotal()));
+		output.append(String.format("Total Accuracy: %f\n", getAccuracy()));
+		
 		return output.toString();
 	}	
 	

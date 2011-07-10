@@ -196,8 +196,8 @@ public class Dataset implements Iterable<Dataset.Entry>{
 	
 	public void join(Dataset ds){
 		//assure same properties
-		if(this.numEntries != ds.numEntries)
-			throw new RuntimeException("number of entry not match");
+//		if(this.numEntries != ds.numEntries)
+//			throw new RuntimeException("number of entry not match");
 		if(this.numFeatures != ds.numFeatures)
 			throw new RuntimeException("dimension not match");
 		

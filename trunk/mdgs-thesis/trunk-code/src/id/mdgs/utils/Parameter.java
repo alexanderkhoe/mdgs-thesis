@@ -107,7 +107,8 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ucidata/else.6f.ucidb.txt",
 	};
 	
-	public static String DATA_ALL[] = {
+	
+	public static String DATA_2000[] = {
 		//0. 300 fit 6 class
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.train.txt",
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.test.txt",
@@ -145,6 +146,37 @@ public class Parameter {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.test.txt",
 	};
 	
+	public static String DATA_ALL[] = {
+		//0. 300 fit 6 class
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_kotor.bwr_300_gabung.test.txt",
+
+		//1. 86 fit
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.86.2000Samples/6.86f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.86.2000Samples/6.86f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.86.2000Samples/6.86f_2000_kotor.bwr_300_gabung.test.txt",
+		
+		//2. 24 fit
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.24.2000Samples/6.24f_2000_kotor.bwr_300_gabung.test.txt",
+		
+		//3 300 fit 12 class
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.300.2000Samples/12.300f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.300.2000Samples/12.300f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.300.2000Samples/12.300f_2000_kotor.bwr_300_gabung.test.txt",
+
+		//4 86 fit 12 class
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.86.2000Samples/12.86f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.86.2000Samples/12.86f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.86.2000Samples/12.86f_2000_kotor.bwr_300_gabung.test.txt",
+
+		//5 24 fit 12 class
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_nonoutliers.bwr_300_gabung.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.train.txt",
+		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.12.24.2000Samples/12.24f_2000_kotor.bwr_300_gabung.test.txt",
+	};
 	
 	public static String DATA_DECOMPOSE[] = {
 		utils.getDefaultPath() + "/resources/ecgdata/with-header/data.6.300.2000Samples/6.300f_2000_nonoutliers.bwr_300_gabung.train.txt",

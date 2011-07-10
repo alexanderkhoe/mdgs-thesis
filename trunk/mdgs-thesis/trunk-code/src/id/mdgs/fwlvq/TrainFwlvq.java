@@ -11,10 +11,9 @@ import id.mdgs.dataset.FuzzyNode;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.dataset.FCodeBook.FEntry;
-import id.mdgs.dataset.FCodeBook.FWinnerInfo;
 import id.mdgs.fnlvqold.Fnlvq;
 import id.mdgs.fnlvqold.TrainFnlvq;
-import id.mdgs.lvq.TrainLvq1.Best;
+import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.utils.MathUtils;
 
 /**

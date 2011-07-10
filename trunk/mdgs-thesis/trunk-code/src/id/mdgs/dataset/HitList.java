@@ -146,6 +146,18 @@ public class HitList implements Iterable<HitList.HitEntry>{
 		}
 	}
 	
+	public void run(FCodeBook set){
+		for(FEntry e: set){
+			this.addHit(e.label);
+		}
+	}
+
+	public void run(FoldedDataset<Dataset, Entry> set){
+		for(Entry e: set){
+			this.addHit(e.label);
+		}
+	}
+	
 	public String toString(){
 		return this.toString(null);
 	}

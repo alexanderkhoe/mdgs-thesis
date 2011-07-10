@@ -2,6 +2,7 @@ package id.mdgs.dataset;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.HitList.HitEntry;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -34,11 +35,11 @@ public class TestDataDesc {
 			"7GlvqPSOOpsi3",
 			};
 	public static int urut = 6;
-	public static int NUM_DATA = 7;
+	public static int NUM_DATA = 1;
 	public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
 	
 	
-	@BeforeClass
+//	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		utils.header("Load dataset");
 		trainsets 	= new Dataset[NUM_DATA];
@@ -72,7 +73,7 @@ public class TestDataDesc {
 				, false)));		
 	}
 	
-	@AfterClass
+//	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		if(resumeWriter != null){
 			resumeWriter.flush();
@@ -81,7 +82,47 @@ public class TestDataDesc {
 	}	
 	
 	@Test
+	public void test3(){
+		Dataset ds = new Dataset(Parameter.DATA_ALL[3*3]);
+		ds.load();
+
+		HitList hl = new HitList();
+		hl.run(ds);
+		
+		for(HitEntry he: hl){
+			System.out.println(String.format("%d\t%d", he.label, he.freq));
+		}
+	}
+	
+//	@Test
 	public void test(){
+		DatasetProfiler dp1, dp2, dp3;
+		for(int i=0; i < NUM_DATA;i++){
+			dp1 = new DatasetProfiler();
+			dp2 = new DatasetProfiler();
+			dp3 = new DatasetProfiler();
+			
+			dp1.run(trainsets[i]);
+			dp2.run(testsets[i]);
+			dp3.run(testsetsOutlier[i]);
+			
+			utils.log(resumeWriter, String.format("Kelas: %d, Fitur: %d",
+					nclass[i], fiture[i]));
+			utils.log(resumeWriter, "Kelas\tTrain\tTest\tTest Outlier");
+			for(int j=0;j < dp1.size();j++){
+				utils.log(resumeWriter, 
+						String.format("%d\t%d\t%d\t%d",j, 
+								dp1.entries.get(j).data.size(),
+								dp2.entries.get(j).data.size(),
+								dp3.entries.get(j).data.size()));
+			}
+			utils.log(resumeWriter, "");
+			
+		}
+	}
+	
+//	@Test
+	public void test2(){
 		DatasetProfiler dp1, dp2, dp3;
 		for(int i=0; i < NUM_DATA;i++){
 			dp1 = new DatasetProfiler();

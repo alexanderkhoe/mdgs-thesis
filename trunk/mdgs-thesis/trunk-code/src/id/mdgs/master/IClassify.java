@@ -5,4 +5,5 @@ public interface IClassify<T,E> {
 	public void loadCodebook(T codebook);
 	public void loadCodebook(String location);
 	public void saveCodebook(String location);
+	public T getCodebook();
 }

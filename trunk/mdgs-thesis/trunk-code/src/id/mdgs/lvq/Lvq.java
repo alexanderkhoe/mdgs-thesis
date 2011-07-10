@@ -246,4 +246,9 @@ public class Lvq implements IClassify<Dataset, Entry> {
 		codebook.reset();
 		this.codebook.load(location);
 	}
+
+	@Override
+	public Dataset getCodebook() {
+		return this.codebook;
+	}
 }

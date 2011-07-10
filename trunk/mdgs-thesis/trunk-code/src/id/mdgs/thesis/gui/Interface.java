@@ -15,7 +15,8 @@ public class Interface {
 	}
 
 	public static interface IErrorMonitor extends IMonitor {
-		public void updateError(int epoch, double error);		
+		public void updateError(int epoch, double error);
+		public void updateError(int epoch, double[] error);	
 	}
 	
 }

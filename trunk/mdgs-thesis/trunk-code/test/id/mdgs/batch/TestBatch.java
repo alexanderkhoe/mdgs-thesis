@@ -20,6 +20,22 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class TestBatch {
+	
+	public static ConfusionMatrix doTest(IClassify<?, Entry> net, FoldedDataset<?, Entry> data, int numclass){
+		ConfusionMatrix cm = new ConfusionMatrix(numclass);
+		
+		for(Entry sample: data){
+			int win = -1, target;
+			
+			target = sample.label;
+			win = net.classify(sample);
+			
+			cm.feed(win, target);
+		}
+		
+		return cm;
+	}
+	
 	public static PrintWriter createWriter(String tag) throws IOException{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
 		return new PrintWriter(new BufferedWriter(new FileWriter(

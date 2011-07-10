@@ -24,8 +24,8 @@ import org.junit.Test;
 public class TestBackProp {
 	@Test
 	public void testBP(){
-		int Pos = 4 * 4;
-		int nclass = 12;
+		int Pos = 1 * 4;
+		int nclass = 6;
 		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
 		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
 //		Dataset trainset = new Dataset(Parameter.ECG300C15N100_TRAIN);
@@ -40,7 +40,7 @@ public class TestBackProp {
 		BasicNetwork network = new BasicNetwork();
 		network.addLayer(new BasicLayer(null,false,trainset.numFeatures));
 		network.addLayer(new BasicLayer(new ActivationSigmoid(),true,24));
-		network.addLayer(new BasicLayer(new ActivationSigmoid(),true,nclass));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(),true, nclass));
 		network.getStructure().finalizeStructure();
 		network.reset();
 

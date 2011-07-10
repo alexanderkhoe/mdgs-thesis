@@ -5,6 +5,7 @@ package id.mdgs.thesis.gui;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FCodeBook;
+import id.mdgs.master.IClassify;
 import id.mdgs.master.ITrain;
 import id.mdgs.thesis.gui.Interface.ICodeMonitor;
 import id.mdgs.thesis.gui.Interface.IErrorMonitor;
@@ -33,6 +34,18 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	public IErrorMonitor  error;
 	public static int npanel = 10;
 	
+	public CodebookMonitor(String title){
+		super(title);
+		createMenu();
+	}
+
+	public void setNetTrain(IClassify<?, ?> net, ITrain trainer){
+		this.trainer = trainer;
+		if(net.getCodebook() instanceof Dataset)
+			init((Dataset)net.getCodebook());
+		else if(net.getCodebook() instanceof FCodeBook)
+			init((FCodeBook)net.getCodebook());
+	}
 	
 	public CodebookMonitor(String title, Dataset codebook , ITrain trainer) {
 		super(title);
@@ -66,7 +79,7 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	    	desktop.add(cms[i].getPanel());
 	    }
 	    
-	    error = new ErrorMonitor(trainer.getMaxEpoch());
+	    error = new ErrorMonitor(trainer.getMaxEpoch(), 2);
 	    desktop.add(error.getPanel());
 	    
 	    // Display the desktop in a top-level frame
@@ -87,7 +100,7 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	    	desktop.add(cms[i].getPanel());
 	    }
 	    
-	    error = new ErrorMonitor(trainer.getMaxEpoch());
+	    error = new ErrorMonitor(trainer.getMaxEpoch(), 2);
 	    desktop.add(error.getPanel());
 	    
 	    // Display the desktop in a top-level frame
@@ -142,6 +155,11 @@ public class CodebookMonitor extends ApplicationFrame implements ActionListener 
 	}
 
 	public void update(int epoch, double error){
+		this.update(epoch);
+		this.error.updateError(epoch, error);
+	}
+	
+	public void update(int epoch, double[] error){
 		this.update(epoch);
 		this.error.updateError(epoch, error);
 	}

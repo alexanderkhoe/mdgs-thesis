@@ -408,4 +408,9 @@ public class Fnlvq implements IClassify<FCodeBook, Entry>{
 		this.codebook.load(location);
 	}
 
+	@Override
+	public FCodeBook getCodebook() {
+		return this.codebook;
+	}
+
 }
