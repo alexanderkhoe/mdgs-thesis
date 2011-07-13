@@ -29,8 +29,7 @@ import org.junit.Test;
 
 
 public class TestBatchSkenario1a {
-	public static Dataset[] trainsets;
-	public static Dataset[] testsets;
+	public static Dataset[] datasets;
 	public static Dataset[] testsetsOutlier;
 	
 	public static KFoldedDataset<Dataset, Entry>[] kfdsets;
@@ -57,22 +56,17 @@ public class TestBatchSkenario1a {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		utils.header("Load dataset");
-		trainsets 	= new Dataset[NUM_DATA];
-		testsets	= new Dataset[NUM_DATA];
+		datasets 	= new Dataset[NUM_DATA];
 		testsetsOutlier = new Dataset[NUM_DATA];
 		
 		for(int i=0; i < NUM_DATA;i++){
 			utils.log(String.format("Load #%d", i));
-			int pos = i * 4;
-			trainsets[i] 		= new Dataset(Parameter.DATA[pos + 0]);
-			testsets[i] 		= new Dataset(Parameter.DATA[pos + 1]);
-			testsetsOutlier[i] 	= new Dataset(Parameter.DATA[pos + 2]);
+			int pos = i * 3;
+			datasets[i] 		= new Dataset(Parameter.DATA_ALL[pos + 0]);
+			testsetsOutlier[i] 	= new Dataset(Parameter.DATA_ALL[pos + 1]);
 			
-			trainsets[i].load();
-			testsets[i].load();
+			datasets[i].load();
 			testsetsOutlier[i].load();
-			
-			trainsets[i].join(testsets[i]);
 		}
 
 		kfdsets = new KFoldedDataset[NUM_DATA];
@@ -80,7 +74,7 @@ public class TestBatchSkenario1a {
 		
 		int K = 2;
 		for(int i=0; i < NUM_DATA;i++){
-			kfdsets[i] 	= new KFoldedDataset<Dataset, Dataset.Entry>(trainsets[i], K, 0.5, false);
+			kfdsets[i] 	= new KFoldedDataset<Dataset, Dataset.Entry>(datasets[i], K, 0.5, false);
 			fdoutsets[i]= new FoldedDataset<Dataset, Dataset.Entry>(testsetsOutlier[i], true);
 		}
 	}

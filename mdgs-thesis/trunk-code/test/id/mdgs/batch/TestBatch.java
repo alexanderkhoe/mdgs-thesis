@@ -104,6 +104,8 @@ public class TestBatch {
 			int win = net.classify(sample);
 			int target = sample.label;
 			cm.feed(win, target);
+			i++;
+//			System.out.println(i);
 		}		
 		
 		return cm;
