@@ -5,10 +5,10 @@ import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.dump.glvq.TrainGlvqMsa;
 import id.mdgs.evaluation.ConfusionMatrix;
+import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils;
 import id.mdgs.master.ITrain;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 

@@ -45,8 +45,8 @@ public class TestDaubechies {
 		for(int i=0; i < NUM_DATA;i++){
 			utils.log(String.format("Load #%d", i));
 			int pos = i * 2;
-			trainsets[i] 		= new Dataset(Parameter.DATA_DBX[pos + 0]);
-			testsets[i] 		= new Dataset(Parameter.DATA_DBX[pos + 1]);
+			trainsets[i] 		= new Dataset(Parameter.DATA_DAUBECHIES[pos + 0]);
+			testsets[i] 		= new Dataset(Parameter.DATA_DAUBECHIES[pos + 1]);
 			
 			trainsets[i].load();
 			testsets[i].load();

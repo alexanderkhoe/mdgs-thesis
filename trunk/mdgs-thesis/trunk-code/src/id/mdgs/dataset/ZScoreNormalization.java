@@ -5,6 +5,11 @@ import org.apache.commons.math.stat.descriptive.MultivariateSummaryStatistics;
 
 import id.mdgs.dataset.Dataset.Entry;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class ZScoreNormalization extends DataNormalization {
 	public Entry mean;
 	public Entry std;

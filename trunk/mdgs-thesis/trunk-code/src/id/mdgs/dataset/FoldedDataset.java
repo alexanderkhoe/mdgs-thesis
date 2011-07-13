@@ -10,6 +10,13 @@ import java.util.List;
 
 import javax.management.RuntimeErrorException;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ * @param <T>
+ * @param <E>
+ */
 public class FoldedDataset<T, E> implements Iterable<E> {
 	public class FoldedIterator implements Iterator<E>{
 		private int currentIndex = 0;

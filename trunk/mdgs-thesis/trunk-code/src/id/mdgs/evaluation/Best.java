@@ -3,6 +3,11 @@ package id.mdgs.evaluation;
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FCodeBook;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class Best {
 	public static class CBest {
 		public Dataset codebook;

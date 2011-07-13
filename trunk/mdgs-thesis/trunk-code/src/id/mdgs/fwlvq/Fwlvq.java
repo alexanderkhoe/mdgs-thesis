@@ -9,6 +9,11 @@ import id.mdgs.fnlvqold.Fnlvq;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.utils.MathUtils;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class Fwlvq extends Fnlvq {
 
 	public Fwlvq() {

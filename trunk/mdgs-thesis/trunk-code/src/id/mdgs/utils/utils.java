@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @author madeagus
+ * 
+ * @author I Made Agus Setiawan
  *
  */
 public class utils {

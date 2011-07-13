@@ -12,6 +12,7 @@ import id.mdgs.fnlvq.Fpglvq;
 import id.mdgs.fnlvq.TrainFpglvq;
 import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
+import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
 import id.mdgs.lvq.TrainLvq21;
@@ -70,6 +71,11 @@ import id.mdgs.thesis.gui.MainEcg.Algoritma;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class MainEcg extends JFrame {
 
 	private JPanel contentPane;
@@ -576,7 +582,7 @@ public class MainEcg extends JFrame {
 			}
 
 			if(init.equals("1-5nn")){
-				((Lvq)net).initCodes(trainset, 1, 5);
+				((Lvq)net).initStaticCodes(trainset, 1, 5);
 			} else if(init.equals("random-eksternal")) {
 				((Lvq)net).initCodes(trainset, 0d, 1d, 1);
 			}

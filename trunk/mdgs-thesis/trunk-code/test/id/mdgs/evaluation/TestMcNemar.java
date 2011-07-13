@@ -52,9 +52,9 @@ public class TestMcNemar {
 		mntest.registerTrainer(TrainGlvq.class.getSimpleName(), train3);
 		mntest.registerTrainer(TrainFpglvq.class.getSimpleName(), train4);
 		
-		Lvq c1 = new Lvq();		c1.initCodes(trainset, 1, 5);
-		Lvq c2 = new Lvq();		c2.initCodes(trainset, 1, 5);
-		Glvq c3 = new Glvq();		c3.initCodes(trainset, 1, 5);
+		Lvq c1 = new Lvq();			c1.initStaticCodes(trainset, 1, 5);
+		Lvq c2 = new Lvq();			c2.initStaticCodes(trainset, 1, 5);
+		Glvq c3 = new Glvq();		c3.initStaticCodes(trainset, 1, 5);
 		Fpglvq c4 = new Fpglvq();	c4.initCodes(trainset, 1d, false);
 		
 //		mntest.registerClassifier(TrainLvq1.class.getSimpleName(), c1);

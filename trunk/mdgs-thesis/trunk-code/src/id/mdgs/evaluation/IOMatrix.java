@@ -1,14 +1,17 @@
 package id.mdgs.evaluation;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import id.mdgs.utils.CombinationGenerator;
 import id.mdgs.utils.MathUtils;
-import id.mdgs.utils.utils;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class IOMatrix {
 	private int nSample, nAlgo;
 	

@@ -18,6 +18,11 @@ import id.mdgs.master.ITrain;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class KHoldOutTest {
 
 	class Pair {

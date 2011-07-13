@@ -27,7 +27,7 @@ public class TestLvq {
 		
 		FoldedDataset<Dataset, Entry> fdset = new FoldedDataset<Dataset, Dataset.Entry>(trainset, true);
 		Lvq net = new Lvq();
-		net.initCodes(fdset, 1, 5);
+		net.initStaticCodes(fdset, 1, 5);
 //		net.initCodes(trainset);
 //		net.initCodes(trainset, 0d, 1d);
 		System.out.println(net.codebook.toString());

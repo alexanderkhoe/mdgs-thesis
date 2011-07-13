@@ -4,6 +4,11 @@ import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.dataset.HitList.HitEntry;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class DataStatistik {
 	DatasetProfiler dp;
 	

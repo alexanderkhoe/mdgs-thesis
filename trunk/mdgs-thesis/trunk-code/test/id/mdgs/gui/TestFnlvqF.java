@@ -7,7 +7,6 @@ import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.fnlvqold.FnlvqF;
 import id.mdgs.fnlvqold.TrainFnlvqFuzzy;
 import id.mdgs.lvq.LvqUtils;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 

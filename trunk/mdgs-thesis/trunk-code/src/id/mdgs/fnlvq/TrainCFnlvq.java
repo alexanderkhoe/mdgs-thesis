@@ -16,6 +16,11 @@ import id.mdgs.master.ITrain;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class TrainCFnlvq implements ITrain {
 
 	public CFnlvq network;
@@ -81,7 +86,6 @@ public class TrainCFnlvq implements ITrain {
 
 	@Override
 	public void reloadPreviousCode(int label) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -91,19 +95,19 @@ public class TrainCFnlvq implements ITrain {
 			return;
 		}
 		
-		int TP = 0, N = 0;
-		double avgError = 0;
-		for(Entry sample: getTraining()){
-			double mce;
-			mce = train(this.network.codebook, sample);
-			avgError += lostFunction(mce);
-			
-			if(mce < 0) TP++;
-			N++;
-		}
+//		int TP = 0, N = 0;
+//		double avgError = 0;
+//		for(Entry sample: getTraining()){
+//			double mce;
+//			mce = train(this.network.codebook, sample);
+//			avgError += lostFunction(mce);
+//			
+//			if(mce < 0) TP++;
+//			N++;
+//		}
 	
 		updateLearningRate();
-		setError(avgError/N);
+//		setError(avgError/N);
 		currEpoch++;
 		
 		bestCodebook.evaluate(network.codebook, getError(), currEpoch);
@@ -116,8 +120,8 @@ public class TrainCFnlvq implements ITrain {
 		wins = this.network.findWinner.function(codebook, input, codebook.size());
 		
 		/*adjust code vector*/
-		adjustWeights(codebook, wins[0].winner, input, this.alpha, 
-				MathUtils.equals(wins[0].coef, ((CFnlvq)this.network).wavelet(0)));
+//		adjustWeights(codebook, wins[0].winner, input, this.alpha, 
+//				MathUtils.equals(wins[0].coef, ((CFnlvq)this.network).wavelet(0)));
 		
 		return wins[0];
 	}

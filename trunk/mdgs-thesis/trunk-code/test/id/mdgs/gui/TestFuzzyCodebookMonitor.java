@@ -7,7 +7,6 @@ import id.mdgs.fnlvqold.Fnlvq;
 import id.mdgs.fnlvqold.TrainFnlvq;
 import id.mdgs.fwlvq.Fwlvq;
 import id.mdgs.fwlvq.TrainFwlvq;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
