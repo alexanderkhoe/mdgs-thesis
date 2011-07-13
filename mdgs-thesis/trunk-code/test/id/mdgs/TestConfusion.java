@@ -1,7 +1,9 @@
 package id.mdgs;
 
+import id.mdgs.dataset.Dataset;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.utils.DataSetUtils;
+import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
 import java.util.Iterator;
@@ -24,12 +26,16 @@ public class TestConfusion {
 	@Test
 	public void testBP(){
 		utils.header("Testing ECG data using BackPropagation");
-		DataSetUtils.createData24N100(0.5);
-		DataSetUtils.changeIdealToBiner(DataSetUtils.ecg24N100Part1);
-		DataSetUtils.changeIdealToBiner(DataSetUtils.ecg24N100Part2);
+		int Pos = 1 * 4;
+		int nclass = 6;
+		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
+		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
 		
-		NeuralDataSet trainset = DataSetUtils.ecg24N100Part1;
-		NeuralDataSet testset = DataSetUtils.ecg24N100Part2;
+		trainset.load();
+		testset.load();
+
+		NeuralDataSet enTrainset = DataSetUtils.myDataset2EncogDataset(trainset);
+		NeuralDataSet enTestset = DataSetUtils.myDataset2EncogDataset(testset);
 		
 		BasicNetwork network = new BasicNetwork();
 		network.addLayer(new BasicLayer(null,false,24));
@@ -39,7 +45,7 @@ public class TestConfusion {
 		network.reset();
 
 		// train the neural network
-		final Train train = new Backpropagation(network, trainset, 0, 0.8);
+		final Train train = new Backpropagation(network, enTrainset, 0, 0.8);
 		train.addStrategy(new SmartLearningRate());
 		int epoch = 1;
 
@@ -55,7 +61,7 @@ public class TestConfusion {
 		ConfusionMatrix cm = new ConfusionMatrix(12);
 		
 		utils.log("Test Result");
-		Iterator<NeuralDataPair> it = testset.iterator();
+		Iterator<NeuralDataPair> it = enTestset.iterator();
 		int tp = 0, total = 0;
 		while(it.hasNext()){
 			NeuralDataPair pair = it.next(); 

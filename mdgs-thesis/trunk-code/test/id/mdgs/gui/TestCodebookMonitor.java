@@ -8,7 +8,6 @@ import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq21;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 

@@ -13,7 +13,7 @@ import id.mdgs.glvq.mglvq.MGlvq;
 import id.mdgs.glvq.mglvq.MGlvq2;
 import id.mdgs.glvq.mglvq.TrainMGlvq;
 import id.mdgs.glvq.mglvq.MGlvq.MParam;
-import id.mdgs.thesis.gui.CodebookMonitor;
+import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 

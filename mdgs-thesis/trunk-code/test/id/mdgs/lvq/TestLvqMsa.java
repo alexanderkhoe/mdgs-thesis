@@ -33,7 +33,6 @@ public class TestLvqMsa {
 		TrainLvq21Msa train = new TrainLvq21Msa(net, trainset, 0.1, 0.005);
 //		TrainLvq21Msa train = new TrainLvq21Msa(net, trainset, 0.1, 0.1);
 		int iteration = 0;
-		train.resetCounter();
 		do {
 //			train.iterationOption1();
 			train.iterationOption3();

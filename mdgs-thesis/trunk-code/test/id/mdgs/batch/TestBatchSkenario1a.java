@@ -163,7 +163,7 @@ public class TestBatchSkenario1a {
 					for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 						
 						Lvq net = new Lvq();
-						net.initCodes(trainset, 1, 5);
+						net.initStaticCodes(trainset, 1, 5);
 						
 						TrainLvq1 train = new TrainLvq1(net, trainset, alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);
@@ -286,7 +286,7 @@ public class TestBatchSkenario1a {
 						for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 							
 							Lvq net = new Lvq();
-							net.initCodes(trainset, 1, 5);
+							net.initStaticCodes(trainset, 1, 5);
 							
 							TrainLvq21 train = new TrainLvq21(net, trainset, alphaset[a], windowset[c]);
 							train.setMaxEpoch(iterationset[b]);
@@ -409,7 +409,7 @@ public class TestBatchSkenario1a {
 					for(int attempt=0;attempt < MAX_ATTEMPT;attempt++){
 						
 						Glvq net = new Glvq();
-						net.initCodes(trainset, 1, 5);
+						net.initStaticCodes(trainset, 1, 5);
 						
 						TrainGlvq train = new TrainGlvq(net, trainset, alphaset[a]);
 						train.setMaxEpoch(iterationset[b]);

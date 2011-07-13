@@ -10,12 +10,12 @@ import id.mdgs.fnlvq.Fpglvq;
 import id.mdgs.fnlvq.TrainFpglvq;
 import id.mdgs.glvq.Glvq;
 import id.mdgs.glvq.TrainGlvq;
+import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.TrainLvq1;
 import id.mdgs.lvq.TrainLvq21;
 import id.mdgs.master.IClassify;
 import id.mdgs.master.ITrain;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 
 import javax.swing.JFrame;

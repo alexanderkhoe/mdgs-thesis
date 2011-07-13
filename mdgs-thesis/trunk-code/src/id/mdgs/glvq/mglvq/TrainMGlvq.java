@@ -8,21 +8,15 @@ import java.util.Iterator;
 import org.apache.commons.math.DimensionMismatchException;
 import org.apache.commons.math.linear.LUDecompositionImpl;
 import org.apache.commons.math.linear.RealMatrix;
-import org.apache.commons.math.stat.correlation.Covariance;
 import org.apache.commons.math.stat.descriptive.MultivariateSummaryStatistics;
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-import org.encog.mathutil.matrices.Matrix;
-
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.DatasetProfiler;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.DatasetProfiler.PEntry;
+import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.glvq.mglvq.MGlvq.MParam;
-import id.mdgs.lvq.WinnerByEuc;
-import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;
-import id.mdgs.lvq.TrainLvq1.Best;
-import id.mdgs.lvq.TrainLvq1;
+import id.mdgs.master.IClassify;
 import id.mdgs.master.ITrain;
 import id.mdgs.utils.MathUtils;
 import id.mdgs.utils.utils;
@@ -44,6 +38,7 @@ public class TrainMGlvq implements ITrain {
 	protected DatasetProfiler profiler;
 	protected double error;
 
+	protected FoldedDataset<Dataset, Entry> foldedDs;
 	/**/
 	public static class Best {
 		public Dataset codebook;
@@ -142,9 +137,9 @@ public class TrainMGlvq implements ITrain {
 	/**
 	 * @return the training
 	 */
-	public Dataset getTraining() {
-		return training;
-	}
+//	public Dataset getTraining() {
+//		return training;
+//	}
 
 	public boolean shouldStop(){
 		return currEpoch >= maxEpoch;
@@ -401,4 +396,29 @@ public class TrainMGlvq implements ITrain {
 			
 		return mps;
 	}
+
+	@Override
+	public void setNetwork(IClassify<?, ?> net) {
+	}
+
+	@Override
+	public void reset() {
+	}
+
+	@Override
+	public void setTraining(FoldedDataset<?, ?> foldedDs) {
+		
+	}
+
+	@Override
+	public FoldedDataset<Dataset, Entry> getTraining() {
+		return this.foldedDs;
+	}
+
+	@Override
+	public String information() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

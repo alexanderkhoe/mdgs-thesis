@@ -2,7 +2,6 @@ package id.mdgs.batch;
 
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +22,6 @@ import id.mdgs.lvq.TrainLvq3;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
-import org.encog.neural.networks.training.strategy.ResetStrategy;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -417,7 +415,7 @@ public class TestLvq {
 						utils.timer.start();
 						
 						do {
-							train.iterationOption1();
+							train.iteration();
 						} while (!train.shouldStop());
 						
 						long waktu = utils.timer.stop();
@@ -536,7 +534,7 @@ public class TestLvq {
 						utils.timer.start();
 						
 						do {
-							train.iterationOption3();
+							train.iteration();
 						} while (!train.shouldStop());
 						
 						long waktu = utils.timer.stop();
@@ -659,7 +657,7 @@ public class TestLvq {
 							utils.timer.start();
 							
 							do {
-								train.iterationOption3();
+								train.iteration();
 							} while (!train.shouldStop());
 							
 							long waktu = utils.timer.stop();
@@ -783,7 +781,7 @@ public class TestLvq {
 								utils.timer.start();
 								
 								do {
-									train.iterationOption3();
+									train.iteration();
 								} while (!train.shouldStop());
 								
 								long waktu = utils.timer.stop();

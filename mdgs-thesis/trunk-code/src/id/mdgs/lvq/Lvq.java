@@ -124,7 +124,7 @@ public class Lvq implements IClassify<Dataset, Entry> {
 	 * @param knn
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Iterable<Entry>> void initCodes(T data, int num, int knn){
+	public <T extends Iterable<Entry>> void initStaticCodes(T data, int num, int knn){
 		
 		//pick from dataset
 		HitList classes = new HitList();

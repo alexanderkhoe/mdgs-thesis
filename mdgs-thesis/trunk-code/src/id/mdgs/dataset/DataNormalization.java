@@ -3,6 +3,12 @@ package id.mdgs.dataset;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.lvq.LvqUtils.MinMax;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
+
 public class DataNormalization {
 	
 	public Dataset dset;

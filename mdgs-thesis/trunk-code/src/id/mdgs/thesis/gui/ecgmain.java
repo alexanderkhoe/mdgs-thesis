@@ -21,6 +21,11 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+/**
+ * 
+ * @author I Made Agus Setiawan
+ *
+ */
 public class ecgmain extends JFrame {
 
 	private static final long serialVersionUID = 1L;

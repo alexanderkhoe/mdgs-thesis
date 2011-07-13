@@ -7,9 +7,9 @@ import id.mdgs.dataset.KFoldedDataset;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.ZScoreNormalization;
 import id.mdgs.evaluation.ConfusionMatrix;
+import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.master.ITrain;
-import id.mdgs.thesis.gui.CodebookMonitor;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
