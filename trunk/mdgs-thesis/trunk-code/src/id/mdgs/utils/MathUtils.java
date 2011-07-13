@@ -23,10 +23,15 @@ public class MathUtils {
 		
 		double difference = 0;
 		
-		for(int x = 0;x < v1.length;x++){
-			double diff = v1[x] - v2[x];
-			difference += diff * diff; 
-		}
+//		try {
+			for(int x = 0;x < v1.length;x++){
+				double diff = v1[x] - v2[x];
+				difference += diff * diff; 
+			}
+//		} catch(Exception e){
+//			System.out.print(v1.length + " " + v2.length);
+//			System.exit(0);
+//		}
 		
 		return difference;
 	}
