@@ -56,6 +56,22 @@ public class MathUtils {
 		return temp1.getTrace();
 	}
 	
+
+	/**
+	 * 
+	 * @param M		ensure row vector
+	 * @param invS
+	 * @return
+	 */
+	public static double mahalanobisDistance(RealMatrix M, RealMatrix invS){
+		RealMatrix MT 	= M.transpose();
+		
+		RealMatrix temp1 = MT.multiply(invS).multiply(M);
+		assert(temp1.getRowDimension() == 1 && temp1.getColumnDimension() == 1);
+		
+		return temp1.getTrace();
+	}
+	
 	
 	
 	public static double sigmoid(double x) {

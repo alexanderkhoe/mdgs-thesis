@@ -2,8 +2,9 @@ package id.mdgs.lvq;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.Dataset.Entry;
-import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.evaluation.ConfusionMatrix;
+import id.mdgs.glvq.Glvq;
+import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -25,7 +26,7 @@ public class TestPSO {
 		trainset.load();
 		testset.load();
 		
-		Lvq net = new Lvq();
+		Glvq net = new Glvq();
 		net.initCodes(trainset);
 
 		TrainPso trainInit = new TrainPso(net, trainset, 5);
@@ -47,7 +48,7 @@ public class TestPSO {
 
 		} while (iteration < trainInit.maxEpoch);		
 		
-		TrainGlvq1 train = new TrainGlvq1(net, trainset, 0.05);
+		TrainGlvq train = new TrainGlvq(net, trainset, 0.05);
 		train.iteration(100);
 		
 		ConfusionMatrix cm = new ConfusionMatrix(nclass);

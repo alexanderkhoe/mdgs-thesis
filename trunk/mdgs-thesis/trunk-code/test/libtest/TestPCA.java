@@ -2,8 +2,6 @@ package libtest;
 
 import org.junit.Test;
 
-import javastat.multivariate.PCA;
-
 
 public class TestPCA {
 
