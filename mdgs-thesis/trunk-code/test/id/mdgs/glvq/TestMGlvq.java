@@ -5,15 +5,15 @@ import java.util.Iterator;
 import javax.swing.JFrame;
 
 import id.mdgs.dataset.Dataset;
-import id.mdgs.dataset.DatasetProfiler;
+import id.mdgs.dataset.FoldedDataset;
+import id.mdgs.dataset.KFoldedDataset;
 import id.mdgs.dataset.Dataset.Entry;
-import id.mdgs.dataset.DatasetProfiler.PEntry;
 import id.mdgs.evaluation.ConfusionMatrix;
 import id.mdgs.glvq.mglvq.MGlvq;
-import id.mdgs.glvq.mglvq.MGlvq2;
 import id.mdgs.glvq.mglvq.TrainMGlvq;
-import id.mdgs.glvq.mglvq.MGlvq.MParam;
+import id.mdgs.glvq.mglvq.WinnerByMahalanobis;
 import id.mdgs.gui.CodebookMonitor;
+import id.mdgs.master.ITrain;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -22,6 +22,62 @@ import org.junit.Test;
 
 
 public class TestMGlvq {
+	@Test
+	public void testMGlvq(){
+//		int Pos = 5 * 4;
+//		int nclass = 12;
+//		Dataset trainset = new Dataset(Parameter.DATA[Pos + 0]);
+//		Dataset testset  = new Dataset(Parameter.DATA[Pos + 1]);
+//		
+//		trainset.load();
+//		testset.load();
+
+		int Pos = 5 * 3;
+		int nclass = 12;
+		Dataset dset = new Dataset(Parameter.DATA_ALL[Pos + 0]);
+		
+		dset.load();
+		KFoldedDataset<Dataset, Entry> kfdsets 	= new KFoldedDataset<Dataset, Dataset.Entry>(dset, 10, 0.5, false);
+		FoldedDataset<Dataset, Entry> trainset 	= kfdsets.getKFoldedForTrain(0);
+		FoldedDataset<Dataset, Entry> testset  	= kfdsets.getKFoldedForTest(0);
+		
+		MGlvq net = new MGlvq(WinnerByMahalanobis.normalizeData(trainset));
+		net.initCodes(trainset, 1);
+		
+		ITrain train = new TrainMGlvq(net, trainset, 0.001);
+		train.setMaxEpoch(50);
+		
+		/*monitor*/
+		CodebookMonitor cbm = new CodebookMonitor(net.getClass().getSimpleName() + " Codebook Monitor", net.codebook, train);
+		cbm.pack();
+		RefineryUtilities.centerFrameOnScreen(cbm);
+		cbm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		cbm.setVisible(true);
+		
+		do{
+			train.iteration();
+			cbm.update(train.getCurrEpoch(), train.getError());
+			System.out.println(train.getError());
+		}while(!train.shouldStop());
+
+		ConfusionMatrix cm = new ConfusionMatrix(nclass);
+		StringBuilder Failed = new StringBuilder();
+		Iterator<Entry> it = trainset.iterator();
+		while(it.hasNext()){
+			Entry sample = it.next(); 
+			
+			int win = net.classify(sample);
+			int target = sample.label;
+			
+			cm.feed(win, target);
+			if(win != target)
+				Failed.append(sample.toString() + "\n");
+		}
+		
+		utils.log(cm.toString());		
+	}
+	
+	
 //	@Test
 	public void testNormalizasi(){
 		double[][] d1 = {
@@ -40,21 +96,21 @@ public class TestMGlvq {
 		Dataset set = new Dataset();
 		set.load(d1);
 		
-		for(Entry e: set){
-			System.out.println(e.toString());
-		}
-		
-		MParam[] mp = TrainMGlvq.normalizeData(set);
-		for(Entry e: set){
-			System.out.println(e.toString());
-		}
-		
-		for(int i=0;i < mp.length;i++){
-			for(int j=0;j < mp[i].mean.size();j++){
-				System.out.println(j + "-Mean: " + mp[i].mean.data[j] + 
-						", Std: " + mp[i].std.data[j]);
-			}
-		}
+//		for(Entry e: set){
+//			System.out.println(e.toString());
+//		}
+//		
+//		MParam[] mp = TrainMGlvq.normalizeData(set);
+//		for(Entry e: set){
+//			System.out.println(e.toString());
+//		}
+//		
+//		for(int i=0;i < mp.length;i++){
+//			for(int j=0;j < mp[i].mean.size();j++){
+//				System.out.println(j + "-Mean: " + mp[i].mean.data[j] + 
+//						", Std: " + mp[i].std.data[j]);
+//			}
+//		}
 	}
 	
 //	@Test
@@ -96,50 +152,50 @@ public class TestMGlvq {
 //		trainset = trainset2;
 //		testset  = testset2;
 		
-		MGlvq net = new MGlvq(TrainMGlvq.normalizeData(trainset));
-		net.initCodes(trainset);
-		//net.initCodesRandom(trainset);
-		
-		TrainMGlvq train = new TrainMGlvq(net, trainset, 0.005);
-		train.setMaxEpoch(150);
-		
-		/*monitor*/
-		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + " Codebook Monitor", net.codebook);
-		cbm.pack();
-		RefineryUtilities.centerFrameOnScreen(cbm);
-		cbm.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		cbm.setVisible(true);
-		
-		do{
-			train.iteration();
-			cbm.update(train.getCurrEpoch());
-			System.out.println(train.getError());
-		}while(!train.shouldStop());
-
-		ConfusionMatrix cm = new ConfusionMatrix(nclass);
-		//testset = trainset;
-		StringBuilder Failed = new StringBuilder();
-		Iterator<Entry> it = testset.iterator();
-		while(it.hasNext()){
-			Entry sample = it.next(); 
-			
-			int win = net.classify(sample);
-			int target = sample.label;
-			
-			cm.feed(win, target);
-			if(win != target)
-				Failed.append(sample.toString() + "\n");
-		}
-		
-		//utils.log(DumpMatrix.dumpMatrix(network.getWeights()));
-		utils.log(cm.toString());
-		utils.log("Test Result :");
-		utils.log(String.format("True : %d", cm.getTruePrediction()));
-		utils.log(String.format("Total: %d", cm.getTotal()));
-		utils.log(String.format("Accuracy = %.4f",cm.getAccuracy()));
+//		MGlvq net = new MGlvq(TrainMGlvq.normalizeData(trainset));
+//		net.initCodes(trainset);
+//		//net.initCodesRandom(trainset);
+//		
+//		TrainMGlvq train = new TrainMGlvq(net, trainset, 0.005);
+//		train.setMaxEpoch(150);
+//		
+//		/*monitor*/
+//		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + " Codebook Monitor", net.codebook);
+//		cbm.pack();
+//		RefineryUtilities.centerFrameOnScreen(cbm);
+//		cbm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		cbm.setVisible(true);
+//		
+//		do{
+//			train.iteration();
+//			cbm.update(train.getCurrEpoch());
+//			System.out.println(train.getError());
+//		}while(!train.shouldStop());
+//
+//		ConfusionMatrix cm = new ConfusionMatrix(nclass);
+//		//testset = trainset;
+//		StringBuilder Failed = new StringBuilder();
+//		Iterator<Entry> it = testset.iterator();
+//		while(it.hasNext()){
+//			Entry sample = it.next(); 
+//			
+//			int win = net.classify(sample);
+//			int target = sample.label;
+//			
+//			cm.feed(win, target);
+//			if(win != target)
+//				Failed.append(sample.toString() + "\n");
+//		}
+//		
+//		//utils.log(DumpMatrix.dumpMatrix(network.getWeights()));
+//		utils.log(cm.toString());
+//		utils.log("Test Result :");
+//		utils.log(String.format("True : %d", cm.getTruePrediction()));
+//		utils.log(String.format("Total: %d", cm.getTotal()));
+//		utils.log(String.format("Accuracy = %.4f",cm.getAccuracy()));
 	}
 	
-	@Test
+//	@Test
 	public void testMGlvq2(){
 		int Pos = 5 * 4;
 		int nclass = 12;
@@ -180,44 +236,44 @@ public class TestMGlvq {
 //			}
 //		}
 		
-		MGlvq2 net = new MGlvq2(TrainMGlvq.normalizeData(trainset));
-		net.initCodes(trainset);
-
-		TrainMGlvq train = new TrainMGlvq(net, trainset, 0.005);
-		train.setMaxEpoch(150);
-		
-		/*monitor*/
-		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + " Codebook Monitor", net.codebook);
-		cbm.pack();
-		RefineryUtilities.centerFrameOnScreen(cbm);
-		cbm.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		cbm.setVisible(true);
-		
-		do{
-			train.iteration();
-			cbm.update(train.getCurrEpoch());
-			System.out.println(train.getError());
-		}while(!train.shouldStop());
-
-		//calculate threshold
-		net.calcThreshold(trainset);
-		System.out.println(net.toString());
-		
-		ConfusionMatrix cm = new ConfusionMatrix(nclass);
-		Iterator<Entry> it = testset.iterator();
-		while(it.hasNext()){
-			Entry sample = it.next(); 
-			
-			int win = net.classify(sample);
-			int target = sample.label;
-			
-			cm.feed(win, target);
-		}
-		
-		utils.log(cm.toString());
-		utils.log("Test Result :");
-		utils.log(String.format("True : %d", cm.getTruePrediction()));
-		utils.log(String.format("Total: %d", cm.getTotal()));
-		utils.log(String.format("Accuracy = %.4f",cm.getAccuracy()));
+//		MGlvq2 net = new MGlvq2(TrainMGlvq.normalizeData(trainset));
+//		net.initCodes(trainset);
+//
+//		TrainMGlvq train = new TrainMGlvq(net, trainset, 0.005);
+//		train.setMaxEpoch(150);
+//		
+//		/*monitor*/
+//		CodebookMonitor cbm = new CodebookMonitor(train.getClass().getSimpleName() + " Codebook Monitor", net.codebook);
+//		cbm.pack();
+//		RefineryUtilities.centerFrameOnScreen(cbm);
+//		cbm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		cbm.setVisible(true);
+//		
+//		do{
+//			train.iteration();
+//			cbm.update(train.getCurrEpoch());
+//			System.out.println(train.getError());
+//		}while(!train.shouldStop());
+//
+//		//calculate threshold
+//		net.calcThreshold(trainset);
+//		System.out.println(net.toString());
+//		
+//		ConfusionMatrix cm = new ConfusionMatrix(nclass);
+//		Iterator<Entry> it = testset.iterator();
+//		while(it.hasNext()){
+//			Entry sample = it.next(); 
+//			
+//			int win = net.classify(sample);
+//			int target = sample.label;
+//			
+//			cm.feed(win, target);
+//		}
+//		
+//		utils.log(cm.toString());
+//		utils.log("Test Result :");
+//		utils.log(String.format("True : %d", cm.getTruePrediction()));
+//		utils.log(String.format("Total: %d", cm.getTotal()));
+//		utils.log(String.format("Accuracy = %.4f",cm.getAccuracy()));
 	}	
 }

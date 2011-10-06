@@ -26,14 +26,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.JEditorPane;
 import java.awt.Font;
 
 import javax.swing.ButtonGroup;
@@ -53,13 +48,11 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JTextArea;
@@ -67,7 +60,6 @@ import javax.swing.JRadioButton;
 
 import org.jfree.ui.RefineryUtilities;
 
-import id.mdgs.thesis.gui.MainEcg.Algoritma;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 

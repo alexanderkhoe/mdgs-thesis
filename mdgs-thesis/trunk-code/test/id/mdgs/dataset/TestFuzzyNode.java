@@ -3,8 +3,6 @@
  */
 package id.mdgs.dataset;
 
-import id.mdgs.neural.data.FuzzyNode;
-import id.mdgs.neural.data.Node;
 import junit.framework.Assert;
 
 import org.junit.Test;

@@ -180,11 +180,22 @@ public class FoldedDataset<T, E> implements Iterable<E> {
 		}
 	}
 	
-	
-	
 	@Override
 	public Iterator<E> iterator() {
 		final FoldedIterator it = new FoldedIterator();
 		return it;
+	}
+	
+	public Dataset getDeepDataset(){
+		Dataset ds = new Dataset();
+		ds.copyInfo((Dataset) this.masterDataset);
+		
+		for(E e : this){
+			Entry en = (Entry) e;
+			Entry tmp = en.clone(); 
+			ds.add(tmp);
+		}
+		
+		return ds;
 	}
 }

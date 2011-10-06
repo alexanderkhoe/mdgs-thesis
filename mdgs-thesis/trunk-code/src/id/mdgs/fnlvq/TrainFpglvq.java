@@ -11,7 +11,6 @@ import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.dataset.FCodeBook.FEntry;
 import id.mdgs.evaluation.Best;
 import id.mdgs.evaluation.Best.FBest;
-import id.mdgs.fnlvqold.Fnlvq;
 import id.mdgs.lvq.Lvq;
 import id.mdgs.lvq.LvqUtils.FWinnerInfo;
 import id.mdgs.lvq.LvqUtils.WinnerInfo;

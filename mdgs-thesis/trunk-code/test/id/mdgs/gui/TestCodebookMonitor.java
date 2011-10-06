@@ -4,16 +4,14 @@ import java.util.Iterator;
 
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.Dataset.Entry;
-import id.mdgs.dump.glvq.TrainGlvq1;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.lvq.Lvq;
-import id.mdgs.lvq.TrainLvq21;
+import id.mdgs.glvq.Glvq;
+import id.mdgs.glvq.TrainGlvq;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
 import javax.swing.JFrame;
 
-import org.encog.neural.networks.training.Train;
 import org.jfree.ui.RefineryUtilities;
 
 public class TestCodebookMonitor {
@@ -26,11 +24,11 @@ public class TestCodebookMonitor {
 		trainset.load();
 		testset.load();
 		
-		Lvq net = new Lvq();
+		Glvq net = new Glvq();
 		net.initCodes(trainset);
 //		net.initCodesRandom(trainset);
 		
-		TrainGlvq1 train = new TrainGlvq1(net, trainset, 0.005);
+		TrainGlvq train = new TrainGlvq( net, trainset, 0.005);
 		train.setMaxEpoch(200);
 		
 //		TrainLvq21 train = new TrainLvq21(net, trainset, 0.001, 0.005);
@@ -45,7 +43,7 @@ public class TestCodebookMonitor {
 		
 		/*start training*/
 		do{
-			train.iterationOption3();
+			train.iteration();
 			cbm.update(train.currEpoch);
 			System.out.println("Epoch: " + train.currEpoch);
 		}while(!train.shouldStop());

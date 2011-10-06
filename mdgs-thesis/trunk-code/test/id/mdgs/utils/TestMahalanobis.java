@@ -1,7 +1,5 @@
 package id.mdgs.utils;
 
-import org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
-import org.apache.mahout.math.DenseVector;
 import org.junit.Test;
 
 
@@ -12,8 +10,8 @@ public class TestMahalanobis {
 	
 	@Test
 	public void testMD(){
-		MahalanobisDistanceMeasure mdm = new MahalanobisDistanceMeasure();
-		System.out.println(mdm.distance(new DenseVector(v1), new DenseVector(v2)));
+//		MahalanobisDistanceMeasure mdm = new MahalanobisDistanceMeasure();
+//		System.out.println(mdm.distance(new DenseVector(v1), new DenseVector(v2)));
 	}
 
 }

@@ -1,17 +1,12 @@
 package id.mdgs.fnlvq;
 
-import id.mdgs.dataset.DataNormalization;
 import id.mdgs.dataset.Dataset;
 import id.mdgs.dataset.FoldedDataset;
 import id.mdgs.dataset.KFoldedDataset;
-import id.mdgs.dataset.ZScoreNormalization;
 import id.mdgs.dataset.Dataset.Entry;
 import id.mdgs.evaluation.ConfusionMatrix;
-import id.mdgs.fnlvqold.Fglvq;
-import id.mdgs.fnlvqold.TrainFglvq;
 import id.mdgs.gui.CodebookMonitor;
 import id.mdgs.master.ITrain;
-import id.mdgs.utils.DataSetUtils;
 import id.mdgs.utils.Parameter;
 import id.mdgs.utils.utils;
 
@@ -19,7 +14,6 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import org.encog.app.analyst.wizard.WizardMethodType;
 import org.jfree.ui.RefineryUtilities;
 
 public class TestFpglvq {
