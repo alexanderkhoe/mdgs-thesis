@@ -9,7 +9,7 @@
 % membuat laporan skripsi. Konfigurasi yang lama telah disesuaikan dengan 
 % aturan penulisan thesis yang dikeluarkan UI pada tahun 2008.
 %
-          
+           
 % Tipe dokumen adalah report dengan satu kolom. 
 %   
 \documentclass[12pt, a4paper, onecolumn, oneside, final]{report}
@@ -99,14 +99,16 @@
 % Daftar Pustaka
 \include{pustaka}
 
-%
+% 
 % Lampiran 
 %
-\begin{appendix}
-	\include{markLampiran}
-	\setcounter{page}{2}
+% \setcounter{page}{102}    
+%\begin{appendix}
+% 	\pagestyle{empty}
+	\include{markLampiran} 
 	\include{glossary-acronym}
+	\include{errata} 
 	\include{lampiran}
-\end{appendix}
+%\end{appendix}
 
 \end{document}

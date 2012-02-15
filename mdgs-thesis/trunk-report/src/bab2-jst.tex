@@ -137,9 +137,9 @@ Secara umum, algoritma LVQ dapat ditunjukkan pada algoritma \ref{alg:lvq}.
 	\STATE $t \leftarrow 0$
 	\WHILE {$\alpha_t \neq 0$ or $t < t_{max}$}
 		\STATE $x \leftarrow $ getNextSample()
-		\STATE $train(W, x) \Downarrow$
-		\STATE $\qquad \leadsto w \leftarrow $ getClosestVRef()
-		\STATE $\qquad \leadsto $updateVRef($w$)
+		\STATE $train(W, x)$ %\Downarrow$
+% 		\STATE $\qquad \leadsto w \leftarrow $ getClosestVRef()
+% 		\STATE $\qquad \leadsto $updateVRef($w$)
 		\STATE $t \leftarrow t + 1$
 	\ENDWHILE
 \end{algorithmic}
@@ -370,12 +370,12 @@ eksplisit, tidak seperti pada algoritma LVQ. Disamping itu algoritma LVQ2.1 juga
 tidak menjamin konvergensi dari vektor pewakil ke distribusi dari kelas selama
 proses pelatihan (\cite{Sato:1995, Sato:1998}).Metode pembelajaran yang
 digunakan disini berdasarkan atas proses minimisasi dari cost function,
-\emph{miss-classification error}, dengan menggunakan metode optimasi gradient
-descent.
+\emph{minimum classification error}, dengan menggunakan metode optimasi
+gradient descent.
 Diberikan $w_1$ adalah vektor pewakil terdekat berasal dari kategori yang sama
 dengan kategori vektor masukan (($C_{w_1} = C_x$)), dan $w_2$ adalah vektor
 pewakil terdekat yang bukan berasal dari kategori vektor masukan ($C_{w_2} \neq
-C_x$). \emph{miss-classification error} $\varphi(x)$ dapat dihitung dengan
+C_x$). \emph{minimum classification error} $\varphi(x)$ dapat dihitung dengan
 menggunakan persamaan \ref{eq:mce}; 
 \begin{align}
 \label{eq:mce}

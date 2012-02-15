@@ -13,7 +13,7 @@ database yang digunakan sebagai sumber data dari keseluruhan penelitian ini.
 Pada penelitian ini, data yang digunakan bersumber dari data yang tersedia
 dengan bebas di physionet, yakni data MIT-BIH arrhytmia database. Data ini telah
 banyak digunakan oleh para peneliti dalam melakukan investigasi mengenai kelaian
-aritmia seperti yang telah diuraikan sebagian pada Bab~\ref{bab:pendahuluan}. Database
+Aritmia seperti yang telah diuraikan sebagian pada Bab~\ref{bab:pendahuluan}. Database
 ini terdiri dari 48 data record yang didapat dari 47 subjek yang diteliti oleh
 BIH arrhytmia Laboratory yang dilakukan antara tahun 1975 sampai 1979. 
 
@@ -129,7 +129,7 @@ Untuk lebih jelasnya, hasil dari proses BWR dapat dilihat pada
 \section{Ekstraksi Beat}
 \label{sec:ekstractbeat}
 %-----------------------------------------------------------------------------%
-Untuk melakukan pengenalan kelaianan aritmia, terdapat beberapa pendekatan yang
+Untuk melakukan pengenalan kelaianan Aritmia, terdapat beberapa pendekatan yang
 umum dilakukan oleh para peneliti dimana dapat dikelompokkan menjadi dua sebagai
 berikut;
 \begin{enumerate}
@@ -155,8 +155,8 @@ sehingga didapat beat dengan lebar 300 sampel data. Ilustrasi dapat dilihat pada
 \pic~\ref{fig:ecgcutoff}. Hasil dari proses segmentasi tersebut dapat dilihat
 pada \pic~\ref{fig:ecgplot}.
 
-\addFigure{width=0.6\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh  beat dari
-5 jenis aritmia dan 1 beat normal.}
+\addFigure{width=1\textwidth}{pics/ecgplot.png}{fig:ecgplot}{Contoh beat dari
+11 jenis Aritmia dan 1 beat normal.}
 
 Dari proses segmentasi yang telah dilakukan didapat sejumlah beat yang
 dilengkapi dengan label anotasi nya seperti yang ditunjukkan pada
@@ -165,7 +165,6 @@ dilengkapi dengan label anotasi nya seperti yang ditunjukkan pada
 Dari \tab~\ref{tbl:beatstat} dapat dilihat jumlah beat untuk tiap label anotasi
 tidak berimbang dan bahkan ada yang berjumlah sangat kecil, yaitu 2 beat untuk
 jenis Supraventrikular premature beat. 
-
 
 
 Sesuai dengan standar AAMI, seperti yang terlihat pada \tab~\ref{tbl:aami}, maka
@@ -186,15 +185,15 @@ AAMI\cite{Philip:2004}}
 %-----------------------------------------------------------------------------%
 Untuk menganalisis hasil ekstraksi beat yang dilakukan pada tahap sebelumnya
 (sub-bab \ref{sec:ekstractbeat}), beat yang dihasilkan kemudian dikelompokkan
-berdasarkan tipe masing-masing aritmia dan diplot menggunakan aplikasi matlab.
-Empat jenis aritmia diplot seperti yang diilustrasikan pada
+berdasarkan tipe masing-masing Aritmia dan diplot menggunakan aplikasi matlab.
+Empat jenis Aritmia diplot seperti yang diilustrasikan pada
 \pic~\ref{fig:plotecgoutlier}.
 
 \addFigure{width=1\textwidth}{pics/plotecgoutlier.jpg}{fig:plotecgoutlier}{Plot
-Empat tipe aritmia hasil proses ekstraksi fitur}
+Empat tipe Aritmia hasil proses ekstraksi fitur}
 
 Dari hasil pengamatan terlihat bahwa terdapat beat ECG pada tiap-tiap tipe
-aritmia yang berada diluar distribusi masing-masing kategori kelas, dimana
+Aritmia yang berada diluar distribusi masing-masing kategori kelas, dimana
 dalam hal ini diistilahkan dengan outlier. Outlier ini jika digunakan untuk
 melatih jaringan saraf yang dibangun dapat menyebabkan ketidak-akuratan data
 karena model akan mencoba mengakomodasi outlier tersebut, namun akan berimbas
@@ -207,7 +206,7 @@ harus dihilangkan.
 \caption{Mencari dan menghilangkan outlier beat}          
 \label{alg:outlier}                           
 \begin{algorithmic}                    % enter the algorithmic environment
-	\FORALL {$Data_c$ in $C_{aritmia}$}
+	\FORALL {$Data_c$ in $C_{Aritmia}$}
 		\FOR{$k = 1 \to d$}
 			\STATE $Q_1 = lower\ quartile $ \COMMENT{percentile ke-25} 
 			\STATE $Q_3 = upper\ quartile $ \COMMENT{percentile ke-75}
@@ -264,7 +263,7 @@ Dari \pic~\ref{fig:hasilremove} dapat dilihat beat outlier yang terdapat pada
 sinyal ECG di-kecualikan/dihapus dan menghasilkan kumpulan beat dengan sebaran
 sesuai dengan rentang quartil yang ditentukan. Pada
 \tab~\ref{tbl:beatstat-nonoutlier} dapat dilihat data statistik jumlah beat yang
-dihasilkan untuk setiap tipe aritmia setelah dilakukan penghilangan outlier
+dihasilkan untuk setiap tipe Aritmia setelah dilakukan penghilangan outlier
 pada data. Seperti yang telah disebutkan sebelumnya, karena jumlah beat yang
 sedikit, untuk saat ini, proses pengenalan akan dilakukan hanya pada 12 kategori
 pertama yang terdapat pada tabel tersebut (dapat dilihat pada bagian yang

@@ -59,86 +59,86 @@ sebelumnya sudah dilatih untuk mengenal berbagai macam kemungkinan penyakit
 jantung, sehingga proses interpretasi awal dapat dilakukan lebih mudah, lebih
 cepat dan lebih akurat. 
 
-Terdapat beberapa tipe penyakit jantung, salah satunya adalah aritmia
+Terdapat beberapa tipe penyakit jantung, salah satunya adalah Aritmia
 (\emph{Arrhytmia/Cardiac Arrhytmia}). Aritmia adalah kelainan pada irama jantung
 atau ketidak-beraturan denyut jantung. Pada kelainan jantung ini, denyut jantung
 mungkin terlalu cepat, terlalu lambat atau tidak beraturan. Beberapa pasien
 terkadang tidak menyadari akan kondisi tersebut, dan beberapa pasien lainnya
 merasakan gejala-gejala klinis yang timbul seperti palpitasi, pusing, nyeri
 dada, nafas yang pendek. Di lain pihak, orang normal juga memungkinkan mengalami
-perasaan yang sama seperti palpitasi, tapi hal tersebut bukan aritmia. Oleh
+perasaan yang sama seperti palpitasi, tapi hal tersebut bukan Aritmia. Oleh
 karena itu, kelaian ini tidak cukup hanya di diagnosa berdasarkan gejala klinis
 saja, dan pemanfaatan ECG akan sangat membantu dalam proses tersebut.
 
 Berbagai penelitian telah dilakukan dalam kaitan pengenalan berbagai penyakit
-aritmia. Terdapat banyak penelitian dengan mengaplikasikan jaringan saraf tiruan
+Aritmia. Terdapat banyak penelitian dengan mengaplikasikan jaringan saraf tiruan
 (JST) dan berbagai variasinya sebagai metode pendeteksian. Yeap \cite{Yeap:1990}
-menggunakan backpropagation untuk mendeteksi aritmia dengan menggunakan AHA
-database. Ozbay \cite{Ozbay:2001} memanfaatkan tipe aritmia dari MIT-BIH sebagai
+menggunakan backpropagation untuk mendeteksi Aritmia dengan menggunakan AHA
+database. Ozbay \cite{Ozbay:2001} memanfaatkan tipe Aritmia dari MIT-BIH sebagai
 data untuk pelatihan dan menggunakan data dari institusi-nya sebagai data
 testing. Sedangkan Ceylan \cite{Ceylan:2007} melakukan studi perbandingan
 beberapa metode extraksi fitur mulai dari Principal Component Analysis(PCA),
 Wavelet transform (WT) dan Fuzzy C-Mean Clustering (FCM) untuk reduksi data dan
 menggunakan BackPropagation untuk klasifikasi signal. Empat struktur dibangun,
-FCM-NN, PCA-NN, FCM-PCA-NN and WT-NN dan menggunakan data aritmia dari MIT-BIH
+FCM-NN, PCA-NN, FCM-PCA-NN and WT-NN dan menggunakan data Aritmia dari MIT-BIH
 database. Studi perbandingan yang lain dilakukan oleh Ghongade dkk.
 \cite{Ghongade:2007}. Ghongade melakukan perbandingan beberapa metode ekstraksi
 fitur yakni DFT, PCA, DWT terhadap 180 signal sample dan disertai dengan
 ekstrasi fitur berdasarkan morfologi signal yakni R-peak, QRS area serta Q-S
 distance dengan menggunakan Backpropagation. Data yang digunakan adalah tiga
-tipe aritmia dari MIT-BIH database. Guler \cite{Guler:2005} menggunakan multi
+tipe Aritmia dari MIT-BIH database. Guler \cite{Guler:2005} menggunakan multi
 layer perceptron (MLP) dan combine network model untuk mengklasifikasi signal
 ECG (beat) dan menggunakan distribusi statistik dari hasil analisis spectral
 signal ECG menggunakan DWT sebagai fitur klasifikasi. Elsayad dalam papernya,
 \cite{Elsayad:2009} mengaplikasikan competitive based learning, yakni Learning
-Vector Quantization - LVQ, untuk mengklasifikasi data ECG aritmia dari UCI
+Vector Quantization - LVQ, untuk mengklasifikasi data ECG Aritmia dari UCI
 database. Data diolah menggunakan PCA dan diaplikasikan pada beberapa varian
 LVQ. Karraz dkk. dalam papernya \cite{Karraz:2006} mengembangkan klasifikasi
 denyut jantung otomatis menggunakan jaringan saraf tiruan berdasarkan Bayesian
-Framework. Studi dilakukan terhadap 5 tipe ECG aritmia dari MIT-BIH database dan
+Framework. Studi dilakukan terhadap 5 tipe ECG Aritmia dari MIT-BIH database dan
 fitur yang digunakan adalah ECG morphology dan time intervals.
 
 Beberapa penelitian mengaplikasikan teori fuzzy untuk mendeteksi berbagai tipe
-aritmia seperti yang dilakukan oleh Anuradha dkk. pada papernya
+Aritmia seperti yang dilakukan oleh Anuradha dkk. pada papernya
 \cite{Anuradha:2008}. Nonlinier dynamic dari ECG signal digunakan sebagai
-karakteristik dari aritmia diantaranya Spectral entropy, Poincaré plot geometry,
+karakteristik dari Aritmia diantaranya Spectral entropy, Poincaré plot geometry,
 Largest Lyapunov exponent and Detrended fluctuation analysis yang diekstrak dari
 heart rate signal. Kemudian linguistik variabel (fuzzy set) digunakan untuk
 merepresentasikan ECG fitur dan fuzzy conditional statement digunakan sebagai
 rule. Exarchos dkk. \cite{Exarchos:2007} mengembangkan metodologi dimana secara
 otomatis menghasilkan fuzzy expert system dari data pelatihan dengan menggunakan
-decision tree dimana digunakan untuk mengklasifikasi aritmia (MIT-BIH database)
+decision tree dimana digunakan untuk mengklasifikasi Aritmia (MIT-BIH database)
 dan ischaemic (ST-T database). Yeh dkk. \cite{Yeh:2009} mengembangkan Fuzzy
-logic method (FLM) untuk mendeteksi lima tipe aritmia dari signal ECG  melalui
+logic method (FLM) untuk mendeteksi lima tipe Aritmia dari signal ECG  melalui
 fuzzy inference engine dan operasi defuzzifikasi dengan menggunakan data dari
-MIT-BIH aritmia database.
+MIT-BIH Aritmia database.
 
-Hao dkk. \cite{Hao:2005} mengembangkan metode klasifikasi aritmia menggunakan
+Hao dkk. \cite{Hao:2005} mengembangkan metode klasifikasi Aritmia menggunakan
 Support Vector Machine (SVM) dengan menggunakan PCA sebagai metode ekstraksi
-fitur dari data MIT-BIH database. Studi dilakukan terhadap empat tipe aritmia
+fitur dari data MIT-BIH database. Studi dilakukan terhadap empat tipe Aritmia
 yakni Normal, LBBB, RBBB dan PVC. Nasiri dkk. \cite{Nasiri:2009}
-mengembangkan metode klasifikasi aritmia dengan mengintegrasikan SVM dan
+mengembangkan metode klasifikasi Aritmia dengan mengintegrasikan SVM dan
 Genetic Algorithm dimana GA digunakan untuk meningkatkan kinerja dari SVM dari
 sisi generalisasi-nya. Sedangkan Melgani dkk. \cite{Melgani:2008}
 mengintegrasikannya dengan Particle Swarm Optimization (PSO) dengan menggunakan
 data dari MIT-BIH database.
 
 Metode pemrosesan ECG otomatis untuk proses klasifikasi denyut jantung
-dikembangkan oleh Philip dkk. \cite{Philip:2004} dimana kategori dari aritmia
+dikembangkan oleh Philip dkk. \cite{Philip:2004} dimana kategori dari Aritmia
 yang digunakan adalah lima kategori yang direkomendasikan oleh standar ANSI/AAMI
 EC57:1998 yaitu normal beat, ventricular ectopic beat (VEB), supraventricular
 ectopic beat (SVEB), fusion of a normal and a VEB, dan unknown beat type. Lima
-kategori tersebut merupakan pengelompokkan dari 15 kategori aritmia yang
+kategori tersebut merupakan pengelompokkan dari 15 kategori Aritmia yang
 terdapat pada MIT-BIH database. Fitur yang digunakan adalah berdasarkan pada
 interval denyut jantung, interval RR dan morfologi dari ECG. 
 
 Dari latar belakang tersebut diatas, terlihat belum terlalu banyak peneliti yang
 menggunakan pendekatan Competitive Based Learning seperti LVQ digunakan untuk
-mendeteksi kelainan jantung khusus-nya aritmia. Disamping itu, laboratorium
+mendeteksi kelainan jantung khusus-nya Aritmia. Disamping itu, laboratorium
 dimana \saya melakukan penelitian, sebelumnya telah mengembangkan metode
 pengenalan aroma dengan menggunakan konsep \emph{Competitive Based Learning}
 yaitu FNLVQ. Oleh sebab itu pada penelitian ini, \saya akan melakukan studi
-tentang klasifikasi signal ECG aritmia dengan menggunakan pendekatan
+tentang klasifikasi signal ECG Aritmia dengan menggunakan pendekatan
 \emph{competitive based learning}, yakni Generalized LVQ \cite{Sato:1995}, yang
 merupakan generalisasi dari LVQ2.1 , dimana GLVQ memiliki keunggulan dalam hal
 menjamin konvergensi dalam proses pelatihan yang tidak dimiliki LVQ2.1 serta
@@ -186,14 +186,14 @@ terbagi menjadi beberapa permasalahan sebagai berikut;
 
 \begin{enumerate}
   \item Bagaimana pengolahan data awal yang harus dilakukan agar sesuai dengan
-  kebutuhan proses pengenalan aritmia.
+  kebutuhan proses pengenalan Aritmia.
   \item Bagaimana penanganan noise data dapat memperbaiki kinerja dari proses
-  pengenalan aritmia.
+  pengenalan Aritmia.
   \item Bagaimana metode pembelajaran berbasis kompetisi dapat digunakan untuk
-  proses pengenalan aritmia.
+  proses pengenalan Aritmia.
   \item Bagaimana teori fuzzy diintegrasikan ke metode Generalized LVQ?
   \item Bagaimana integrasi teori fuzzy dengan GLVQ dapat digunakan untuk
-  meningkatkan kinerja dari proses pengenalan aritmia.
+  meningkatkan kinerja dari proses pengenalan Aritmia.
 %   \item Bagaimana metode perhitungan kemiripan mahalanobis distance dapat
 %   digunakan untuk memperbaiki kinerja dari proses pengenalan Arrhytmia.
 \end{enumerate}
@@ -206,10 +206,10 @@ terbagi menjadi beberapa permasalahan sebagai berikut;
 Ruang lingkup yang digunakan dalam penelitian ini adalah sebagai berikut;
 \begin{enumerate}
   \item Dataset yang digunakan sebagai data pelatihan dan evaluasi adalah data
-  ECG aritmia yang didapat dari physionet, yakni data MIT-BIH database dimana
+  ECG Aritmia yang didapat dari physionet, yakni data MIT-BIH database dimana
   data tersebut sudah dilengkapi dengan berbagai anotasi dari para ahli jantung
   secara manual.
-  \item Jumlah kategori aritmia yang akan dideteksi dalam penelitian ini
+  \item Jumlah kategori Aritmia yang akan dideteksi dalam penelitian ini
   adalah sebanyak 12 kategori termasuk didalamnya signal denyut jantung hasil
   dari penggunaan alat pacu jantung (pacemaker).
   \item Sinyal ECG yang digunakan pada penelitian ini hanya menggunakan
@@ -225,9 +225,9 @@ Ruang lingkup yang digunakan dalam penelitian ini adalah sebagai berikut;
 Tujuan dari penelitian ini adalah sebagai berikut;
 \begin{enumerate}
   \item Mencari beberapa kemungkinan pengolahan data ECG agar dapat digunakan
-  dalam proses pelatihan dan pengenalan kelainan irama jantung-aritmia.
+  dalam proses pelatihan dan pengenalan kelainan irama jantung-Aritmia.
   \item Mengembangkan sistem yang mampu mengenali kelainan irama
-  jantung-aritmia berdasarkan data signal ECG dengan menggunakan pendekatan
+  jantung-Aritmia berdasarkan data signal ECG dengan menggunakan pendekatan
   competitive based learning.
 \end{enumerate}
 
@@ -269,9 +269,9 @@ Secara garis besar, kontribusi \saya pada penelitian ini dapat dilihat
 dari dua aspek diantaranya sebagai berikut;
 \begin{enumerate}
   \item Internal : kontribusi terhadap penelitian yang dilakukan oleh tim
-  peneliti aritmia Fasilkom Universitas Indonesia
+  peneliti Aritmia Fasilkom Universitas Indonesia
   \begin{itemize}
-    \item Sebagai bagian awal penelitian di bidang aritmia, dimana pada
+    \item Sebagai bagian awal penelitian di bidang Aritmia, dimana pada
     penelitian ini dilakukan proses pengolahan data awal dengan melewati
     beberapa tahap pemrosesan.
     \item Pengembangan Java Engine metode klasifikasi yang dapat digunakan
@@ -280,12 +280,12 @@ dari dua aspek diantaranya sebagai berikut;
   \end{itemize}
   
   \item Eksternal : kontribusi terhadap dunia penelitian khususnya dibidang
-  pengenalan aritmia.
+  pengenalan Aritmia.
   \begin{itemize}
     \item Pengembangan metode klasifikasi baru yaitu Fuzzy-Neuro Generalized
     Learning Vector Quantization (FNGLVQ).
     \item Penggunaan metode FNGLVQ dalam pendeteksian pengenalan kelaian
-    aritmia melalui sinyal ECG.
+    Aritmia melalui sinyal ECG.
   \end{itemize}
 \end{enumerate} 
 
@@ -298,9 +298,9 @@ Metode yang digunakan dalam penelitian ini adalah sebagai berikut;
 		Pada tahap ini, \saya melakukan kajian literatur mengenai perkembangan terakhir
 		penelitian di bidang ECG, mempelajari mengenai pendekatan yang dilakukan para
 		peneliti dalam mencari solusi permasalahan, terutama proses pengenalan kelainan
-		jantung seperti aritmia. Literatur ini didapat dari buku, thesis dan paper baik
-		dalam jurnal dalam negeri maupun luar negeri, serta informasi dari berbagai
-		sumber yang berkaitan dengan topik thesis ini.
+		jantung seperti Aritmia. Literatur ini didapat dari buku, tesis dan artikel
+		baik dalam jurnal dalam negeri maupun luar negeri, serta informasi dari berbagai
+		sumber yang berkaitan dengan topik tesis ini.
   \item Pengolahan data\\
 		Pada tahap ini, \saya mempersiapkan data yang akan digunakan dalam penelitian.
 		Data ECG yang digunakan merupakan data yang diambil dari repository
@@ -320,7 +320,7 @@ Metode yang digunakan dalam penelitian ini adalah sebagai berikut;
 		skenario percobaan. Kemudian dilanjutkan dengan analisis terhadap hasil  yang
 		didapat untuk mengetahui performa dari sistem.
   \item Penulisan laporan \\
-		Bagian akhir dari metodologi penelitian ini adalah penulisan thesis yang
+		Bagian akhir dari metodologi penelitian ini adalah penulisan tesis yang
 		memuat semua hasil penelitian yang telah dilakukan.
 \end{enumerate}
 
@@ -334,7 +334,7 @@ Sistematika penulisan laporan akhir ini adalah sebagai berikut:
 		masalah, tujuan, ruang lingkup, metodologi penelitian serta sistematika penulisan.
 	\item Bab 2 \babDua \\
 		Bab ini berisi pembahasan mengenai sekilas tentang penyakit jantung, dan
-		khususnya beberapa variasi kelainan irama jantung-aritmia. Juga akan
+		khususnya beberapa variasi kelainan irama jantung-Aritmia. Juga akan
 		dibahas mengenai pendekatan dalam machine learning khususnya
 		Competitive Base learning mulai dari standard LVQ sampai Generalized LVQ
 		(GLVQ) dan bagaimana metode tersebut diaplikasikan terhadap ECG data.

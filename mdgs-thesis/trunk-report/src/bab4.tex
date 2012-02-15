@@ -1,18 +1,19 @@
 %-----------------------------------------------------------------------------%
 \chapter{\babEmpat}
+\label{ch:fnglvq}
 %-----------------------------------------------------------------------------%
 Pada bab ini akan diuraikan mengenai metode klasifikasi yang dikembangkan,
 modifikasi yang dilakukan serta perancangan dan implementasi dari metode
 tersebut.
-
+ 
 %-----------------------------------------------------------------------------%
 \section{Metode Fuzzy Neuro GLVQ}
 %-----------------------------------------------------------------------------%
-Metode Fuzzy-Neuro GLVQ yang dikembangkan merupakan metode yang mengadaptasi
-mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode Generalized LVQ, dengan
-harapan dapat meningkatkan tingkat akurasi pengenalan kelainan aritmia dimana
-sebaran dari tiap kategori kelas aritmia tumpang tindih satu sama lain. Berikut
-akan diuraikan mengenai metode FNGLVQ.
+Metode \gls{fnglvq} yang dikembangkan merupakan metode yang
+mengadaptasi mekanisme fuzzifikasi dari Fuzzy-Neuro LVQ dengan metode Generalized LVQ, dengan
+harapan dapat meningkatkan tingkat akurasi pengenalan kelainan Aritmia dimana
+sebaran dari tiap kategori kelas Aritmia tumpang tindih satu sama lain. Berikut
+akan diuraikan mengenai metode \gls{fnglvq}.
 
 % dimana hal ini  dimotivasi oleh Kelemahan dari FNLVQ yang
 % sensitif terhadap inisialisasi  bobot awal dan keunggulan dari GLVQ yang
@@ -24,13 +25,14 @@ akan diuraikan mengenai metode FNGLVQ.
 % \emph{unknown} data. 
 
 \subsection{Konsep dasar}
-Perbedaan yang mendasar dari karakteristik pengenalan aritmia berdasarkan beat
+\label{ssec:konsep-dasar}
+Perbedaan yang mendasar dari karakteristik pengenalan Aritmia berdasarkan beat
 dengan pengenalan aroma adalah dari sisi data yang akan menjadi masukan
 jaringan LVQ. Pada pengenalan aroma, data masukan merupakan data himpunan
 fuzzy, dimana merupakan representasi dari ketidakpastian (\emph{fuzziness})
 sensor dalam membaca informasi aroma, dimana hal ini berimplikasi pada model
 dari vektor pewakil yang diimplementasikan juga dengan himpunan fuzzy. Sedangkan
-pada pengenalan aritmia, distribusi data masing-masing kategori saling tumpang
+pada pengenalan Aritmia, distribusi data masing-masing kategori saling tumpang
 tindih (\emph{overlaping}) satu sama lain, seperti yang dapat ditunjukkan pada
 \pic~\ref{fig:overlap} sehingga diharapkan dengan menggunakan vektor pewakil
 fuzzy, maka ketidakpastian pola suatu kelas dapat diturunkan. Selain itu, kunci
@@ -41,22 +43,22 @@ vektor masukkan tersebut polanya belum pernah diketahui oleh jaringan saraf
 (\emph{unknown}).
  
 \addFigure{width=0.6\textwidth}{pics/plotoverlap.png}{fig:overlap}{Ilustrasi
-data aritmia yang tumpang tindih (\emph{overlap}) antar kategori.}
+data Aritmia yang tumpang tindih (\emph{overlap}) antar kategori.}
 
-Pada pengenalan aritmia yang dilakukan pada penelitian ini, yang dikenali
+Pada pengenalan Aritmia yang dilakukan pada penelitian ini, yang dikenali
 adalah beat dalam ECG, dimana kemunculan suatu kelainan beat ditandai dengan
 morfologinya. Menurut dr. Jolanda Jonas, tidak semua kemunculan kelainan beat
-menandakan seorang pasien menderita aritmia. Terdapat kelainan beat yang hanya muncul
+menandakan seorang pasien menderita Aritmia. Terdapat kelainan beat yang hanya muncul
 sekali dalam data ECG dimana hal ini sering digunakan sebagai indikasi untuk
 pemeriksaan lanjutan, seperti pemasangan alat observasi ECG 24 jam
 (\emph{Holter ECG}). Sehingga himpunan fuzzy sebagai masukan
 sistem, seperti pada sistem pengenalan aroma, tidak cocok untuk digunakan. Oleh
-karena itu pada pengenalan aritmia ini, digunakan masukan berupa data
+karena itu pada pengenalan Aritmia ini, digunakan masukan berupa data
 \emph{crisp}.  Ilustrasi pendekatan dengan menggunakan algoritma FNLVQ pada
 sinyal ECG dapat dilihat pada \pic~\ref{fig:fnlvq-flow}. 
  
 \addFigure{width=1\textwidth}{pics/fnlvq-flow.png}{fig:fnlvq-flow}{Ilustrasi
-algoritma FNLVQ pada sinyal ECG}.
+algoritma FNLVQ pada sinyal ECG}
 
 Seperti terlihat pada \pic~\ref{fig:fnlvq-flow}, beberapa data beat ECG ($c$)
 di-fuzzifikasi terlebih dahulu membentuk fungsi keanggotaan untuk
@@ -67,7 +69,7 @@ fuzzifikasi terlebih dahulu, oleh karena itu data masukan pada
 algoritma yang diusulkan berbentuk (\emph{crisp}).
 
 \addFigure{width=1\textwidth}{pics/fnglvq-flow.png}{fig:fnglvq-flow}{Ilustrasi
-algoritma FNGLVQ pada sinyal ECG}.
+algoritma FNGLVQ pada sinyal ECG}
  
 Seperti yang sudah diuraikan pada sub-bab \ref{ssec:glvq}, fungsi diskriminan
 yang digunakan \gls{glvq} adalah menggunakan \emph{distance \gls{metric}}, yakni
@@ -107,7 +109,7 @@ pewakil dengan nilai similarity ($\mu_j$) terbesar (\emph{max}).
 dimana vektor pewakil pemenang akan di-update selama proses pembelajaran 
 tergantung dari vektor masukan yang diberikan. Namun pada metode ini, vektor
 pewakil yang akan di-update tidak hanya berdasarkan vektor pemenang saja,
-melainkan ditentukan oleh \emph{miss classification error} dengan menghitung
+melainkan ditentukan oleh \emph{minimum classification error} dengan menghitung
 jarak relatif antara jarak vektor masukkan($x$) dengan vektor pewakil dari
 kelas yang sama ($C_x = C_w$) dan jarak terbesar vektor masukan dengan vektor
 pewakil yang tidak berasal dari kelas yang sama ($C_x \neq C_{\max_{j}(w_j)}$).
@@ -120,6 +122,7 @@ dapat dilihat pada \pic~\ref{fig:taksonomi}.
 taksonomi algoritma yang dikembangkan (FNGLVQ).}
 
 \subsection{Metode FNGLVQ}
+\label{ssec:metode-fnglvq}
 Pada konsep similarity, semakin besar nilainya, maka tingkat kemiripan kedua
 vektor akan semakin tinggi. Untuk dapat menggunakan pendekatan similarity dengan
 fuzzy pada \gls{glvq},  maka nilai derajat keanggotaan di-komplemen menjadi $d =
@@ -133,7 +136,7 @@ tersebut disubstitusikan ke \equ~\ref{eq:mce} sehingga didapat;
 	&= \frac{\mu_2 - \mu_1}{2 - \mu_1 - \mu_2}
 \end{align}
 
-dengan $\varphi(x)$ adalah nilai \emph{miss-classification error (MCE)},
+dengan $\varphi(x)$ adalah nilai \emph{minimum classification error (MCE)},
 $\mu_1$ adalah nilai similarity vektor masukkan($x$) dengan vektor pewakil dari
 kelas yang sama ($C_x = C_w$), dan $\mu_2$ adalah nilai similarity
 terbesar antara vektor masukan dengan vektor pewakil yang tidak berasal dari
@@ -213,7 +216,7 @@ digunakan $w_{min}, w_{mean}, w_{max}$ untuk mewakili notasi diatas.
 	0 & , x \geq w_{max}
 	\end{array}
 \end{align}
-
+ 
 \noindent maka turunan dari fungsi segitiga diatas, dalam hal ini akan
 diturunkan terhadap nilai rata-rata bobot ($w_{mean}$), didapat sebagai berikut;
 \begin{itemize}
@@ -542,11 +545,11 @@ pembelajaran secara keseluruhan.
 %-----------------------------------------------------------------------------%
 \section{Implementasi Sistem}
 %-----------------------------------------------------------------------------%
-Secara garis besar, sistem pengenalan aritmia yang dibangun dapat dilihat
+Secara garis besar, sistem pengenalan Aritmia yang dibangun dapat dilihat
 melalui diagram pada \pic~\ref{fig:diagramAll}. 
 
 \addFigure{width=1\textwidth}{pics/block-diagram.png}{fig:diagramAll}{Blok
-diagram sistem pengenal aritmia yang dikembangkan.}
+diagram sistem pengenal Aritmia yang dikembangkan.}
 
 Seperti yang ditunjukkan pada \pic~\ref{fig:diagramAll}, pengembangan sistem
 terdiri dari empat tahap diantaranya;
@@ -554,7 +557,7 @@ terdiri dari empat tahap diantaranya;
   \item \emph{Data acquisition} : yaitu tahap perekaman data ECG. Pada tahap
   ini untuk sementara menggunakan data digital yang disediakan secara bebas di
   physionet.net khususnya data MIT-BIH arrhytmia database. Kedepannya, tahap ini dapat
-  disubstitusi dengan penelitian yang telah dilakukan oleh peneliti lain dalam tim aritmia.
+  disubstitusi dengan penelitian yang telah dilakukan oleh peneliti lain dalam tim Aritmia.
   \item \emph{Data preprocessing} : yaitu tahap pengolahan data awal. Pada tahap
   ini, data dasar diolah sedemikian rupa sehingga dapat merepresentasikan data
   ECG dengan baik agar dapat meningkatkan kinerja proses pengenalan. Untuk
@@ -580,7 +583,7 @@ dikembangkan.
 \subsection{Lingkungan pengembangan}
 Seperti yang telah diuraikan sebelumnya, penelitian ini difokuskan untuk
 menggali representasi data ECG yang memadai serta mengembangkan metode
-pengenalan aritmia (\emph{Data preprocessing} dan \emph{Pattern
+pengenalan Aritmia (\emph{Data preprocessing} dan \emph{Pattern
 Classification}). 
 \begin{enumerate}
   \item Untuk tahap pengolahan data, dilakukan dengan menggunakan aplikasi
@@ -589,7 +592,7 @@ Classification}).
   Feature Extraction. Sedangkan untuk tahap baseline wander removal (BWR)
   menggunakan kode yang disediakan oleh Gari Clifford \cite{Clifford:2005} yang
   bersifat open source.
-  \item Untuk tahap pengembangan sistem pengenal aritmia, difokuskan pada
+  \item Untuk tahap pengembangan sistem pengenal Aritmia, difokuskan pada
   pengembangan engine tahap awal dimana tujuannya adalah agar lebih mudah untuk
   digunakan dan dikembangkan lebih lanjut (\emph{Usability} dan
   \emph{Modifiability}). Pengembangan engine dilakukan di lingkungan :
@@ -624,11 +627,16 @@ berikut adalah uraian dari masing-masing package
 \begin{itemize}
   \item \textbf{master} : merupakan package untuk \texttt{interface} class
   dimana dapat digunakan untuk mengembangkan metode klasifikasi yang lain.
+  
   \item \textbf{dataset} : merupakan package untuk menangani data yang akan
   digunakan untuk proses pelatihan maupun pengujian. Disini ada dua jenis
   \texttt{class} yang diimplementasikan untuk mengakomodasi jenis data Crisp
   (\texttt{Dataset}) dan data Fuzzy (\texttt{FCodeBook}), khususnya Fuzzy dengan
   membership function segitiga. \\ 
+  
+	\addFigure{width=1\textwidth}{pics/class-diagram.png}{fig:classdiag}{Class
+	diagram dari engine yang dikembangkan.}
+	
   Untuk memudahkan pengelolaan data, serta mengimplementasikan metode
   Round-Robin yang diuraikan pada sub-bab \ref{ssec:round-robin},
   diimplementasikan dengan konsep folding, yaitu pada class
@@ -636,35 +644,35 @@ berikut adalah uraian dari masing-masing package
   class \texttt{KFoldedDataset}. Disamping itu diimplementasikan juga mekanisme
   untuk normalisasi data (\texttt{DataNormalization}  dan
   \texttt{ZScoreNormalization}).
+  
   \item \textbf{lvq, glvq} dan \textbf{fn-glvq} : merupakan package yang
   terdiri dari metode pengenalan lvq, glvq dan metode baru yang dikembangkan
   yaitu fn-glvq.
+  
   \item \textbf{evaluation} : yaitu package yang digunakan untuk melakukan uji
   test statistik yang umum dilakukan dalam pengembangan suatu metode klasifikasi.
   
-  \addFigure{width=1\textwidth}{pics/class-diagram.png}{fig:classdiag}{Class
-	diagram dari engine yang dikembangkan.}
-
   \item \textbf{gui} : merupakan package yang digunakan untuk memonitor proses
   pelatihan yang dilakukan dimana dapat menampilkan perkembangan vektor pewakil
   tiap iterasi dan tingkat error yang dihasilkan.
+  
   \item \textbf{utils} : merupakan package utility yang digunakan disebagian
   beasar paket engine yang dikembangkan.
 \end{itemize} 
 
-Untuk lebih jelasnya, pada \pic~\ref{fig:classdiag} ditunjukkan class diagam
-dari engine yang dikembangkan.
+Untuk lebih jelasnya, pada \pic~\ref{fig:classdiag} dapat dilihat class diagam 
+dari \emph{engine} yang dikembangkan. Antarmuka sistem yang dapat digunakan
+untuk menunjukkan kerja dari \emph{engine} yang dikembangkan dapat dilihat pada
+\pic~\ref{fig:mainform}. Pada \pic~\ref{fig:codemonitor} dapat dilihat tampilan
+antar muka sistem untuk melakukan pengawasan perkembangan proses pembelajaran, 
+terutama untuk melihat perkembangan perubahan vektor pewakil  untuk setiap  kali
+proses iterasi epoch.
 
-
-Berikut ditunjukkan antarmuka sistem yang dapat digunakan untuk menunjukkan
-kerja dari engine yang dikembangkan, pada \pic~\ref{fig:mainform}
 \addFigure{width=0.8\textwidth}{pics/mainform.png}{fig:mainform}{Contoh Antar
 muka yang dikembangkan.}
 
-Seperti yang disebutkan diatas, berikut pada \pic~\ref{fig:codemonitor} adalah
-tampilan antar muka untuk melakukan pengawasan perkembangan proses pembelajaran,
-terutama untuk melihat perkembangan perubahan vektor pewakil untuk setiap  kali
-proses iterasi epoch.
+\clearpage
+
 \addFigure{width=1\textwidth}{pics/codemonitor.png}{fig:codemonitor}{Form
 Codebook Monitor yang digunakan untuk memonitor perkembangan proses
 pembelajaran.}
