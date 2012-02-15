@@ -2,14 +2,13 @@
 \begin{theglossary}\glossaryheader
 \glsgroupheading{glssymbols}\relax \glsresetentrylist %
 \glossaryentryfield{arrhytmia}{\glsnamefont{\emph {arrhytmia}}}{kelaian/gangguan urutan irama jantung atau gangguan kecepatan dari proses depolarisasi, repolarisasi atau keduanya pada jantung}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{11\delimR 13}\delimN 
-		\setentrycounter[]{page}\glsnumberformat{15}}}%
+		\setentrycounter[]{page}\glsnumberformat{11\delimN 12}}}%
 \glossaryentryfield{heartrate}{\glsnamefont{\emph {heart rate}}}{laju denyut jantung}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{12}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{11}}}\glsgroupskip
 \glsgroupheading{M}\relax \glsresetentrylist %
 \glossaryentryfield{metric}{\glsnamefont{metric}}{atau disebut juga fungsi jarak, merupakan fungsi yang digunakan untuk menentukan jarak antara elemen dalam himpunan}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{58}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{60}}}\glsgroupskip
 \glsgroupheading{P}\relax \glsresetentrylist %
 \glossaryentryfield{palpitasi}{\glsnamefont{palpitasi}}{Sensasi yang tidak menyenangkan dari denyut jantung yang kuat dan tidak teratur}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{12}}}%
+		\setentrycounter[]{page}\glsnumberformat{11}}}%
 \end{theglossary}\glossarypostamble

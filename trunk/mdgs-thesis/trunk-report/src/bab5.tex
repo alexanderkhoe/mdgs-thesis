@@ -8,7 +8,7 @@ beberapa metode lain yang telah dicoba dan memperhitungkan tingkat kevalidan
 percobaan terhadap hasil yang diperoleh.
      
 %-----------------------------------------------------------------------------%
-\section{Ujicoba algoritma terhadap data fitur}
+\section{Ujicoba algoritma}
 %-----------------------------------------------------------------------------%
 Pada subbab ini akan diuraikan mengenai beberapa skenario ujicoba yang dilakukan
 untuk mengetahui pengaruh ekstraksi fitur yang sudah dilakukan dan kinerja dari
@@ -22,13 +22,14 @@ Ujicoba dilakukan dilingkungan dengan spesifikasi sebagai berikut;
   \item Komputer Intel i7-9500
   \item Memory 6Gb
   \item Sistem Operasi Windows 7
+  \item Aplikasi R untuk uji statistik
 \end{itemize} 
 
 Jenis Data yang akan diujicobakan ada dua kelompok yaitu data 6 kelas dan data
 12 kelas. Berikut adalah rincian untuk masing-masing kelompok;
 \begin{itemize}
   \setlength{\itemsep}{1pt}
-  \item Data 6 kelas terdiri dari kategori penyakit aritmia;
+  \item Data 6 kelas terdiri dari kategori penyakit Aritmia;
   \begin{enumerate}
     \setlength{\itemsep}{1pt}
     \item Normal beat (NOR)
@@ -50,20 +51,91 @@ Jenis Data yang akan diujicobakan ada dua kelompok yaitu data 6 kelas dan data
   \end{enumerate}
 \end{itemize}
 
-Dari data hasil ekstraksi yang telah didapat berdasarkan
-\tab~\ref{tbl:beatstat-nonoutlier}, untuk keperluan ujicoba ini hanya akan
-dipakai maksimal 2000 sampel data untuk setiap kategori kelas aritmia, untuk
-menurunkan faktor ketidak-seimbangan data. Meskipun demikian, untuk data
-kategori 12 kelas, ketidak-seimbangan data akan tetap ada dan akan diujicobakan
-terhadap algoritma yang ada. Berikut pada tabel \ref{tbl:statdatauji} adalah
-statistik data yang akan digunakan dalam ujicoba ini. 
+Dari data hasil ekstraksi yang telah didapat sesuai dengan 
+\tab~\ref{tbl:beatstat-nonoutlier}, untuk keperluan ujicoba pada bab ini hanya
+akan memakai maksimal 2000 sampel data untuk setiap kategori kelas Aritmia,
+untuk lebih menyeimbangkan jumlah data antar kelas, yakni pada data 6 kelas.
+Namun demikian, ketidakseimbangan data masih tetap dipertahankan untuk 12 kelas
+dimana akan diujicobakan pada algoritma yang ada. Berikut pada \tab~
+\ref{tbl:statdatauji} adalah statistik data yang akan digunakan dalam ujicoba.
 
 \addTableFromFigures{width=0.8\textwidth}{pics/stat-datauji.png}{tbl:statdatauji}{Statistik
 data ujicoba}
 
-Pada uji coba ini, tingkat akurasi akan digunakan untuk menunjukkan kinerja dari
-algoritma terhadap data fitur yang ada.
+Metode yang umum dan akan digunakan dalam meng-evaluasi kinerja dari 
+algoritma klasifikasi ini adalah \emph{accuracy}, yaitu rasio jumlah data yang
+dikenali benar oleh algoritma terhadap jumlah data keseluruhan:
+\begin{align}
+	accuracy = \frac{TP + TN}{N}
+\end{align} 
 
+Namun untuk mengevaluasi algoritma terhadap data yang tidak seimbang, dibutuhkan
+metode evaluasi tambahan yang lebih komprehensif. Metode yang paling relevan
+untuk data tidak seimbang adalah \emph{precision, recall, F-Measure,
+sensitifity, specificity dan geometric mean} yang perhitungannya
+berdasarkan \emph{confusion matrix} dimana metode evaluasi ini independen
+terhadap kategori kelas. 
+
+\begin{table}[h!]
+\small
+\caption{Confusion matrix dari klasifikasi dua kelas.}
+\label{tbl:conf-matrix}
+\begin{center}
+	\begin{tabular}{c|m{1.5cm}|m{3cm}|m{3cm}|}
+	\multicolumn{2}{c}{} &
+	\multicolumn{2}{c}{Prediction Class}\\	\cline{2-4}
+	& & Positive & Negative \\ \cline{2-4}
+	\multirow{2}{*}{True Class} & 
+	Positive 	& True Positives\newline (TP) 	& False Negatives\newline (FN) \\
+	\cline{2-4} 
+	& Negative 	& False Positives\newline (FP) 	& True
+	Negatives\newline (TN) \\\cline{2-4}
+	\end{tabular}
+\end{center}
+\end{table}
+
+\noindent Berikut adalah beberapa metode evaluasi tersebut diatas
+\cite{Nguyen:2009};
+\begin{itemize}
+	\item \emph{Precision} : porsi dari prediksi data positif yang dikenali benar
+	oleh algoritma.
+	\begin{align}
+		Precision = \frac{TP}{TP + FP} 
+	\end{align}   
+	
+	\item \emph{Recall} : porsi dari data sampel yang diprediksi benar 
+	oleh algoritma.
+	\begin{align}
+		Recall = \frac{TP}{TP + FN}
+	\end{align}
+	
+	\item \emph{F-measure} : merupakan harmonic mean dari \emph{recall} dan
+	\emph{precision}. Semakin tinggi nilai \emph{F-measure} mengindikasikan nilai
+	yang tinggi untuk \emph{recall} dan \emph{F-measure}.
+	\begin{align}
+		F_{measure} = \frac{2 \times Recall \times Precision}{Recall + Precision}
+	\end{align}
+	
+	\item \emph{Sensitivity} : akurasi dari data sampel positif
+	\begin{align}
+		Sensitivity = Recall
+	\end{align}
+	
+	\item \emph{Specificity} : akurasi dari data sampel negatif
+	\begin{align}
+		Specificity = 1 - \frac{FP}{FP + TN}
+	\end{align}
+	
+	\item \emph{Geometric Mean} : mengindikasikan keseimbangan kinerja
+	algoritma antara mayoritas dan minoritas kelas.
+	\begin{align}
+		G_{mean} = \sqrt{Sensitivity \times Specificity}
+	\end{align} 
+\end{itemize}
+ 
+Untuk mengevaluasi algoritma pada dataset yang lebih dari dua kelas,
+maka perhitungan dilakukan dengan mencari nilai rata-rata terhadap kategori
+kelas.
 %-----------------------------------------------------------------------------%
 \subsection{Ujicoba Skenario 1: mother wavelet daubhecies}
 %-----------------------------------------------------------------------------%
@@ -93,7 +165,7 @@ wavelet daubechies}
 \end{center} 
 \end{table}
 
-Data yang diujicobakan adalah data aritmia 6 kelas, tanpa outlier dengan total
+Data yang diujicobakan adalah data Aritmia 6 kelas, tanpa outlier dengan total
 jumlah data 11.134 dimana akan dibagi menjadi dua dengan porsi yang  sama untuk
 training dan testing dan telah dilakukan proses round-robin 1 data. Sedangkan
 pada \tab~\ref{tbl:statdatask1} ditunjukkan detail jumlah fitur untuk
@@ -241,7 +313,7 @@ FNGLVQ.
 
 Secara keseluruhan dapat ditunjukkan bahwa ekstraksi dan reduksi fitur dengan
 dekomposisi menggunakan daubechies wavelet dapat mempertahankan tingkat akurasi
-pengenalan aritmia, bahkan pada beberapa kasus diatas dapat meningkatkan
+pengenalan Aritmia, bahkan pada beberapa kasus diatas dapat meningkatkan
 akurasi. Fitur dengan jumlah 86 dapat dipilih untuk digunakan dalam proses pengenalan
 selanjutnya, karena dari \tab~\ref{tbl:sk2-hasil} dapat dilihat fitur 157 dan 86
 memiliki rata-rata akurasi yang sama, namun fitur 86 memiliki hampir setengah
@@ -253,7 +325,7 @@ mensyaratkan jumlah yang kecil, Fitur 24 dapat dipertimbangkan untuk digunakan.
 %awalnya skenario 5
 %-----------------------------------------------------------------------------%
 Pada percobaan ini, data pelatihan yang akan digunakan diurutkan secara
-round robin terhadap kategori kelas aritmia seperti yang telah diuraikan
+round robin terhadap kategori kelas Aritmia seperti yang telah diuraikan
 pada sub-bab \ref{ssec:round-robin}. Tujuan dari percobaan ini adalah  untuk
 mengetahui bagaimana pengaruh \emph{round-robin} data latih terhadap
 proses pembelajaran dari algoritma. Untuk uji coba ini, data yang akan digunakan adalah
@@ -286,7 +358,7 @@ ujicoba round-robin dengan jumlah data $i$ yang saling silang. Pada
 \pic~\ref{fig:sk3-hasil} ditunjukkan hasil ujicoba untuk keempat algoritma
 tersebut diatas.
 
-\addFigure{\width=0.7\textwidth}{pics/efekroundrobin.png}{fig:sk3-hasil}{Hasil
+\addFigure{width=1\textwidth}{pics/efekroundrobin.png}{fig:sk3-hasil}{Hasil
 ujicoba data round-robin 1000 kombinasi.}
 
 Dari \pic~\ref{fig:sk3-hasil} dapat dilihat masing-masing algoritma memberikan
@@ -305,7 +377,7 @@ ke level 75\%, dan pada nilai $i=881$, tingkat akurasi kembali naik ke level
 92\% - 94\%.
 
 Dari kondisi diatas dapat disimpulkan, dengan menggunakan mekanisme round-robin
-dapat meningkatkan level akurasi pengenalan aritmia, khususnya untuk nilai $i$
+dapat meningkatkan level akurasi pengenalan Aritmia, khususnya untuk nilai $i$
 yang tidak terlalu besar $i < 30$, hampir keempat algoritma memberikan nilai
 akurasi yang stabil di level tertinggi.
 
@@ -407,17 +479,17 @@ dengan nilai yang tidak jauh dari distribusi dataset-nya. Pada ujicoba ini,
 masing-masing algoritma akan diinisialisasi berdasarkan;
 \begin{enumerate}
   \item GLVQ \\
-  \textbf{Random Internal} : bobot awal diinisialisasi dari data latih dengan
+  \textit{Random Internal} : bobot awal diinisialisasi dari data latih dengan
   dipilih secara random. \\
-  \textbf{Random External} : bobot awal diinisialisasi dari nilai random
+  \textit{Random External} : bobot awal diinisialisasi dari nilai random
   interval [0, 1], dengan harapan bahwa jika diinisialisasi dengan cara seperti ini, tingkat
   akurasi tidak begitu jauh berubah.
   \item FNGLVQ \\
-  \textbf{Random Internal} : bobot awal diinisialisasi dari data latih dengan
+  \textit{Random Internal} : bobot awal diinisialisasi dari data latih dengan
   menghitung agregasi data statistik (\emph{min}, \emph{mean}, \emph{max}) dari
   setengah data latih yang dipilih secara random. \\ 
-  \textbf{Random External} :  bobot awal diinisialisasi dengan cara memilih nilai
-  pusat fungsi keanggotaan ($w_{mean}$) secara random pada interval distribusi
+  \textit{Random External} :  bobot awal diinisialisasi dengan cara memilih
+  nilai pusat fungsi keanggotaan ($w_{mean}$) secara random pada interval distribusi
   dari data latih.
 \end{enumerate}
 
@@ -443,7 +515,7 @@ akurasi (acc dalam \%) dengan algoritma GLVQ dan FN-GLVQ}
 	\multirow{2}{*}{Kelas} &  
 	\multirow{2}{*}{Fit}  &  
 	\multicolumn{2}{c}{GLVQ}  &
-	\multicolumn{2}{c}{FNGLVQ} \\ \cline{3-11}
+	\multicolumn{2}{c}{FNGLVQ} \\ %\cline{3-11}
     &    &    RandInt  &  RandEks  &  RandInt  &  RandEks \\
     \hline
     \multirow{3}{*}{6}  &  300    & 96.62  &  96.03  &  98.10  &  97.61 \\
@@ -466,37 +538,103 @@ akurasi (acc dalam \%) dengan algoritma GLVQ dan FN-GLVQ}
  
  Dari \pic~\ref{fig:sk5-hasil} dapat dilihat untuk algoritma GLVQ,
  inisialisasi random tidak mempengaruhi kinerja algoritma dalam melakukan
- pengenalan kelainan aritmia dimana di setiap model fitur data, tingkat
+ pengenalan kelainan Aritmia dimana di setiap model fitur data, tingkat
  akurasi tidak jauh berbeda (rata-rata error 0.0005). Namun berbeda dengan
  algoritma FNGLVQ, untuk data dengan fitur 300 dan 86, tingkat akurasi
  antara kedua kondisi yang dibuat masih dapat mengimbangi dengan tingkat
- error rata-rata (0.013475). Namun untuk data fitur 24,  tingkat akurasi
- turun sangat drastis, sampai lebih dari 10\% (error rata-rata
- 0.13155). Karena Tidak semua kondisi data dapat dipertahankan tingkat
- akurasinya, maka hal ini menunjukkan bahwa FNGLVQ belum bisa
- menjamin ketidak sensitifan bobot terhadap kinerja algoritma untuk 
- semua kondisi data, hanya untuk kondisi-kondisi tertentu saja.  
+ error rata-rata 0.013475. Namun untuk data fitur 24,  tingkat akurasi
+ turun sangat drastis, hingga mencapai lebih dari 10\% (error rata-rata
+ 0.13155).  Dari kondisi tersebut dapat dilihat bahwa secara empiris, FNGLVQ
+ belum bisa menjamin ketidaksensitifan inisialisasi bobot awal terhadap kinerja
+ algoritma seperti pada GLVQ.
 
 %-----------------------------------------------------------------------------%
 \subsection{Ujicoba Skenario 6 : Uji Unbalance Data}
 %-----------------------------------------------------------------------------%
 Ujicoba ini dilakukan untuk mengetahui kemampuan algoritma dalam menangani
 jumlah data yang tidak seimbang antar kategori kelas. Pada uji ini digunakan
-data 12 kelas dengan fitur 86 (Fit2). Ujicoba dilakukan dengan menggunakan
-algoritma LVQ1, LVQ21, GLVQ, FN-GLVQ dan tambahan algoritma Backpropagation.
-parameter yang digunakan mengacu pada data parameter terbaik. Sedangkan untuk
-Backpropagation menggunakan laju pembelajaran 0.05 dengan momentum 0.6. Dari
-hasil ujicoba didapat data seperti pada Tabel \ref{tbl:sk6-hasil}.
+data 12 kelas dengan fitur 86 (Fit2). 
 
-\addTableFromFigures{width=1\textwidth}{pics/uji-unbalance.png}{tbl:sk6-hasil}{Hasil
-uji unbalance data dengan menggunakan 5 algoritma}
+\begin{table}
+\small
+\caption{Hasil uji unbalance data dengan menggunakan 5 algoritma (dalam \%)}
+\label{tbl:sk6-hasil}
+\begin{center}
+	\begin{tabular}{cccccc}
+	\hline
+    Alg. & Max Epoch   &    Total Acc  &  Recall  &  Precision  &  F-Measure \\
+    \hline
+	LVQ1 & 150 & 72.09 & 63.86 & 69.34 & 62.04 \\
+	LVQ21 & 150 & 84.98 & 80.11 & 73.28 & 72.85 \\
+	GLVQ & 150 & 94.08 & 82.12 & 84.46 & 82.73 \\
+	FN-GLVQ & 150 & \textbf{96.35} & \textbf{86.23} & \textbf{93.49} &
+	\textbf{89.31} \\ 
+	Backprop2 & 2000 & 92.03 & 51.11 & 52.41 & 50.68 \\
+	Backprop5 & 5000 & 93.56 & 53.58 & 54.54 & 53.52 \\
+	 &  &  &  &  &  \\ \cline{1-5}
+	 & Iterasi & Sensitifity & Specificity & G-Mean &  \\ \cline{1-5} 
+	LVQ1 & 150 & 63.86 & 97.28 & 73.84 &  \\
+	LVQ21 & 150 & 80.11 & 98.63 & 84.78 &  \\
+	GLVQ & 150 & 82.12 & 99.42 & 88.68 &  \\
+	FN-GLVQ & 150 & \textbf{86.23} & \textbf{99.64} & \textbf{92.33} &  \\
+	Backprop2 & 2000 & 51.11 & 99.21 & 53.20 &  \\
+	Backprop5 & 5000 & 53.58 & 99.36 & 55.26 &  \\
+	\cline{1-5}
+	\end{tabular}
+\end{center}
+\end{table}
 
-Dari Tabel \ref{tbl:sk6-hasil} dapat dilihat FN-GLVQ menghasilkan nilai Recall
-(TPRate), FMeasure serta G-Mean terbaik untuk kelima algoritma yang
-diujicobakan, yakni di level 86.23\%, 89.31\% dan 92.33\%. Ini menunjukkan bahwa
-metode yang dikembangkan dapat menangani unbalance data dengan baik, bahkan
+Ujicoba dilakukan dengan menggunakan algoritma LVQ1, LVQ21, GLVQ, FN-GLVQ dengan
+tambahan algoritma Backpropagation. parameter yang digunakan mengacu pada data
+parameter terbaik. Sedangkan untuk Backpropagation menggunakan laju pembelajaran
+0.05 dengan momentum 0.6. Algoritma Backpropagation akan diujicobakan untuk dua
+macam iterasi, 2000 dan 5000. Dari hasil ujicoba tersebut didapat data hasil
+seperti pada \tab~ \ref{tbl:sk6-hasil} (nilai rata-rata terhadap kategori
+kelas).
+
+Dari Tabel \ref{tbl:sk6-hasil} dapat dilihat FNGLVQ menghasilkan nilai
+akurasi terbaik mencapai 96.35\%. Sedangkan untuk melihat kemampuan
+algoritma terhadap data yang tidak seimbang, maka dapat dilihat dari nilai 
+\emph{Recall/TPRate}, \emph{Precision}, \emph{F-Measure}, \emph{Sensitivity},
+\emph{Specificity} dan \emph{G-Mean}. Dari nilai rata-rata \emph{Recall}
+terlihat algoritma FNGLVQ mampu mengenali Aritmia lebih baik dan merata untuk
+setiap kategori kelas, yakni mencapai 86.23\%, $\pm$ 4\% lebih tinggi dari GLVQ.
+Sedangkan nilai \emph{F-measure} menunjukkan hasil FNGLVQ lebih baik
+dibandingkan yang lain, mencapai 89.31\%, $\pm$ 7\% lebih tinggi dari GLVQ.
+Nilai \emph{Geometric Mean} juga menunjukkan hasil FNGLVQ lebih baik, 92.33\%,
+$\pm$ 4\% lebih baik dari GLVQ. Pada \tab~\ref{tbl:sk6-detail} dapat dilihat
+sebaran tingkat pengenalan untuk tiap kategori kelas.
+
+\begin{table}
+\small
+\caption{Hasil uji unbalance data untuk setiap kategori kelas (dalam \%)}
+\label{tbl:sk6-detail}
+\begin{center}
+	\begin{tabular}{cccccccc}
+	\hline
+	Kelas & N & Lvq1 & Lvq21 & Glvq & Fnglvq & Backprop2 & backprop5 \\ \hline
+	C\#0   & 1000 & 84.70 & 96.70 & 89.20 & 95.30 & 98.30 & 99.10 \\
+	C\#1   & 1000 & 69.00 & 71.20 & 95.70 & 98.00 & 99.30 & 99.40 \\
+	C\#2   & 1000 & 71.90 & 90.80 & 97.60 & 99.50 & 98.70 & 99.70 \\
+	C\#3   & 1000 & 25.10 & 58.30 & 91.20 & 93.70 & 94.40 & 96.70 \\
+	C\#4   & 949 & 99.68 & 99.89 & 99.89 & 99.89 & 100.00 & 99.68 \\
+	C\#5   & 618 & 100.00 & 100.00 & 98.87 & 99.68 & 99.84 & 99.84 \\
+	C\#6   & 206 & 50.00 & 83.98 & 88.35 & 92.72 & 22.82 & 48.54 \\
+	C\#7   & 52 & 80.77 & 98.08 & 94.23 & 86.54 & 0.00 & 0.00 \\
+	C\#8   & 74 & 98.65 & 95.95 & 93.24 & 68.92 & 0.00 & 0.00 \\
+	C\#9   & 30 & 43.33 & 90.00 & 13.33 & 73.33 & 0.00 & 0.00 \\
+	C\#10  & 51 & 43.14 & 76.47 & 62.75 & 54.90 & 0.00 & 0.00 \\
+	C\#11  & 18 & 0.00 & 0.00 & 61.11 & 72.22 & 0.00 & 0.00 \\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+
+
+Dari \tab~\ref{tbl:sk6-detail} dapat dilihat algoritma FNGLVQ memberikan tingkat
+akurasi yang lebih merata dibandingkan algoritma yang lain.  Ini menunjukkan
+bahwa metode yang dikembangkan dapat menangani unbalance data dengan baik, bahkan
 mengungguli metode GLVQ maupun Backpropagation.
-
 
 %-----------------------------------------------------------------------------%
 \subsection{Ujicoba Skenario 7 : Uji Pengaruh Outlier Removal}
@@ -505,24 +643,18 @@ Ujicoba ini dilakukan untuk mengetahui pengaruh penghilangan outlier yang muncul
 pada data dasar. uji ini dilakukan dengan menggunakan algoritma GLVQ dan FNGLVQ
 dengan menggunakan parameter alpha 0.05, epoch maksimal 150. Pada uji ini akan
 dibandingkan kemampuan pengenalan terhadap data kotor yang sebelumnya dilatih
-menggunakan data bersih dan data kotor. 
-% Algoritma diuji pelatihan menggunakan
-% data kotor, kemudian dilakukan testing dengan data kotor. Selanjutnya, algoritma
-% dilatih menggunakan data bersih yang dilanjutkan dengan uji test data bersih.
-% Satu tambahan testing dilakukan terhadap data test kotor seperti dilakukan
-% sebelumnya untuk mengetahui bagaimana kemampuan jaringan dalam mengenali data
-% kotor yang sebelumnya dilatih dengan data bersih. 
+menggunakan data bersih dan data kotor. 	Pada Tabel \ref{tbl:sk7-hasil}
+ditunjukkan tabulasi hasil uji terhadap data kotor dan bersih.
 
-Pada Tabel \ref{tbl:sk7-hasil} ditunjukkan tabulasi hasil uji terhadap data
-kotor dan bersih.
+\clearpage
 
 \addTableFromFigures{width=0.9\textwidth}{pics/ujikotor.png}{tbl:sk7-hasil}{tabulasi
 hasil uji algoritma terhadap data kotor dan bersih.}
 
 Dari Tabel \ref{tbl:sk7-hasil} dapat dilihat bahwa langkah untuk menghilangkan
-outlier pada data dasar dapat meningkatkan tingkat pengenalan aritmia oleh
-algoritma baik GLVQ maupun FNGLVQ. Berikut ditunjukkan grafik perbandingan data 
-Gambar \ref{fig:sk7-chart}.
+outlier pada data dasar dapat meningkatkan tingkat pengenalan Aritmia oleh
+algoritma baik GLVQ maupun FNGLVQ. Pada \pic~\ref{fig:sk7-chart}
+ditunjukkan grafik perbandingan data.
 
 \addFigure{width=0.7\textwidth}{pics/ujikotor-chart.png}{fig:sk7-chart}{Grafik
 perbandingan hasil uji algoritma terhadap data kotor dan bersih.}
@@ -530,6 +662,8 @@ perbandingan hasil uji algoritma terhadap data kotor dan bersih.}
 %-----------------------------------------------------------------------------%
 %\subsection{Ujicoba Skenario 7 : Pengenalan Unknown data}
 %-----------------------------------------------------------------------------%
+
+\clearpage
 
 %-----------------------------------------------------------------------------%
 \section{Uji Statistik}
@@ -606,15 +740,13 @@ dari yang lainnya.
 \subsection{K-Hold Out paired t-test}
 Pada uji ini, jumlah iterasi dilakukan sebanyak $K=30$ dimana dataset dipartisi
 menjadi dua sama besar (50:50) untuk pelatihan dan pengujian.  Sedangkan
-inisialisasi bobot menggunakan cara random internal dari dataset.  Setelah
+inisialisasi bobot menggunakan cara random internal dari dataset. Setelah
 dilakukan ujicoba didapat data tabulasi seperti yang ditunjukkan pada
 \tab~\ref{tbl:khold-hasil};
 
 Dari data KHold Score pada tabulasi \ref{tbl:khold-hasil}, didapat $t_6$
 untuk 6 kelas adlah -76.672141, sedangkan $t_{12}$ untuk 12 kelas didapat 
--70.245154. 
-
-sedangkan Level Signifikan yang digunakan untuk uji KHold
+-70.245154. Sedangkan Level Signifikan yang digunakan untuk uji KHold
 adalah 0.05 (95\%) dengan 29 ($K-1$) derajat kebebasan.  Nilai tabulasi yang
 diperoleh dari tabel adalah $2.045$. Untuk 6 Kelas, $H_0$  dapat ditolak, karena
 $\lvert t_6 \rvert > 2.045$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert >
@@ -623,15 +755,15 @@ $\lvert t_6 \rvert > 2.045$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert >
 Namun, setelah dilakukan uji normal data dengan menggunakan \emph{Shapiro-Wilk
 normality test} , p-value untuk data $P_{A6}, P_{B6}, P_{A12}, P_{B12}$
 berturut-turut adalah  1.542e-05, 0.6734, 0.3234 dan 0.3267. Nilai p-value untuk
-$P_{A6}$ dibawah 0.05 (alpha), maka ini menunjukkan data $P_{A6}$ tidak
+$P_{A6}$ dibawah 0.05 (\emph{alpha}), maka ini menunjukkan data $P_{A6}$ tidak
 normal, sehingga diperlukan uji statistik lain, yakni uji \emph{Wilcoxon signed
 rank test}. Dengan menggunakan aplikasi R, untuk data 6 kelas, didapatkan nilai
 p-value = 1.807e-06. Dengan nilai p-value $< 0.05$, dapat disimpulkan bahwa $H_0$
 juga dapat ditolak.
 
-Sehingga ini menunjukan bahwa
-perbedaan akurasi dari kedua algoritma sangat signifikan dan dapat disimpulkan
-algoritma FNGLVQ memberikan hasil lebih baik dibandingkan dengan GLVQ.
+Sehingga ini menunjukan bahwa perbedaan akurasi dari kedua algoritma sangat
+signifikan dan dapat disimpulkan algoritma FNGLVQ memberikan hasil lebih baik
+dibandingkan dengan GLVQ.
 
 
 %============================================================================
@@ -650,7 +782,7 @@ GLVQ, $P_B=$ FNGLVQ, dengan nilai $K=30$}
 	\multicolumn{3}{c}{6 Kelas} & & 
 	\multicolumn{3}{c}{12 Kelas} \\
 	\cline{1-3} \cline{5-7} 
-	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  P_B \\
+	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  $P_B$ \\
 	   \cline{1-3} \cline{5-7} 
   K:0  &  97.32  &  98.82  &    &    K:0  &  94.52  &  97.28 \\
   K:1  &  97.49  &  98.80  &    &    K:1  &  94.30  &  97.33 \\
@@ -710,25 +842,6 @@ Dari data KFold Score pada tabulasi \ref{tbl:kfold-hasil}, didapat $t_6$
 untuk 6 kelas adlah -6.664332, sedangkan $t_{12}$ untuk 12 kelas didapat 
 -10.255489. 
 
-Level Signifikan yang digunakan untuk uji KFold adalah 0.05 (95\%) 
-dengan 9 ($K-1$) derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
-adalah $2.262$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
-2.262$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.262$, sehingga $H_0$
-juga dapat ditolak. 
-
-Namun sekali lagi, hasil uji normal data yang dilakukan dengan
-menggunakan \emph{Shapiro-Wilk normality test} terhadap data diatas menunjukkan
-data $P_{A6}$ dan $P_{A12}$ tidak normal (p-value 0.04851 dan 0.04248),
-sedangkan nilai p-value untuk $P_{B6}$ dan $P_{B12}$ adalah 0.6884 dan 0.9324.
-Dengan menggunakan uji \emph{Wilcoxon signed rank test} menggunakan aplikasi R
-didapat nilai p-value untuk data 6 kelas adalah 0.005889, sedangkan untuk data
-12 kelas adalah 0.001953. Dari kedua nilai p-value hasil uji \emph{Wilcoxon
-signed rank test} menunjukkan bahwa kedua-nya berada dibawah selang 0.05.
-
-Sehingga ini menunjukan
-bahwa perbedaan akurasi dari kedua algoritma juga sangat signifikan dan dapat disimpulkan
-algoritma FNGLVQ memberikan hasil lebih baik dibandingkan dengan GLVQ.
-
 \begin{table}
 \small  
 \caption{Hasil tabulasi uji K-Fold untuk 6 dan 12 kategori kelas, $P_A=$
@@ -743,7 +856,7 @@ $90:10$}
 	\multicolumn{3}{c}{6 Kelas} & & 
 	\multicolumn{3}{c}{12 Kelas} \\
 	\cline{1-3} \cline{5-7}
-	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  P_B \\
+	   $K$  &     $P_A$  &  $P_B$  &    &     $K$  &     $P_A$  &  $P_B$ \\
 	   \cline{1-3} \cline{5-7} 
   K:0  &  96.77  &  98.47  &    &    K:0  &  93.50  &  96.50 \\
   K:1  &  95.78  &  98.65  &    &    K:1  &  96.17  &  97.08 \\
@@ -768,12 +881,54 @@ $t_6$   : -6.664332  &    &    &    &  $t_{12}$   : -10.255489  &    &   \\
 \end{center} 
 \end{table}
 
+Level Signifikan yang digunakan untuk uji KFold adalah 0.05 (95\%) 
+dengan 9 ($K-1$) derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
+adalah $2.262$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
+2.262$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.262$, sehingga $H_0$
+juga dapat ditolak. 
+ 
+Namun dari hasil uji normal data yang dilakukan dengan
+menggunakan \emph{Shapiro-Wilk normality test} terhadap data diatas menunjukkan
+data $P_{A6}$ dan $P_{A12}$ tidak normal (p-value 0.04851 dan 0.04248),
+sedangkan nilai p-value untuk $P_{B6}$ dan $P_{B12}$ adalah 0.6884 dan 0.9324.
+Dengan menggunakan uji \emph{Wilcoxon signed rank test} menggunakan aplikasi R
+didapat nilai p-value untuk data 6 kelas adalah 0.005889, sedangkan untuk data
+12 kelas adalah 0.001953. Dari kedua nilai p-value hasil uji \emph{Wilcoxon
+signed rank test} menunjukkan bahwa kedua-nya berada dibawah selang 0.05.
+
+Sehingga ini menunjukan bahwa perbedaan akurasi dari kedua algoritma juga sangat
+signifikan dan dapat disimpulkan algoritma FNGLVQ memberikan hasil lebih baik
+dibandingkan dengan GLVQ.
+
 \subsection{Dietterich’s 5 x 2-Fold Cross-Validation Paired t-Test}
 Pada uji ini, dataset yang digunakan dipartisi menjadi 2-Fold di iterasi
 sebanyak 5 kali seperti yang telah diuraikan pada sub-bab
 \ref{sec:ujittest}. Inisialisasi bobot menggunakan cara random  internal dari
 dataset.  Setelah dilakukan ujicoba didapat data  tabulasi seperti yang
 ditunjukkan pada \tab~\ref{tbl:52fold-hasil}.
+   
+Dari data Dietterich’s Score pada tabulasi \ref{tbl:52fold-hasil}, didapat
+$t_6$ untuk 6 kelas adlah -4.846367, sedangkan $t_{12}$ untuk 12 kelas didapat 
+-3.910283. 
+
+Level Signifikan yang digunakan untuk uji KHold adalah 0.05 (95\%) 
+dengan 5 derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
+adalah $2.571$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
+2.571$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.571$, sehingga $H_0$
+juga dapat ditolak. Dan dari hasil uji kenormalan data menunjukkan bahwa
+data adalah normal. Sehingga ini menunjukan juga bahwa perbedaan akurasi dari
+kedua algoritma sangat  signifikan dan dapat disimpulkan algoritma FNGLVQ
+memberikan hasil lebih baik dibandingkan dengan GLVQ.
+
+\vspace{1cm}
+
+\noindent Dari empat uji test yang dilakukan terhadap algoritma GLVQ dan FNGLVQ
+pada data Aritmia 6 dan 12 Kelas, 86 fitur; tiga uji test menunjukkan bahwa FNGLVQ
+memberikan hasil yang lebih baik secara signifikan daripada GLVQ, sedangkan satu
+uji test memberikan kesimpulan yang seimbang. Sehingga dapat ditarik kesimpulan
+bahwa FNGLVQ memberikan hasil yang lebih baik dari pada GLVQ pada pengenalan
+kelainan Aritmia.
+
 %============================================================================
 % TABEL Dietterich’s
 %============================================================================
@@ -811,31 +966,12 @@ GLVQ, $P_B=$ FNGLVQ}
   \hline
   &    &    &    &   \\
    \multicolumn{3}{l}{Dietterich’s Score 6 Kelas} & &  \\   
-  $t_12$   : -3.910283  &    &    &    & \\  
+  $t_{12}$   : -3.910283  &    &    &    & \\  
 	\end{tabular}
 \end{center} 
 \end{table}
-   
-Dari data Dietterich’s Score pada tabulasi \ref{tbl:52fold-hasil}, didapat
-$t_6$ untuk 6 kelas adlah -4.846367, sedangkan $t_{12}$ untuk 12 kelas didapat 
--3.910283. 
 
-Level Signifikan yang digunakan untuk uji KHold adalah 0.05 (95\%) 
-dengan 5 derajat kebebasan. Nilai tabulasi yang diperoleh dari tabel
-adalah $2.571$. Untuk 6 Kelas, $H_0$ dapat ditolak, karena $\lvert t_6 \rvert >
-2.571$. Dan untuk 12 kelas, nilai $\lvert t_{12} \rvert > 2.571$, sehingga $H_0$
-juga dapat ditolak. Dan dari hasil uji kenormalan data menunjukkan bahwa
-data adalah normal. Sehingga ini menunjukan juga bahwa perbedaan akurasi dari
-kedua algoritma sangat  signifikan dan dapat disimpulkan algoritma FNGLVQ
-memberikan hasil lebih baik dibandingkan dengan GLVQ.
-
-
-Dari empat uji test yang dilakukan terhadap algoritma GLVQ dan FNGLVQ pada
-data aritmia 6 dan 12 Kelas, 86 fitur; 3 uji test menunjukkan bahwa FNGLVQ
-memberikan hasil yang lebih baik secara signifikan daripada GLVQ, sedangkan 1
-uji test memberikan kesimpulan yang seimbang. Sehingga dapat ditarik kesimpulan
-bahwa FNGLVQ memberikan hasil yang lebih baik dari pada GLVQ pada pengenalan
-kelainan aritmia. 
+ 
 % %-----------------------------------------------------------------------------%
 % \section{Analisis Hasil}
 % %-----------------------------------------------------------------------------%

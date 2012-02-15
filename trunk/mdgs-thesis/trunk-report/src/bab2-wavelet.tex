@@ -51,17 +51,17 @@ terlokalisasi adalah frekuensi rendah.
 \addFigure{width=1\textwidth}{pics/waveletcwt.png}{fig:cwt}{Contoh sinyal
 nonstasioner dan hasil dari WT (kontinu)} 
 
-Pada \pic~\ref{fig:cwt} ditunjukkan contoh sinyal nonstasioner dengan kandungan
-frekuensi 250, 500, 750 dan 1000Hz dengan tambahan noise yang kemudian
-ditransformasi menggunakan WT. Dari gambar tersebut terlihat bahwa frekuensi
-250Hz muncul pertama kali yang diikuti dengan frekuensi yang lain. Ketika kita
-akan menganalisis menggunakan wavelet, terdapat tradeoff resolusi antara waktu
-dan frekuensi(pada dasarnya pada WT, direpresetnasikan dengan waktu-skala,
-dimana skala dan frekuensi berbanding terbalik, semakin tinggi skala, maka
-dapat melokalisasi frekuensi rendah dan sebaliknya). Jika skala tinggi
-maka maka semakin tidak jelas resolusi frekuensi, namun
-semakin jelas resolusi waktunya, dan sebaliknya.
-
+Pada \pic~\ref{fig:cwt}\footnote{sumber: Agfianto Eko Putra, Analisis Sinyal
+non-stasioner menggunakan wavelet dan metode dekorlet, 2006} ditunjukkan contoh
+sinyal nonstasioner dengan kandungan frekuensi 250, 500, 750 dan 1000Hz dengan
+tambahan noise yang kemudian ditransformasi menggunakan WT. Dari gambar tersebut
+terlihat bahwa frekuensi 250Hz muncul pertama kali yang diikuti dengan frekuensi
+yang lain. Ketika kita akan menganalisis menggunakan wavelet, terdapat tradeoff
+resolusi antara waktu dan frekuensi(pada dasarnya pada WT, direpresetnasikan
+dengan waktu-skala, dimana skala dan frekuensi berbanding terbalik, semakin
+tinggi skala, maka dapat melokalisasi frekuensi rendah dan sebaliknya). Jika
+skala tinggi maka maka semakin tidak jelas resolusi frekuensi, namun semakin
+jelas resolusi waktunya, dan sebaliknya.
 \subsection{Descrete Wavelet Transform}
 Pada dasarnya, nilai koefisien dari wavelet untuk jendela wavelet dan
 signal tertentu menunjukkan seberapa dekat korelasi antara wavelet 
@@ -104,10 +104,10 @@ dari sinyal asli.
 \addFigure{width=0.8\textwidth}{pics/dwtdecompos.png}{fig:decompos}{Ilustrasi
 proses dekomposisi, (a) Dekomposisi satu tingkat, (b) dekomposisi multi tingkat}
 
-Pada \pic~\ref{fig:decompos}a dapat dilihat proses filtering wavelet dimana
-$f(x)$ adalah sinyal asli, kemudian dilewatkan ke filter lolos-rendah
-(\emph{lowpass})  lolos-tinggi (\emph{highpass}) dan menghasilkan dua sinyal,
-\textbf{A}-proksimasi dan \textbf{D}-etail. 
+Pada \pic~\ref{fig:decompos}\footnotemark[\value{footnote}] dapat dilihat proses
+filtering wavelet dimana $f(x)$ adalah sinyal asli, kemudian dilewatkan ke
+filter lolos-rendah (\emph{lowpass})  lolos-tinggi (\emph{highpass}) dan
+menghasilkan dua sinyal, \textbf{A}-proksimasi dan \textbf{D}-etail.
 
 Jika dekomposisi sinyal diteruskan secara iteratif untuk bagian aproksimasinya,
 sehingga suatu sinyal dapat dibagi-bagi kedalam banyak komponen resolusi rendah,

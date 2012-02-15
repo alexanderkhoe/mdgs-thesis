@@ -11,35 +11,46 @@ dipertimbangan dalam penelitian berikutnya.
 \section{Kesimpulan}
 %---------------------------------------------------------------
 Sebuah metode jaringan saraf tiruan berbasis kompetisi dengan nama
-FNGLVQ berhasil dikembangkan dan diuji-coba dengan menggunakan data aritmia
+FNGLVQ berhasil dikembangkan dan diuji-coba dengan menggunakan data Aritmia
 dari data MIT-BIH database. Pengujian dilakukan dengan menggunakan beberapa
 skenario dan dilakukan uji statistik untuk menunjukkan keunggulan metode FNLVQ
-terhadap GLVQ khususnya pada data kelainan aritmia. Dari hasil pengujian dan
+terhadap GLVQ khususnya pada data kelainan Aritmia. Dari hasil pengujian dan
 analisis dapat ditarik kesimpulan sebagai berikut;
 \begin{enumerate}
   \item Penelitian ini berhasil mengembangkan suatu metode pengenalan baru,
   FNGLVQ yang diimplementasikan dengan menggunakan java.
+
   \item Pengolahan data awal menggunakan wavelet daubechies order 8 (db8)
   memberikan hasil rata-rata terbaik dibandingkan dengan db2, db4 maupun
   db6, yakni 94.92\%. 
 
-%   \item Penghilangan Noise pada data awal aritmia dapat meningkatkan kinerja
-%   algoritma dalam proses pengenalan aritmia.
-
   \item Penggunaan mekanisme pengurutan data latih menggunakan metode
-  \emph{round-robin} dapat meningkatkan level akurasi dengan nilai $i < 30$.
+  \emph{round-robin} dapat meningkatkan tingkat akurasi dengan rentang jumlah
+  data per kategori kelas $i < 30$.
+
   \item Penggabungan teori fuzzy yang diadaptasi dari metode FNLVQ dengan
-  GLVQ menjadi FN-GLVQ dapat meningkatkan kinerja dari pengenalan kelainan
-  aritmia sampai 98.53\% untuk 6 kelas aritmia dan 96.33\% untuk 12 kelas.
+  GLVQ menjadi FNGLVQ dapat meningkatkan kinerja dari pengenalan kelainan
+  Aritmia mencapai 98.53\% untuk data 6 kelas dan 96.33\% untuk data 12
+  kelas.
+
+  \item Penggunaan metode LVQ pada data Aritmia dapat memberikan tingkat
+  pengenalan rata-rata diatas 97\% untuk data 6 kelas dan 95\%
+  untuk 12 kelas.
+
+%   \item Penggabungan teori fuzzy yang diadaptasi dari metode FNLVQ dengan
+%   GLVQ menjadi FNGLVQ dapat meningkatkan kinerja dari pengenalan kelainan
+%   Aritmia rata-rata tingkat akurasi mencapai diatas 97\% untuk 6 kelas dan
+%   rata-rata diatas 95\% untuk 12 kelas.
+
   \item Metode FNGLVQ masih sensitif terhadap inisialisasi bobot awal
-  dibandingkan dengan metode GLVQ, namun dengan bobot yang tepat, misal bobot
-  diambil dari data latih, dapat memberikan hasil yang lebih baik.
-  \item Penggunaan metode LVQ khususnya GLVQ dan FNGLVQ pada data aritmia
-  dapat memberikan tingkat pengenalan rata-rata diatas 97\% untuk 6 kelas dan
-  sampai rata-rata 95\% untuk 12 kelas
+  dibandingkan dengan metode GLVQ, namun dengan bobot yang tepat, misal
+  diinisialisasi dengan data dari data latih, dapat memberikan hasil yang
+  lebih baik.
+
   \item Data dengan sebaran yang tidak seimbang antar kelas dapat ditangani
   lebih baik dengan menggunakan FNGLVQ dibandingkan dengan metode LVQ1, LVQ21,
-  GLVQ dan Backpropagation.
+  GLVQ dan Backpropagation dengan nilai rata-rata \emph{recall, f-measure} dan
+  \emph{g-mean} berturut-turut 86.23\%, 89.31\% dan 92.33\%.
 \end{enumerate}
 
 %---------------------------------------------------------------
@@ -49,7 +60,7 @@ Pemrosesan data awal yang dilakukan pada penelitian ini masih menyisakan
 beberapa kemungkinan-kemungkinan pelenitian lanjutan diataranya;
 \begin{enumerate}
   \item Pada penelitian ini pendekatan analisis ECG yang digunakan adalah
-  pendekatan pengenalan aritmia berdasarkan beat dimana fitur
+  pendekatan pengenalan Aritmia berdasarkan beat dimana fitur
   diekstraksi menjadi kumpulan beat tunggal. Penelitian lanjutan yang dapat
   dilakukan adalah menggunakan pendekatan fitur time interval dan
   morfologi yang bisa didapat dengan menggunakan transformasi
@@ -58,5 +69,5 @@ beberapa kemungkinan-kemungkinan pelenitian lanjutan diataranya;
   menggunakan Mahalanobis distance.
   \item Metode FNGLVQ membutuhkan analisis lanjutan untuk mempelajari tingkat
   sensitifitas inisalisasi bobot awal yang belum bisa dicapai pada penelitian
-  ini.
+  ini serta kemampuan dalam mengenal \emph{unknown} data.
 \end{enumerate}

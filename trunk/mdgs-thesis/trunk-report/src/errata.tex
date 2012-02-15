@@ -1,0 +1,75 @@
+\addChapter{Errata}
+\chapter*{Errata}
+
+Pada bagian ini akan diuraikan beberapa kesalahan penulisan yang muncul
+pada buku tesis ini dan disertai dengan perbaikannya.
+
+\subsubsection*{\textit{12 Agustus 2011}}
+\begin{enumerate}
+	\item Pada Persamaan \ref{eq:turunan1b} sub-bab 2.3.3, halaman 29, terjadi
+	kesalahan penulisan tanda operasi ($+,-$). Pada persamaan tersebut tertulis :
+	\begin{align}
+	\label{eq-errataN:turunan1b}
+	\frac{\delta S}{\delta w_2} =  
+	\frac{\delta S}{\delta \varphi} \frac{\delta \varphi}{\delta d_2} \frac{\delta
+	d_2}{\delta w_2} =
+	- \frac{\delta f}{\delta \varphi} \frac{4d_1}{(d_1 + d_2)^2} (x - w_2) \nonumber
+	\end{align}
+ 
+ 	Seharusnya tertulis (perhatikan tanda $-$, seharusnya $+$):
+ 	\begin{align}
+	\label{eq-errataY:turunan1b}
+	\frac{\delta S}{\delta w_2} =  
+	\frac{\delta S}{\delta \varphi} \frac{\delta \varphi}{\delta d_2} \frac{\delta
+	d_2}{\delta w_2} =
+	+ \frac{\delta f}{\delta \varphi} \frac{4d_1}{(d_1 + d_2)^2} (x - w_2) \nonumber
+	\end{align}
+ 	
+ 	Ini terjadi karena hasil penurunan persamaan \ref{eq:mce} terhadap $d_2$
+ 	menghasilkan $-\frac{4d_1}{(d_1 + d_2)^2}$ dan hasil penurunan $d_2$ terhadap
+ 	$w_2$ menghasilkan $-1$, sehingga menghasilkan persamaan seperti diatas 
+ 	dengan tanda $+$.
+ 	
+ 	\textbf{status} : sudah diperbaiki.
+ 	
+ 	\item Pada sub-bab \ref{ssec:glvq}, terjadi kesalahan penulisan 
+ 	mengenai konsep MCE. yang tertulis adalah : 
+ 	
+ 	``\ldots dari cost function, \emph{miss-classification error}, \ldots''
+ 	
+ 	dan 
+ 	
+ 	``\ldots \emph{miss-classification error} $\varphi(x)$ dapat dihitung \ldots''
+ 	
+ 	seharusnya adalah :
+ 	
+ 	``\ldots dari cost function, \emph{minimum classification error}, \ldots''
+ 	
+ 	dan 
+ 	
+ 	``\ldots \emph{minimum classification error} $\varphi(x)$ dapat dihitung
+ 	\ldots''
+ 	 
+ 	Hal ini juga terjadi pada bab \ref{ch:fnglvq}, khususnya pada sub-bab
+ 	\ref{ssec:konsep-dasar} dimana tertulis :
+ 	
+ 	``\ldots ditentukan oleh \emph{miss classification error} dengan menghitung
+ 	\ldots''
+ 	
+ 	dan juga tertulis pada sub-bab \ref{ssec:metode-fnglvq} sbb:
+ 	
+ 	``\ldots dengan $\varphi(x)$ adalah nilai \emph{miss-classification error
+ 	(MCE)} \ldots''
+ 	
+ 	seharusnya adalah :
+ 	
+ 	``\ldots ditentukan oleh \emph{minimum classification error} dengan
+ 	menghitung \ldots''
+ 	
+	dan
+	
+	``\ldots dengan $\varphi(x)$ adalah nilai \emph{minimum classification error
+ 	(MCE)} \ldots''
+	 	
+	\textbf{status} : sudah diperbaiki.
+\end{enumerate}
